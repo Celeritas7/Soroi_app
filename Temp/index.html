@@ -156,17 +156,17 @@ function toast(m,t){var e=$('toast');e.textContent=m;e.className='toast show '+(
 function modal(t,p,extra,acts){$('mt').textContent=t;$('mp').textContent=p;$('mc').innerHTML=extra||'';var el=$('ma');el.innerHTML='';acts.forEach(function(a){var b=document.createElement('button');b.textContent=a.label;b.className=a.cls||'mdc';b.onclick=function(){$('modal').classList.remove('show');if(a.fn)a.fn();};el.appendChild(b);});$('modal').classList.add('show');}
 
 // Auth
-window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(sess&&sess.user&&['SIGNED_IN','INITIAL_SESSION'].indexOf(ev)>=0){await ckRole(sess.user);S.authOk=true;}else if(ev==='TOKEN_REFRESHED'){/* Keep existing auth state — don't re-query roles or navigate */S.authOk=true;}else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){S.user=null;S.isAdmin=false;S.authOk=true;nav('login');}});setTimeout(function(){if(!S.authOk)nav('login');},4000);initGIS();};
+window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(sess&&sess.user&&['SIGNED_IN','TOKEN_REFRESHED','INITIAL_SESSION'].indexOf(ev)>=0){await ckRole(sess.user);S.authOk=true;}else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){S.user=null;S.authOk=true;nav('login');}});setTimeout(function(){if(!S.authOk)nav('login');},4000);initGIS();};
 async function doLogin(){var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(r.error)toast('Login failed','err');}
-async function doLogout(){await sb.auth.signOut();S.user=null;S.isAdmin=false;nav('login');}
+async function doLogout(){await sb.auth.signOut();S.user=null;nav('login');}
 async function ckRole(u){var fallback=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fallback};S.isAdmin=false;try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){S.user.name=r.data[0].name||fallback;S.isAdmin=(r.data[0].role||'').toLowerCase().trim()==='admin';}else if(u.email==='mangaonkaraniket@gmail.com'){S.isAdmin=true;}}catch(e){console.warn('Role check failed:',e);if(u.email==='mangaonkaraniket@gmail.com')S.isAdmin=true;}console.log('Auth:',S.user.email,'admin:',S.isAdmin);nav('home');loadUnits();}
 
 // GIS
 function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);}}});}
 
 // Data
-async function loadUnits(){try{var r=await sb.from('soroi_app_units').select('*').order('sort_order');if(r.error){console.error('loadUnits RLS/DB error:',r.error);toast('Units: '+r.error.message,'err');S.units=[];}else{S.units=r.data||[];}}catch(e){console.error('loadUnits exception:',e);toast('Units load failed','err');}render();}
-async function loadBom(uid){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');if(r.error){console.error('loadBom RLS/DB error:',r.error);toast('BOM: '+r.error.message,'err');S.bom=[];}else{S.bom=r.data||[];}}catch(e){console.error('loadBom exception:',e);toast('BOM load failed','err');}render();}
+async function loadUnits(){try{var r=await sb.from('soroi_app_units').select('*').order('sort_order');S.units=r.data||[];}catch(e){console.error(e);}render();}
+async function loadBom(uid){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');S.bom=r.data||[];}catch(e){toast('Load failed','err');}render();}
 
 // CSV Import
 function trigCSV(){$('csvF').click();}
@@ -185,7 +185,7 @@ async function parseAndImport(text){
   }
   // Delete existing BOM for this unit
   toast('Importing...','');
-  try{var delR=await sb.from('soroi_app_bom').delete().eq('unit_id',S.selUnit.id);if(delR.error)console.warn('Delete old BOM:',delR.error);}catch(e){console.warn('Delete old BOM exception:',e);}
+  try{await sb.from('soroi_app_bom').delete().eq('unit_id',S.selUnit.id);}catch(e){}
   // Insert rows with hierarchy
   var nameToId={};var sortIdx=0;
   for(var i=0;i<rows.length;i++){
@@ -197,8 +197,7 @@ async function parseAndImport(text){
     var ins={unit_id:S.selUnit.id,parent_id:parentId,seq:(r.seq||'').trim()||null,level:lv,component:(r.component||'').trim(),part_number:(r.part_number||'').trim()||null,qty:parseInt(r.qty)||1,status:(r.status||'NOT_STARTED').trim(),fastener:(r.fastener||'').trim()||null,f_qty:parseInt(r['f.qty']||r.f_qty)||null,loctite:(r.loctite||'').trim()||null,torque:(r.torque||'').trim()||null,sort_order:sortIdx++};
     try{
       var res=await sb.from('soroi_app_bom').insert(ins).select().single();
-      if(res.error){console.error('Row '+i+' insert error:',res.error);}
-      else if(res.data)nameToId[ins.component]=res.data.id;
+      if(res.data)nameToId[ins.component]=res.data.id;
     }catch(e){console.error('Row '+i+':',e);}
   }
   toast('Imported '+rows.length+' items!','ok');
@@ -223,22 +222,11 @@ function clrP(){S.picks={};localStorage.removeItem(psk());}
 
 // Unit CRUD
 async function addUnit(){modal('New Unit','','<input class="md-input" id="nu-name" placeholder="Unit name (e.g. Compressor)"><input class="md-input" id="nu-icon" placeholder="Emoji icon" value="📦">',[{label:'Cancel',cls:'mdc'},{label:'Create',cls:'mdo',fn:async function(){var n=$('nu-name').value.trim(),ic=$('nu-icon').value.trim()||'📦';if(!n){toast('Enter a name','err');return;}var colors=['#c8553d','#2980b9','#27ae60','#8e44ad','#e67e22','#16a085'];var r=await sb.from('soroi_app_units').insert({name:n,icon:ic,color:colors[S.units.length%6],sort_order:S.units.length});if(r.error){console.error('Insert error:',r.error);toast('Error: '+r.error.message,'err');}else{toast('Created: '+n,'ok');loadUnits();}}}]);}
-async function delUnit(id){modal('Delete Unit','Delete this unit and all its BOM data?','',[{label:'Cancel',cls:'mdc'},{label:'Delete',cls:'mdd',fn:async function(){try{var r1=await sb.from('soroi_app_bom').delete().eq('unit_id',id);if(r1.error)console.warn('BOM delete:',r1.error);var r2=await sb.from('soroi_app_units').delete().eq('id',id);if(r2.error){toast('Delete error: '+r2.error.message,'err');}else{toast('Deleted','ok');}loadUnits();}catch(e){toast(e.message,'err');}}}]);}
+async function delUnit(id){modal('Delete Unit','Delete this unit and all its BOM data?','',[{label:'Cancel',cls:'mdc'},{label:'Delete',cls:'mdd',fn:async function(){try{await sb.from('soroi_app_bom').delete().eq('unit_id',id);await sb.from('soroi_app_units').delete().eq('id',id);toast('Deleted','ok');loadUnits();}catch(e){toast(e.message,'err');}}}]);}
 
-// Settings modal
-function openSettings(){
-  modal('Settings','Configure app settings.',
-    '<div style="margin-bottom:10px"><label style="font-size:.78rem;font-weight:600;color:#6b5a4e;display:block;margin-bottom:4px;">Google Sheet ID</label><input class="md-input" id="set-sid" value="'+esc(S.sheetId)+'" placeholder="Paste Google Sheet ID here" style="font-family:var(--mn);font-size:.78rem"></div><p style="font-size:.7rem;color:#a39485;line-height:1.4">Pickup logs will be written to separate tabs per unit inside this spreadsheet.</p>',
-    [{label:'Cancel',cls:'mdc'},{label:'Save',cls:'mdo',fn:function(){
-      var v=$('set-sid').value.trim();
-      S.sheetId=v;localStorage.setItem('soroi_sid',v);
-      toast('Settings saved','ok');
-    }}]
-  );
-}
 // Nav
 function nav(v){S.view=v;render();}
-function goBack(){if(S.view==='pickup'){S.selUnit=null;S.bom=[];S.picks={};S.filter='all';S.subFilter='all';nav('home');loadUnits();}else nav('home');}
+function goBack(){if(S.view==='pickup'){S.selUnit=null;S.bom=[];S.picks={};S.filter='all';S.subFilter='all';nav('home');}else nav('home');}
 
 // Render
 function render(){var a=$('app');switch(S.view){case'loading':a.innerHTML='<div class="lc" style="min-height:100dvh;justify-content:center"><div class="spin"></div></div>';break;case'login':a.innerHTML=vLogin();break;case'home':a.innerHTML=vHome();break;case'pickup':a.innerHTML=vPickup();break;}bindAll();}
@@ -248,7 +236,7 @@ function vLogin(){return '<div class="lgn"><div class="lgn-ic">'+svg('cart')+'</
 function vHome(){
   var colors=['#c8553d','#2980b9','#27ae60','#8e44ad','#e67e22','#16a085','#c0392b','#2c3e50'];
   var h='<div class="hdr"><div class="hdr-b"><div class="hdr-t">🛒 揃い Soroi</div><div class="hdr-s">Shop Floor Pickup</div></div><div class="hdr-r">';
-  if(S.user){h+='<span style="font-size:.75rem;opacity:.8;font-weight:500">'+esc(S.user.name)+'</span>';if(S.isAdmin)h+='<span style="font-size:.6rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-weight:700">ADMIN</span>';if(S.isAdmin)h+='<button class="hdr-btn" onclick="openSettings()" title="Settings">'+svg('gear')+'</button>';h+='<button class="hdr-btn" onclick="doLogout()">Out</button>';}
+  if(S.user)h+='<span style="font-size:.75rem;opacity:.8;font-weight:500">'+esc(S.user.name)+'</span><button class="hdr-btn" onclick="doLogout()">Out</button>';
   h+='</div></div>';
   h+='<div class="home-hdr fade"><h2>📂 Assembly Units</h2><p>'+(S.units.length?S.units.length+' unit'+(S.units.length>1?'s':''):'No units yet'+(S.isAdmin?' — create one below':''))+'</p></div>';
   h+='<div class="ugrid fade">';
@@ -262,6 +250,11 @@ function vHome(){
   });
   if(S.isAdmin)h+='<div class="ucard ucard-add" onclick="addUnit()">'+svg('plus')+'<span>New Unit</span></div>';
   h+='</div>';
+  if(S.isAdmin){
+    h+='<div class="settings no-print"><div class="settings-box"><div class="settings-t">'+svg('gear')+' Settings</div>';
+    h+='<div class="settings-row"><label>Google Sheet ID:</label><input value="'+esc(S.sheetId)+'" placeholder="Paste Sheet ID here" onchange="S.sheetId=this.value;localStorage.setItem(\'soroi_sid\',this.value)"></div>';
+    h+='</div></div>';
+  }
   return h;
 }
 
