@@ -143,22 +143,30 @@ input,select,textarea{font:inherit;color:inherit}
 .bb-g{background:var(--grn);color:#fff;border-color:var(--grn)}.bb-g:hover{opacity:.9}
 .bb-r{background:var(--red);color:#fff;border-color:var(--red)}.bb-r:hover{opacity:.9}
 .bom-wrap{max-width:1100px;margin:0 auto;padding:4px 0 80px}
-.bom-gh{display:flex;align-items:center;gap:8px;padding:8px 14px;font-weight:700;font-size:.85rem;color:#fff;margin-top:4px;cursor:pointer;user-select:none}
-.bom-gh .tri{font-size:.65rem;opacity:.7;flex-shrink:0;transition:transform .15s}.bom-gh .tri.col{transform:rotate(-90deg)}
-.bom-gh-seq{background:rgba(0,0,0,.2);padding:1px 8px;border-radius:10px;font-family:var(--mn);font-size:.72rem;flex-shrink:0}
+/* BOM group header — full-width colored bar */
+.bom-gh{display:flex;align-items:center;gap:8px;padding:10px 16px;font-weight:700;font-size:.88rem;color:#fff;cursor:pointer;user-select:none;margin-top:2px}
+.bom-gh .tri{font-size:.7rem;opacity:.8;flex-shrink:0;width:16px;text-align:center;transition:transform .15s}.bom-gh .tri.col{transform:rotate(-90deg)}
+.bom-gh-seq{background:rgba(255,255,255,.25);padding:2px 9px;border-radius:10px;font-family:var(--mn);font-size:.72rem;font-weight:700;flex-shrink:0;min-width:26px;text-align:center}
 .bom-gh-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bom-gh-pn{font-size:.7rem;opacity:.7;font-weight:500;font-family:var(--mn);flex-shrink:0}
-.bom-gh-cnt{font-size:.72rem;font-weight:500;opacity:.8;flex-shrink:0;background:rgba(0,0,0,.15);padding:1px 8px;border-radius:8px}
+.bom-gh-pn{font-size:.72rem;opacity:.65;font-weight:500;font-family:var(--mn);flex-shrink:0}
+.bom-gh-cnt{font-size:.72rem;font-weight:600;flex-shrink:0;background:rgba(0,0,0,.18);padding:2px 10px;border-radius:8px}
+/* Level colors — matches Axon */
 .bom-l1{background:var(--br)}.bom-l2{background:#e74c3c}.bom-l3{background:#27ae60}.bom-l4{background:#2980b9}.bom-l5{background:#8e44ad}
-.bom-r{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--sf);border-bottom:1px solid var(--bl);font-size:.82rem}
+/* BOM part row */
+.bom-r{display:flex;align-items:center;gap:8px;padding:9px 16px;background:var(--sf);border-bottom:1px solid var(--bl);font-size:.82rem}
+.bom-r:hover{background:var(--bg)}
 .bom-r.hide{display:none}
-.bom-rn{width:24px;text-align:center;font-size:.72rem;color:var(--t3);font-weight:600;flex-shrink:0}
-.bom-rpn{font-weight:700;font-size:.8rem;min-width:100px;font-family:var(--mn);color:var(--tx)}
+.bom-rn{width:26px;text-align:center;font-size:.75rem;color:var(--t3);font-weight:600;flex-shrink:0}
+.bom-seq{background:var(--red);color:#fff;font-family:var(--mn);font-size:.62rem;font-weight:700;padding:2px 0;border-radius:10px;flex-shrink:0;min-width:26px;text-align:center;line-height:1.3}
+.bom-rpn{font-weight:700;font-size:.82rem;min-width:130px;font-family:var(--mn);color:var(--tx)}
 .bom-rname{flex:1;font-size:.82rem;color:var(--t2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bom-rfast{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap}
-.bom-rqty{font-weight:800;font-size:.95rem;min-width:32px;text-align:center;flex-shrink:0}
-.bom-rst{font-size:.68rem;color:var(--t3);flex-shrink:0;min-width:65px;text-align:right}
-.bom-rst.done{color:var(--grn)}.bom-rst.wip{color:var(--ylw)}.bom-rst.blocked{color:var(--red)}
+.bom-rqty{font-weight:800;font-size:.95rem;min-width:36px;text-align:center;flex-shrink:0}
+.bom-rst{font-size:.7rem;color:var(--t3);flex-shrink:0;min-width:70px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:4px}
+.bom-rst::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--t4);flex-shrink:0}
+.bom-rst.done{color:var(--grn)}.bom-rst.done::before{background:var(--grn)}
+.bom-rst.wip{color:var(--ylw)}.bom-rst.wip::before{background:var(--ylw)}
+.bom-rst.blocked{color:var(--red)}.bom-rst.blocked::before{background:var(--red)}
 .bom-empty{padding:40px;text-align:center;color:var(--t3)}
 @media print{.hdr,.bbar,.pk-bar,.pk-flt,.abar,.bom-bar,.no-print{display:none!important}.pr-btns{display:none!important}.cnt{padding:0}.bom-r.hide{display:flex!important}}
 </style>
@@ -191,7 +199,7 @@ function modal(t,p,extra,acts){$('mt').textContent=t;$('mp').textContent=p;$('mc
 window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(sess&&sess.user&&['SIGNED_IN','INITIAL_SESSION'].indexOf(ev)>=0){await ckRole(sess.user);S.authOk=true;}else if(ev==='TOKEN_REFRESHED'){S.authOk=true;}else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){S.user=null;S.isAdmin=false;S.authOk=true;nav('home');loadUnits();}});setTimeout(function(){if(!S.authOk){nav('home');loadUnits();}},4000);initGIS();};
 async function doLogin(){var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(r.error)toast('Login failed','err');}
 async function doLogout(){await sb.auth.signOut();S.user=null;S.isAdmin=false;nav('home');loadUnits();}
-async function ckRole(u){var fallback=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fallback};var admin=false;try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){S.user.name=r.data[0].name||fallback;admin=(r.data[0].role||'').toLowerCase().trim()==='admin';}else if(u.email==='mangaonkaraniket@gmail.com'){admin=true;}}catch(e){console.warn('Role check failed:',e);if(u.email==='mangaonkaraniket@gmail.com')admin=true;}S.isAdmin=admin;console.log('Auth:',S.user.email,'admin:',S.isAdmin,'view:',S.view);if(S.view==='login'||S.view==='loading'){nav('home');loadUnits();}else{render();}}
+async function ckRole(u){var fallback=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fallback};var admin=false;try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){S.user.name=r.data[0].name||fallback;admin=(r.data[0].role||'').toLowerCase().trim()==='admin';}else if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com'){admin=true;}}catch(e){console.warn('Role check failed:',e);if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')admin=true;}S.isAdmin=admin;console.log('Auth:',S.user.email,'admin:',S.isAdmin,'view:',S.view);if(S.view==='login'||S.view==='loading'){nav('home');loadUnits();}else{render();}}
 
 // GIS
 function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);}}});}
@@ -254,7 +262,7 @@ function lodP(){try{S.picks=JSON.parse(localStorage.getItem(psk()))||{};}catch(e
 function clrP(){S.picks={};localStorage.removeItem(psk());}
 
 // Unit CRUD
-async function addUnit(){modal('New Unit','','<input class="md-input" id="nu-name" placeholder="Unit name (e.g. Compressor)"><input class="md-input" id="nu-icon" placeholder="Emoji icon" value="📦">',[{label:'Cancel',cls:'mdc'},{label:'Create',cls:'mdo',fn:async function(){var n=$('nu-name').value.trim(),ic=$('nu-icon').value.trim()||'📦';if(!n){toast('Enter a name','err');return;}var colors=['#c8553d','#2980b9','#27ae60','#8e44ad','#e67e22','#16a085'];var r=await sb.from('soroi_app_units').insert({name:n,icon:ic,color:colors[S.units.length%6],sort_order:S.units.length});if(r.error){console.error('Insert error:',r.error);toast('Error: '+r.error.message,'err');}else{toast('Created: '+n,'ok');loadUnits();}}}]);}
+async function addUnit(){modal('New Unit','','<input class="md-input" id="nu-name" placeholder="Unit name (e.g. Compressor)"><input class="md-input" id="nu-icon" placeholder="Emoji icon" value="📦">',[{label:'Cancel',cls:'mdc'},{label:'Create',cls:'mdo',fn:async function(){var n=$('nu-name').value.trim(),ic=$('nu-icon').value.trim()||'📦';if(!n){toast('Enter a name','err');return;}var colors=['#c8553d','#2980b9','#27ae60','#8e44ad','#e67e22','#16a085'];try{var r=await sb.from('soroi_app_units').insert({name:n,icon:ic,color:colors[S.units.length%6],sort_order:S.units.length}).select();if(r.error){console.error('Insert error:',JSON.stringify(r.error));toast('Error: '+r.error.message,'err');}else{toast('Created: '+n,'ok');loadUnits();}}catch(e){console.error('addUnit exception:',e);toast('Failed: '+e.message,'err');}}}]);}
 async function delUnit(id){modal('Delete Unit','Delete this unit and all its BOM data?','',[{label:'Cancel',cls:'mdc'},{label:'Delete',cls:'mdd',fn:async function(){try{var r1=await sb.from('soroi_app_bom').delete().eq('unit_id',id);if(r1.error)console.warn('BOM delete:',r1.error);var r2=await sb.from('soroi_app_units').delete().eq('id',id);if(r2.error){toast('Delete error: '+r2.error.message,'err');}else{toast('Deleted','ok');}loadUnits();}catch(e){toast(e.message,'err');}}}]);}
 function renameUnit(id,curName){modal('Edit Unit','','<input class="md-input" id="ru-name" value="'+esc(curName)+'" placeholder="Unit name"><input class="md-input" id="ru-desc" value="'+esc((S.units.find(function(u){return u.id===id;})||{}).description||'')+'" placeholder="Description (optional)"><input class="md-input" id="ru-icon" value="'+esc((S.units.find(function(u){return u.id===id;})||{}).icon||'📦')+'" placeholder="Emoji icon">',[{label:'Cancel',cls:'mdc'},{label:'Save',cls:'mdo',fn:async function(){var n=$('ru-name').value.trim(),d=$('ru-desc').value.trim(),ic=$('ru-icon').value.trim()||'📦';if(!n){toast('Enter a name','err');return;}var r=await sb.from('soroi_app_units').update({name:n,description:d||null,icon:ic}).eq('id',id);if(r.error){toast('Error: '+r.error.message,'err');}else{toast('Updated','ok');loadUnits();}}}]);}
 // Settings modal
@@ -367,6 +375,7 @@ function vBom(){
       var stLabel=b.status==='DONE'?'Done':b.status==='IN_PROGRESS'?'In Progress':b.status==='BLOCKED'?'Blocked':'Not Started';
       h+='<div class="bom-r'+(hidden?' hide':'')+'">';
       h+='<span class="bom-rn">'+num+'</span>';
+      if(b.seq)h+='<span class="bom-seq">'+esc(b.seq)+'</span>';
       h+='<span class="bom-rpn">'+(b.part_number?esc(b.part_number):'—')+'</span>';
       h+='<span class="bom-rname">'+esc(b.component)+'</span>';
       h+='<span class="bom-rfast">';
