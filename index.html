@@ -136,34 +136,41 @@ input,select,textarea{font:inherit;color:inherit}
 .lc{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px;color:var(--t3)}
 .fade{animation:fi .15s ease}@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 /* BOM Table View */
-.bom-bar{padding:8px 16px;background:var(--sf);border-bottom:1px solid var(--bl);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.bb{padding:5px 12px;border-radius:var(--rs);font-size:.75rem;font-weight:600;background:var(--bl);border:1.5px solid var(--bd);cursor:pointer;display:flex;align-items:center;gap:4px}
-.bb:hover{background:var(--bd)}
-.bb-p{background:var(--br);color:#fff;border-color:var(--br)}.bb-p:hover{background:var(--br2)}
-.bb-g{background:var(--grn);color:#fff;border-color:var(--grn)}.bb-g:hover{opacity:.9}
-.bb-r{background:var(--red);color:#fff;border-color:var(--red)}.bb-r:hover{opacity:.9}
+.bom-bar{padding:8px 16px;background:#2c3440;border-bottom:1px solid var(--bl);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.bb{padding:5px 12px;border-radius:var(--rs);font-size:.75rem;font-weight:600;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.15);cursor:pointer;display:flex;align-items:center;gap:4px;color:#fff}
+.bb:hover{background:rgba(255,255,255,.2)}
+.bb svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2}
+.bb-g{background:#27ae60;border-color:#27ae60}.bb-g:hover{background:#2ecc71}
+.bb-r{background:#e74c3c;border-color:#e74c3c}.bb-r:hover{background:#ef5350}
+.bb-b{background:#3498db;border-color:#3498db}.bb-b:hover{background:#42a5f5}
 .bom-wrap{max-width:1100px;margin:0 auto;padding:4px 0 80px}
 /* BOM group header — full-width colored bar */
 .bom-gh{display:flex;align-items:center;gap:8px;padding:10px 16px;font-weight:700;font-size:.88rem;color:#fff;cursor:pointer;user-select:none;margin-top:2px}
 .bom-gh .tri{font-size:.7rem;opacity:.8;flex-shrink:0;width:16px;text-align:center;transition:transform .15s}.bom-gh .tri.col{transform:rotate(-90deg)}
-.bom-gh-seq{background:rgba(255,255,255,.25);padding:2px 9px;border-radius:10px;font-family:var(--mn);font-size:.72rem;font-weight:700;flex-shrink:0;min-width:26px;text-align:center}
+.bom-gh-seq{background:rgba(255,255,255,.3);padding:2px 10px;border-radius:10px;font-family:var(--mn);font-size:.75rem;font-weight:700;flex-shrink:0;min-width:28px;text-align:center}
 .bom-gh-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bom-gh-pn{font-size:.72rem;opacity:.65;font-weight:500;font-family:var(--mn);flex-shrink:0}
-.bom-gh-cnt{font-size:.72rem;font-weight:600;flex-shrink:0;background:rgba(0,0,0,.18);padding:2px 10px;border-radius:8px}
-/* Level colors — matches Axon */
-.bom-l1{background:var(--br)}.bom-l2{background:#e74c3c}.bom-l3{background:#27ae60}.bom-l4{background:#2980b9}.bom-l5{background:#8e44ad}
+.bom-gh-pn{font-size:.72rem;opacity:.6;font-weight:400;font-family:var(--mn);flex-shrink:0}
+.bom-gh-cnt{font-size:.72rem;font-weight:700;flex-shrink:0;background:rgba(0,0,0,.2);padding:2px 10px;border-radius:8px}
+/* Level colors for group headers */
+.bom-l1{background:#c8553d}.bom-l2{background:#e74c3c}.bom-l3{background:#27ae60}.bom-l4{background:#2980b9}.bom-l5{background:#8e44ad}
+/* Row tinting — parts inherit light tint from parent group */
+.bom-tint-l1{background:#fef8f6}.bom-tint-l2{background:#fef5f5}.bom-tint-l3{background:#f0faf2}.bom-tint-l4{background:#f0f6ff}.bom-tint-l5{background:#f8f2ff}
 /* BOM part row */
-.bom-r{display:flex;align-items:center;gap:8px;padding:9px 16px;background:var(--sf);border-bottom:1px solid var(--bl);font-size:.82rem}
-.bom-r:hover{background:var(--bg)}
+.bom-r{display:flex;align-items:center;gap:10px;padding:9px 16px 9px 20px;border-bottom:1px solid rgba(0,0,0,.04);font-size:.82rem;transition:background .12s}
+.bom-r:hover{filter:brightness(.97)}
 .bom-r.hide{display:none}
-.bom-rn{width:26px;text-align:center;font-size:.75rem;color:var(--t3);font-weight:600;flex-shrink:0}
-.bom-seq{background:var(--red);color:#fff;font-family:var(--mn);font-size:.62rem;font-weight:700;padding:2px 0;border-radius:10px;flex-shrink:0;min-width:26px;text-align:center;line-height:1.3}
-.bom-rpn{font-weight:700;font-size:.82rem;min-width:130px;font-family:var(--mn);color:var(--tx)}
-.bom-rname{flex:1;font-size:.82rem;color:var(--t2);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bom-rn{width:24px;text-align:center;font-size:.72rem;color:#ccc;flex-shrink:0}
+.bom-seq{background:#e74c3c;color:#fff;font-family:var(--mn);font-size:.8rem;font-weight:900;padding:3px 10px;border-radius:12px;flex-shrink:0;min-width:28px;text-align:center;letter-spacing:.5px;line-height:1.2}
+.bom-rpn{font-weight:700;font-size:.88rem;min-width:140px;font-family:var(--mn);color:#1a1a2e}
+.bom-rname{flex:1;font-size:.82rem;color:#888;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bom-rfast{display:flex;gap:3px;flex-shrink:0;flex-wrap:wrap}
-.bom-rqty{font-weight:800;font-size:.95rem;min-width:36px;text-align:center;flex-shrink:0}
-.bom-rst{font-size:.7rem;color:var(--t3);flex-shrink:0;min-width:70px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:4px}
-.bom-rst::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--t4);flex-shrink:0}
+/* Axon-style pills */
+.bom-pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.65rem;font-weight:600;white-space:nowrap}
+.bom-pill-f{background:#e3f2fd;color:#1565c0}.bom-pill-l{background:#f3e5f5;color:#6a1b9a}.bom-pill-t{background:#fff3e0;color:#e65100}.bom-pill-q{background:#fce4ec;color:#c62828}
+.bom-rqty{width:36px;text-align:center;font-size:.95rem;font-weight:700;color:#555;flex-shrink:0}
+.bom-rqty-hi{color:var(--red);font-weight:800;font-size:1rem}
+.bom-rst{font-size:.72rem;color:#999;flex-shrink:0;min-width:70px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:4px}
+.bom-rst::before{content:'';width:6px;height:6px;border-radius:50%;background:#ddd;flex-shrink:0}
 .bom-rst.done{color:var(--grn)}.bom-rst.done::before{background:var(--grn)}
 .bom-rst.wip{color:var(--ylw)}.bom-rst.wip::before{background:var(--ylw)}
 .bom-rst.blocked{color:var(--red)}.bom-rst.blocked::before{background:var(--red)}
@@ -343,13 +350,18 @@ function vBom(){
   h+='<span style="flex:1"></span>';
   if(S.isAdmin){
     h+='<button class="bb bb-g" onclick="trigCSV()">'+svg('up')+' Import CSV</button>';
-    h+='<button class="bb" onclick="exportCSV()">'+svg('down')+' Export CSV</button>';
+    h+='<button class="bb bb-r" onclick="exportCSV()">'+svg('down')+' Export CSV</button>';
   }
+  h+='<button class="bb bb-b" onclick="window.print()">'+svg('print')+' Print</button>';
   h+='</div>';
 
   // BOM Table
   h+='<div class="bom-wrap fade">';
   if(!sorted.length){h+='<div class="bom-empty">No BOM data yet.'+(S.isAdmin?' Import a CSV to get started.':'')+'</div>';h+='</div>';return h;}
+
+  // Build parent-level map for row tinting
+  var parentLvMap={};S.bom.forEach(function(b){parentLvMap[b.id]=b.level;});
+  function getNearestGroupLevel(id){var cur=S.bom.find(function(b){return b.id===id;});if(!cur||!cur.parent_id)return 1;var p=S.bom.find(function(b){return b.id===cur.parent_id;});return p?p.level:1;}
 
   var num=0;
   sorted.forEach(function(b){
@@ -368,22 +380,25 @@ function vBom(){
       h+='<span class="bom-gh-cnt">L'+b.level+' '+desc.length+'</span>';
       h+='</div>';
     }else{
-      // Part row
+      // Part row with tinting
       num++;
       var hidden=isAncCollapsed(b.id);
+      var pLv=getNearestGroupLevel(b.id);
+      var tintCls=pLv<=1?'bom-tint-l1':pLv===2?'bom-tint-l2':pLv===3?'bom-tint-l3':pLv===4?'bom-tint-l4':'bom-tint-l5';
       var stCls=b.status==='DONE'?'done':b.status==='IN_PROGRESS'?'wip':b.status==='BLOCKED'?'blocked':'';
       var stLabel=b.status==='DONE'?'Done':b.status==='IN_PROGRESS'?'In Progress':b.status==='BLOCKED'?'Blocked':'Not Started';
-      h+='<div class="bom-r'+(hidden?' hide':'')+'">';
+      var qHi=b.qty>=4?'bom-rqty-hi':'';
+      h+='<div class="bom-r '+tintCls+(hidden?' hide':'')+'">';
       h+='<span class="bom-rn">'+num+'</span>';
       if(b.seq)h+='<span class="bom-seq">'+esc(b.seq)+'</span>';
       h+='<span class="bom-rpn">'+(b.part_number?esc(b.part_number):'—')+'</span>';
       h+='<span class="bom-rname">'+esc(b.component)+'</span>';
       h+='<span class="bom-rfast">';
-      if(b.fastener)h+='<span class="pill pill-f">'+esc(b.fastener)+(b.f_qty?' ×'+b.f_qty:'')+'</span>';
-      if(b.loctite)h+='<span class="pill pill-l">'+esc(b.loctite)+'</span>';
-      if(b.torque)h+='<span class="pill pill-t">'+esc(b.torque)+'</span>';
+      if(b.fastener)h+='<span class="bom-pill bom-pill-f">'+esc(b.fastener)+(b.f_qty?' ×'+b.f_qty:'')+'</span>';
+      if(b.loctite)h+='<span class="bom-pill bom-pill-l">'+esc(b.loctite)+'</span>';
+      if(b.torque)h+='<span class="bom-pill bom-pill-t">'+esc(b.torque)+'</span>';
       h+='</span>';
-      h+='<span class="bom-rqty">'+b.qty+'</span>';
+      h+='<span class="bom-rqty '+qHi+'">'+b.qty+'</span>';
       h+='<span class="bom-rst '+stCls+'">'+stLabel+'</span>';
       h+='</div>';
     }
