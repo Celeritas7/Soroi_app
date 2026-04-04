@@ -304,11 +304,9 @@ function vPickup(){
   // Progress
   h+='<div class="pk-prog"><b>'+pickedN+'</b>/'+totalPick+' picked — <b>'+pct+'%</b><div class="bar"><div class="fill" style="width:'+pct+'%"></div></div></div>';
 
-  // Filter buttons with colored dots
+  // Filter buttons
   h+='<div class="pk-flt no-print">';
-  [{k:'all',l:'All',c:'#333'},{k:'pending',l:'Pending',c:'#ccc'},{k:'picked',l:'Picked',c:'#27ae60'},{k:'missing',l:'Missing',c:'#e74c3c'}].forEach(function(f){
-    h+='<div class="pk-fb '+(S.filter===f.k?'on':'')+'" data-flt="'+f.k+'"><span class="pk-fb-dot" style="background:'+(S.filter===f.k?'#fff':f.c)+'"></span>'+f.l+'</div>';
-  });
+  ['all','pending','picked','missing'].forEach(function(f){h+='<div class="pk-fb '+(S.filter===f?'on':'')+'" data-flt="'+f+'">'+f.charAt(0).toUpperCase()+f.slice(1)+'</div>';});
   h+='</div>';
 
   // Render BOM as grouped list
@@ -326,57 +324,43 @@ function vPickup(){
 
 function renderBomList(items,ff,idMap){
   var h='';var num=0;
+  // Sort by sort_order
   var sorted=S.bom.slice().sort(function(a,b){return a.sort_order-b.sort_order;});
-  // Assign cycling colors to L2 groups (same palette as BOM view)
-  var nc={};var ci=0;var childSet=new Set();
-  S.bom.forEach(function(b){if(b.parent_id)childSet.add(b.parent_id);});
+  // Render by walking sorted order, showing group headers for L2/L3
   sorted.forEach(function(b){
-    if(b.level===1&&childSet.has(b.id))nc[b.id]=L1C;
-    else if(b.level===2&&childSet.has(b.id)){nc[b.id]=GC[ci%GC.length];ci++;}
-  });
-  function gClr(id){if(nc[id])return nc[id];var it=S.bom.find(function(x){return x.id===id;});if(it&&it.parent_id){var c=gClr(it.parent_id);nc[id]=c;return c;}return DFC;}
-  S.bom.forEach(function(b){gClr(b.id);});
-
-  var partIdx=0;
-  sorted.forEach(function(b){
+    // Check if in filtered set
     if(S.subFilter!=='all'){
       var inSub=b.id===S.subFilter||isDescendantOf(b.id,S.subFilter);
       if(!inSub)return;
     }
     var isLeaf=!S.bom.some(function(c){return c.parent_id===b.id;});
-    var color=nc[b.id]||DFC;
-    // Group headers
+    // Group headers for L2 and L3
     if(b.level<=3&&!isLeaf){
+      var lvCls=b.level===2?'gh-l2':b.level===3?'gh-l3':'gh-l4';
       var desc=getDescendantLeaves(b.id);
       var gPicked=desc.filter(function(d){return S.picks[d.id]==='picked';}).length;
       var gMissing=desc.filter(function(d){return S.picks[d.id]==='missing';}).length;
       var gTotal=desc.length;var gDone=gPicked+gMissing;
-      var fillPct=gTotal?Math.round(gDone/gTotal*100):0;
-      var fillClr=gDone===gTotal&&gTotal>0?'#27ae60':gMissing>0?'#e74c3c':'#fff';
-      h+='<div class="gh" style="background:'+color.light+';border-left:4px solid '+color.bg+'">';
-      h+='<div class="gh-left">';
-      if(b.seq)h+='<span class="gh-seq">'+esc(b.seq)+'</span>';
+      h+='<div class="gh '+lvCls+'">';
+      if(b.seq)h+='<span class="gh-seq">#'+esc(b.seq)+'</span>';
       h+='<span class="gh-name">'+esc(b.component)+'</span>';
       h+='<span class="gh-lv">L'+b.level+'</span>';
+      h+='<span class="gh-prog">'+gDone+'/'+gTotal+'<span class="minibar"><span class="minifill" style="width:'+(gTotal?gDone/gTotal*100:0)+'%"></span></span></span>';
       h+='</div>';
-      h+='<div class="gh-right">';
-      h+='<span class="gh-count" style="color:'+color.bg+'">'+gDone+'/'+gTotal+'</span>';
-      h+='<div class="gh-minibar"><div class="gh-minifill" style="width:'+fillPct+'%;background:'+color.bg+'"></div></div>';
-      h+='</div></div>';
+      // Show PARTS sub-header
       if(b.level>=2)h+='<div class="gh-sub">'+svg('gear')+' PARTS</div>';
-      partIdx=0;
       return;
     }
+    // Leaf parts
     if(!isLeaf)return;
     if(!ff(b))return;
-    num++;partIdx++;
+    num++;
     var ps=S.picks[b.id]||'';
-    var stripe=partIdx%2===0?'#fff':'#fafbfc';
-    h+='<div class="pr '+(ps==='picked'?'picked':ps==='missing'?'missing':'')+'" style="background:'+(ps?'':stripe)+'">';
+    h+='<div class="pr '+(ps==='picked'?'picked':ps==='missing'?'missing':'')+'">';
     h+='<span class="pr-num">'+num+'</span>';
     h+='<div class="pr-btns"><button class="pb ck '+(ps==='picked'?'on':'')+'" data-do="pick" data-id="'+b.id+'">'+svg('check')+'</button><button class="pb xx '+(ps==='missing'?'on':'')+'" data-do="miss" data-id="'+b.id+'">'+svg('x')+'</button></div>';
     if(b.seq)h+='<span class="pr-seq">'+esc(b.seq)+'</span>';
-    h+='<div class="pr-body"><div class="pr-name'+(ps==='picked'?' pk-done':'')+'">'+esc(b.component)+'</div>';
+    h+='<div class="pr-body"><div class="pr-name">'+esc(b.component)+'</div>';
     if(b.part_number)h+='<div class="pr-pn">'+esc(b.part_number)+'</div>';
     if(b.fastener||b.loctite||b.torque){
       h+='<div class="pr-fast">';
