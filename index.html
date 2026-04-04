@@ -41,18 +41,25 @@ input,select,textarea{font:inherit;color:inherit}
 .home-hdr p{font-size:.82rem;color:var(--t3)}
 
 /* Unit cards grid */
-.ugrid{padding:8px 20px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;max-width:900px;margin:0 auto;width:100%}
-.ucard{background:var(--sf);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh);border:1.5px solid var(--bl);border-left:4px solid var(--br);display:flex;align-items:center;gap:14px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.ugrid{padding:8px 20px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;max-width:1100px;margin:0 auto;width:100%}
+.ucard{background:var(--sf);border-radius:var(--r);box-shadow:var(--sh);border:1.5px solid var(--bl);border-top:3.5px solid var(--br);display:flex;flex-direction:column;cursor:pointer;transition:transform .12s,box-shadow .12s;overflow:hidden}
 .ucard:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
 .ucard:active{transform:scale(.985)}
-.ucard-ico{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
-.ucard-b{flex:1;min-width:0}.ucard-n{font-weight:700;font-size:.95rem}.ucard-d{font-size:.72rem;color:var(--t3);margin-top:2px}
-.ucard-a{color:var(--t4)}.ucard-a svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.ucard-del{padding:6px;color:var(--t4);border-radius:var(--rs);flex-shrink:0;transition:color .1s}.ucard-del:hover{color:var(--red);background:var(--red-bg)}
-.ucard-del svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.ucard-add{background:transparent;border:2px dashed var(--bd);border-left:2px dashed var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:24px;color:var(--t3);font-weight:600;font-size:.85rem;min-height:80px}
+.ucard-main{display:flex;align-items:center;gap:14px;padding:18px 20px 10px}
+.ucard-ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+.ucard-info{flex:1;min-width:0}
+.ucard-n{font-weight:700;font-size:1rem;line-height:1.2}
+.ucard-sub{font-size:.75rem;color:var(--t3);margin-top:2px;font-weight:500}
+.ucard-desc{padding:0 20px 14px;font-size:.72rem;color:var(--t4);line-height:1.3}
+.ucard-sep{height:1px;background:var(--bl);margin:0 16px}
+.ucard-acts{display:flex;align-items:center;justify-content:flex-end;gap:6px;padding:8px 14px}
+.ucard-ab{width:32px;height:32px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:all .12s}
+.ucard-ab svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ucard-ab-e{background:#3498db}.ucard-ab-e:hover{background:#2980b9}
+.ucard-ab-d{background:#e74c3c}.ucard-ab-d:hover{background:#c0392b}
+.ucard-add{background:transparent;border:2px dashed var(--bd);border-top:2px dashed var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:32px 20px;color:var(--t3);font-weight:600;font-size:.9rem;min-height:120px}
 .ucard-add:hover{border-color:var(--br);color:var(--br);background:rgba(200,85,61,.03)}
-.ucard-add svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ucard-add svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 /* Admin bar */
 .abar{padding:8px 20px;display:flex;gap:6px;flex-wrap:wrap;max-width:900px;margin:0 auto;width:100%}
@@ -146,7 +153,7 @@ let S={user:null,isAdmin:false,view:'loading',units:[],selUnit:null,bom:[],picks
 let gisC=null,sTk=localStorage.getItem('soroi_stk')||null;
 
 // SVG
-const IC={back:'<polyline points="15 18 9 12 15 6"/>',check:'<polyline points="20 6 9 17 4 12"/>',x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',chev:'<polyline points="9 18 15 12 9 6"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',send:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',print:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',up:'<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',down:'<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',reset:'<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68 1.65 1.65 0 0010 3.17V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>',trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>'};
+const IC={back:'<polyline points="15 18 9 12 15 6"/>',check:'<polyline points="20 6 9 17 4 12"/>',x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',chev:'<polyline points="9 18 15 12 9 6"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',send:'<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',print:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',up:'<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',down:'<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',reset:'<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68 1.65 1.65 0 0010 3.17V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>',trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>',pencil:'<path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>'};
 function svg(n){return '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'+(IC[n]||'')+'</svg>';}
 var GL='<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>';
 
@@ -156,9 +163,9 @@ function toast(m,t){var e=$('toast');e.textContent=m;e.className='toast show '+(
 function modal(t,p,extra,acts){$('mt').textContent=t;$('mp').textContent=p;$('mc').innerHTML=extra||'';var el=$('ma');el.innerHTML='';acts.forEach(function(a){var b=document.createElement('button');b.textContent=a.label;b.className=a.cls||'mdc';b.onclick=function(){$('modal').classList.remove('show');if(a.fn)a.fn();};el.appendChild(b);});$('modal').classList.add('show');}
 
 // Auth
-window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(sess&&sess.user&&['SIGNED_IN','INITIAL_SESSION'].indexOf(ev)>=0){await ckRole(sess.user);S.authOk=true;}else if(ev==='TOKEN_REFRESHED'){/* Keep existing auth state — don't re-query roles or navigate */S.authOk=true;}else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){S.user=null;S.isAdmin=false;S.authOk=true;nav('login');}});setTimeout(function(){if(!S.authOk)nav('login');},4000);initGIS();};
+window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(sess&&sess.user&&['SIGNED_IN','INITIAL_SESSION'].indexOf(ev)>=0){await ckRole(sess.user);S.authOk=true;}else if(ev==='TOKEN_REFRESHED'){S.authOk=true;}else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){S.user=null;S.isAdmin=false;S.authOk=true;nav('home');loadUnits();}});setTimeout(function(){if(!S.authOk){nav('home');loadUnits();}},4000);initGIS();};
 async function doLogin(){var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(r.error)toast('Login failed','err');}
-async function doLogout(){await sb.auth.signOut();S.user=null;S.isAdmin=false;nav('login');}
+async function doLogout(){await sb.auth.signOut();S.user=null;S.isAdmin=false;nav('home');loadUnits();}
 async function ckRole(u){var fallback=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fallback};var admin=false;try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){S.user.name=r.data[0].name||fallback;admin=(r.data[0].role||'').toLowerCase().trim()==='admin';}else if(u.email==='mangaonkaraniket@gmail.com'){admin=true;}}catch(e){console.warn('Role check failed:',e);if(u.email==='mangaonkaraniket@gmail.com')admin=true;}S.isAdmin=admin;console.log('Auth:',S.user.email,'admin:',S.isAdmin,'view:',S.view);if(S.view==='login'||S.view==='loading'){nav('home');loadUnits();}else{render();}}
 
 // GIS
@@ -224,7 +231,7 @@ function clrP(){S.picks={};localStorage.removeItem(psk());}
 // Unit CRUD
 async function addUnit(){modal('New Unit','','<input class="md-input" id="nu-name" placeholder="Unit name (e.g. Compressor)"><input class="md-input" id="nu-icon" placeholder="Emoji icon" value="📦">',[{label:'Cancel',cls:'mdc'},{label:'Create',cls:'mdo',fn:async function(){var n=$('nu-name').value.trim(),ic=$('nu-icon').value.trim()||'📦';if(!n){toast('Enter a name','err');return;}var colors=['#c8553d','#2980b9','#27ae60','#8e44ad','#e67e22','#16a085'];var r=await sb.from('soroi_app_units').insert({name:n,icon:ic,color:colors[S.units.length%6],sort_order:S.units.length});if(r.error){console.error('Insert error:',r.error);toast('Error: '+r.error.message,'err');}else{toast('Created: '+n,'ok');loadUnits();}}}]);}
 async function delUnit(id){modal('Delete Unit','Delete this unit and all its BOM data?','',[{label:'Cancel',cls:'mdc'},{label:'Delete',cls:'mdd',fn:async function(){try{var r1=await sb.from('soroi_app_bom').delete().eq('unit_id',id);if(r1.error)console.warn('BOM delete:',r1.error);var r2=await sb.from('soroi_app_units').delete().eq('id',id);if(r2.error){toast('Delete error: '+r2.error.message,'err');}else{toast('Deleted','ok');}loadUnits();}catch(e){toast(e.message,'err');}}}]);}
-
+function renameUnit(id,curName){modal('Edit Unit','','<input class="md-input" id="ru-name" value="'+esc(curName)+'" placeholder="Unit name"><input class="md-input" id="ru-desc" value="'+esc((S.units.find(function(u){return u.id===id;})||{}).description||'')+'" placeholder="Description (optional)"><input class="md-input" id="ru-icon" value="'+esc((S.units.find(function(u){return u.id===id;})||{}).icon||'📦')+'" placeholder="Emoji icon">',[{label:'Cancel',cls:'mdc'},{label:'Save',cls:'mdo',fn:async function(){var n=$('ru-name').value.trim(),d=$('ru-desc').value.trim(),ic=$('ru-icon').value.trim()||'📦';if(!n){toast('Enter a name','err');return;}var r=await sb.from('soroi_app_units').update({name:n,description:d||null,icon:ic}).eq('id',id);if(r.error){toast('Error: '+r.error.message,'err');}else{toast('Updated','ok');loadUnits();}}}]);}
 // Settings modal
 function openSettings(){
   modal('Settings','Configure app settings.',
@@ -247,18 +254,33 @@ function vLogin(){return '<div class="lgn"><div class="lgn-ic">'+svg('cart')+'</
 
 function vHome(){
   var colors=['#c8553d','#2980b9','#27ae60','#8e44ad','#e67e22','#16a085','#c0392b','#2c3e50'];
+  // Header
   var h='<div class="hdr"><div class="hdr-b"><div class="hdr-t">🛒 揃い Soroi</div><div class="hdr-s">Shop Floor Pickup</div></div><div class="hdr-r">';
-  if(S.user){h+='<span style="font-size:.75rem;opacity:.8;font-weight:500">'+esc(S.user.name)+'</span>';if(S.isAdmin)h+='<span style="font-size:.6rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-weight:700">ADMIN</span>';if(S.isAdmin)h+='<button class="hdr-btn" onclick="openSettings()" title="Settings">'+svg('gear')+'</button>';h+='<button class="hdr-btn" onclick="doLogout()">Out</button>';}
+  if(S.user){
+    h+='<span style="font-size:.75rem;opacity:.8;font-weight:500">'+esc(S.user.name)+'</span>';
+    if(S.isAdmin)h+='<span style="font-size:.6rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-weight:700">ADMIN</span>';
+    if(S.isAdmin)h+='<button class="hdr-btn" onclick="openSettings()" title="Settings">'+svg('gear')+'</button>';
+    h+='<button class="hdr-btn" onclick="doLogout()">Out</button>';
+  }else{
+    h+='<button class="hdr-btn" onclick="doLogin()" style="gap:6px">'+GL+' Sign In</button>';
+  }
   h+='</div></div>';
+  // Title
   h+='<div class="home-hdr fade"><h2>📂 Assembly Units</h2><p>'+(S.units.length?S.units.length+' unit'+(S.units.length>1?'s':''):'No units yet'+(S.isAdmin?' — create one below':''))+'</p></div>';
+  // Cards
   h+='<div class="ugrid fade">';
   S.units.forEach(function(u,i){
     var c=u.color||colors[i%colors.length];
-    h+='<div class="ucard" data-act="unit" data-id="'+u.id+'" style="border-left-color:'+c+'">';
-    h+='<div class="ucard-ico" style="background:'+c+'18;color:'+c+'">'+esc(u.icon||'📦')+'</div>';
-    h+='<div class="ucard-b"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-d">'+(u.description?esc(u.description):'Tap to view BOM')+'</div></div>';
-    if(S.isAdmin)h+='<button class="ucard-del" onclick="event.stopPropagation();delUnit(\''+u.id+'\')">'+svg('trash')+'</button>';
-    h+='<div class="ucard-a">'+svg('chev')+'</div></div>';
+    h+='<div class="ucard" data-act="unit" data-id="'+u.id+'" style="border-top-color:'+c+'">';
+    h+='<div class="ucard-main"><div class="ucard-ico" style="background:'+c+'18;color:'+c+'">'+esc(u.icon||'📦')+'</div>';
+    h+='<div class="ucard-info"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-sub">'+(u.description||'Tap to view BOM')+'</div></div></div>';
+    if(S.isAdmin){
+      h+='<div class="ucard-sep"></div><div class="ucard-acts">';
+      h+='<button class="ucard-ab ucard-ab-e" onclick="event.stopPropagation();renameUnit(\''+u.id+'\',\''+esc(u.name).replace(/'/g,"\\'")+'\')">'+svg('pencil')+'</button>';
+      h+='<button class="ucard-ab ucard-ab-d" onclick="event.stopPropagation();delUnit(\''+u.id+'\')">'+svg('trash')+'</button>';
+      h+='</div>';
+    }
+    h+='</div>';
   });
   if(S.isAdmin)h+='<div class="ucard ucard-add" onclick="addUnit()">'+svg('plus')+'<span>New Unit</span></div>';
   h+='</div>';
