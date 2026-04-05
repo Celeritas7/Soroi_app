@@ -88,9 +88,10 @@ a{color:inherit;text-decoration:none}
             <h1 id="pg-title">🛒 揃い Soroi</h1>
         </div>
         <div class="bar-right" id="bar-right" style="display:none">
-            <span class="chip" id="user-chip"></span>
+            <span class="chip" id="user-chip" style="display:none"></span>
             <a href="admin.html" class="abtn" id="admin-link" style="display:none">⚙️ Admin</a>
-            <button class="lbtn" onclick="doLogout()">Out</button>
+            <button class="lbtn" id="login-btn" onclick="doLogin()" style="display:none">Sign In</button>
+            <button class="lbtn" id="logout-btn" onclick="doLogout()" style="display:none">Out</button>
         </div>
     </div>
     <!-- SECTIONS -->
@@ -150,9 +151,9 @@ window.onload=function(){
         if(session&&session.user&&(ev==='SIGNED_IN'||ev==='TOKEN_REFRESHED'||ev==='INITIAL_SESSION')){
             await checkRole(session.user);authReady=true;
         }
-        else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!session)){user=null;authReady=true;nav('login');}
+        else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!session)){user=null;authReady=true;$('bar-right').style.display='flex';$('login-btn').style.display='inline';await loadAll();nav('home');}
     });
-    setTimeout(()=>{if(!authReady)nav('login');},4000);
+    setTimeout(async()=>{if(!authReady){$('bar-right').style.display='flex';$('login-btn').style.display='inline';await loadAll();nav('home');}},4000);
     initGIS();
 };
 
@@ -162,7 +163,8 @@ async function doLogin(){
 }
 async function doLogout(){
     await sb.auth.signOut();user=null;cart=[];sheetsToken=null;localStorage.removeItem('soroi_stk');
-    $('bar-right').style.display='none';nav('login');
+    $('user-chip').style.display='none';$('admin-link').style.display='none';$('logout-btn').style.display='none';$('login-btn').style.display='inline';
+    nav('home');
 }
 
 async function checkRole(u){
@@ -176,8 +178,11 @@ async function checkRole(u){
     console.log('Auth:',user.email,'admin:',user.isAdmin);
     // Update header
     $('user-chip').innerHTML=esc(user.name)+(user.isAdmin?'<span class="rt">admin</span>':'');
+    $('user-chip').style.display='inline';
     $('bar-right').style.display='flex';
     $('admin-link').style.display=user.isAdmin?'inline-flex':'none';
+    $('login-btn').style.display='none';
+    $('logout-btn').style.display='inline';
     // Load data then navigate
     await loadAll();
     if(currentView==='loading'||currentView==='login')nav('home');
@@ -281,7 +286,6 @@ function renderHome(){
 }
 
 function openUnit(id){
-    if(!user){doLogin();return;}
     selUnit=units.find(u=>u.id===id);
     if(!selUnit)return;
     cart=[];
