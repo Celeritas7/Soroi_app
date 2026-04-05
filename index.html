@@ -133,10 +133,10 @@ window.onload=function(){
         if(sess&&sess.user&&['SIGNED_IN','TOKEN_REFRESHED','INITIAL_SESSION'].indexOf(ev)>=0){
             await checkRole(sess.user);authReady=true;
         }else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){
-            user=null;authReady=true;nav('home');
+            user=null;authReady=true;await loadAll();nav('home');
         }
     });
-    setTimeout(function(){if(!authReady)nav('home');},4000);
+    setTimeout(async function(){if(!authReady){await loadAll();nav('home');}},4000);
     initGIS();
 };
 async function doLogin(){var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(r.error)toast('Login failed','err');}
@@ -153,7 +153,7 @@ async function checkRole(u){
 function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);toast(t('connected'),'ok');}}});}
 
 /* === DATA === */
-async function loadAll(){try{var r=await sb.from('soroi_app_units').select('*').order('sort_order');units=r.data||[];console.log('Units loaded:',units.length);}catch(e){console.error('loadAll:',e);}}
+async function loadAll(){try{var r=await sb.from('soroi_app_units').select('*').order('sort_order');if(r.error){console.error('loadAll RLS error:',r.error);toast('DB: '+r.error.message,'err');units=[];}else{units=r.data||[];}console.log('Units loaded:',units.length);}catch(e){console.error('loadAll exception:',e);toast('Load failed: '+e.message,'err');}}
 async function loadBom(uid){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');if(r.error){console.error('loadBom:',r.error);bom=[];}else{bom=r.data||[];}allBom[uid]=bom;console.log('BOM:',bom.length,'for',uid);}catch(e){console.error('loadBom:',e);bom=[];}}
 async function loadAllBom(){for(var i=0;i<units.length;i++){var uid=units[i].id;if(!allBom[uid]){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');allBom[uid]=r.data||[];}catch(e){}}}}
 
@@ -200,10 +200,11 @@ function renderHome(){
     if(user)h+='<div class="info-bar fade"><div class="info-chip">📅 <b>'+today()+'</b></div><div class="info-chip">👤 <b>'+esc(user.name)+'</b></div></div>';
     h+='<div class="ugrid fade">';
     units.forEach(function(u){var c=u.color||'#2563eb';h+='<div class="ucard" onclick="openUnit(\''+u.id+'\')" style="border-top-color:'+c+'"><div class="ucard-ico" style="background:'+c+'12">'+esc(u.icon||'📦')+'</div><div class="ucard-b"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-d">'+t('tapStart')+'</div></div><div class="ucard-a">'+svg('chev')+'</div></div>';});
-    if(!units.length)h+='<div class="empty-msg">'+t('noUnits')+'</div>';
+    if(!units.length)h+='<div class="empty-msg">'+t('noUnits')+'<br><button onclick="retryUnits()" style="margin-top:12px;padding:8px 20px;border-radius:var(--r);background:var(--pri);color:#fff;font-weight:600;font-size:.82rem;cursor:pointer;border:none">↻ Retry</button></div>';
     h+='</div>';$('sec-home').innerHTML=h;
 }
 function goBack(){selUnit=null;bom=[];mode='bulk';searchQ='';nav('home');}
+async function retryUnits(){toast('Retrying...','');await loadAll();renderHome();}
 async function openUnit(id){
     if(!user){toast(t('loginFirst'),'err');doLogin();return;}
     selUnit=units.find(function(u){return u.id===id;});cart=[];mode='bulk';searchQ='';
