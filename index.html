@@ -90,7 +90,7 @@ input,select{font:inherit;color:inherit}
 var SB_URL='https://wylxvmkcrexwfpjpbhyy.supabase.co';
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bHh2bWtjcmV4d2ZwanBiaHl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MzkxMDYsImV4cCI6MjA4NDIxNTEwNn0.6Bxo42hx4jwlJGWnfjiTpiDUsYfc1QLTN3YtrU1efak';
 var GIS_CID='1088099187141-ut0dn0scqt3h99htf3rg8gsrg2oo1ad8.apps.googleusercontent.com';
-var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'sb-soroi-op-auth'}});
+var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'sb-soroi2-auth'}});
 var S={user:null,view:'loading',units:[],selUnit:null,bom:[],allBom:{},mode:'bulk',cart:[],cartOpen:false,searchQ:'',sheetId:localStorage.getItem('soroi_sid')||'',authOk:false};
 var gisC=null,sTk=localStorage.getItem('soroi_stk')||null;
 var IC={back:'<polyline points="15 18 9 12 15 6"/>',check:'<polyline points="20 6 9 17 4 12"/>',x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',chev:'<polyline points="9 18 15 12 9 6"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>'};
@@ -104,10 +104,10 @@ function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1<10?
 function nowTime(){var d=new Date();return(d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();}
 
 // Auth
-window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(sess&&sess.user&&(ev==='SIGNED_IN'||ev==='INITIAL_SESSION')){await ckRole(sess.user);S.authOk=true;}else if(ev==='TOKEN_REFRESHED'){S.authOk=true;}else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){S.user=null;S.authOk=true;nav('login');}});setTimeout(function(){if(!S.authOk)nav('login');},4000);initGIS();};
-function doLogin(){sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});}
-function doLogout(){sb.auth.signOut();S.user=null;S.cart=[];nav('login');}
-async function ckRole(u){var fb=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fb};try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0)S.user.name=r.data[0].name||fb;}catch(e){}if(S.view==='login'||S.view==='loading'){nav('home');loadUnits();}else{render();}}
+window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(sess&&sess.user&&['SIGNED_IN','INITIAL_SESSION'].indexOf(ev)>=0){await ckRole(sess.user);S.authOk=true;}else if(ev==='TOKEN_REFRESHED'){S.authOk=true;}else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){S.user=null;S.authOk=true;nav('home');loadUnits();}});setTimeout(function(){if(!S.authOk){nav('home');loadUnits();}},4000);initGIS();};
+async function doLogin(){var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(r.error)toast('Login failed','err');}
+async function doLogout(){await sb.auth.signOut();S.user=null;S.cart=[];nav('home');loadUnits();}
+async function ckRole(u){var fb=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fb};var admin=false;try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){S.user.name=r.data[0].name||fb;admin=(r.data[0].role||'').toLowerCase().trim()==='admin';}else if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com'){admin=true;}}catch(e){console.warn('Role check failed:',e);if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')admin=true;}S.user.isAdmin=admin;console.log('Auth:',S.user.email,'admin:',admin,'view:',S.view);if(S.view==='login'||S.view==='loading'){nav('home');loadUnits();}else{render();}}
 function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);toast('Sheets connected','ok');}}});}
 
 // Data
@@ -117,18 +117,24 @@ async function loadAllBom(){for(var i=0;i<S.units.length;i++){var uid=S.units[i]
 
 // Nav
 function nav(v){S.view=v;S.searchQ='';render();}
-function goBack(){if(S.view==='pickup'){S.selUnit=null;S.bom=[];S.mode='bulk';nav('home');}else nav('home');}
-function openUnit(id){S.selUnit=S.units.find(function(u){return u.id===id;});S.cart=[];S.mode='bulk';nav('pickup');loadBom(id);loadAllBom();}
+function goBack(){if(S.view==='pickup'){S.selUnit=null;S.bom=[];S.mode='bulk';S.view='home';render();loadUnits();}else nav('home');}
+function openUnit(id){if(!S.user){toast('Sign in to start picking','err');doLogin();return;}S.selUnit=S.units.find(function(u){return u.id===id;});S.cart=[];S.mode='bulk';nav('pickup');loadBom(id);loadAllBom();}
 
 // Render
 function render(){var a=$('app');switch(S.view){case'loading':a.innerHTML='<div class="lc" style="min-height:100dvh;justify-content:center"><div class="spin"></div></div>';break;case'login':a.innerHTML=vLogin();break;case'home':a.innerHTML=vHome();break;case'pickup':a.innerHTML=vPickup();break;}bindAll();}
 function vLogin(){return '<div class="lgn"><div class="lgn-ic">'+svg('cart')+'</div><div class="lgn-h"><span>揃い</span> Soroi</div><div class="lgn-p">Shop Floor Pickup</div><button class="lgn-btn" onclick="doLogin()">'+GL+' Sign in with Google</button></div>';}
 function vHome(){
   var h='<div class="hdr"><div class="hdr-b"><div class="hdr-t">🛒 揃い Soroi</div><div class="hdr-s">Shop Floor Pickup</div></div><div class="hdr-r">';
-  if(S.user)h+='<span style="font-size:.78rem;opacity:.8;font-weight:500">'+esc(S.user.name)+'</span>';
-  h+='<button class="hdr-btn" onclick="doLogout()">Out</button></div></div>';
+  if(S.user){
+    h+='<span style="font-size:.78rem;opacity:.8;font-weight:500">'+esc(S.user.name)+'</span>';
+    if(S.user.isAdmin)h+='<span style="font-size:.6rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-weight:700">ADMIN</span>';
+    h+='<button class="hdr-btn" onclick="doLogout()">Out</button>';
+  }else{
+    h+='<button class="hdr-btn" onclick="doLogin()" style="gap:6px">'+GL+' Sign In</button>';
+  }
+  h+='</div></div>';
   h+='<div class="home-hdr fade"><h2>Select Unit</h2><p>Choose an assembly unit to start picking</p></div>';
-  h+='<div class="info-bar fade"><div class="info-chip">📅 <b>'+today()+'</b></div><div class="info-chip">👤 <b>'+esc(S.user?S.user.name:'')+'</b></div></div>';
+  if(S.user)h+='<div class="info-bar fade"><div class="info-chip">📅 <b>'+today()+'</b></div><div class="info-chip">👤 <b>'+esc(S.user.name)+'</b></div></div>';
   h+='<div class="ugrid fade">';
   S.units.forEach(function(u){var c=u.color||'#2563eb';h+='<div class="ucard" data-unit="'+u.id+'" style="border-top-color:'+c+'"><div class="ucard-ico" style="background:'+c+'12">'+esc(u.icon||'📦')+'</div><div class="ucard-b"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-d">Tap to start pickup</div></div><div class="ucard-a">'+svg('chev')+'</div></div>';});
   if(!S.units.length)h+='<div class="empty-msg">No units available. Ask admin to create units.</div>';
