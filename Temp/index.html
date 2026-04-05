@@ -39,6 +39,11 @@ body.theme-treasure .modal{background:var(--card);color:var(--t1)}
 body.theme-treasure .modal textarea{background:#1a1a2e;color:var(--t1);border-color:var(--pri)}
 body.theme-treasure .mbtn-cancel{background:var(--brd);color:var(--t2)}
 body.theme-treasure .action-btn{background:var(--card);border-color:var(--brd);color:var(--t2)}
+body.theme-treasure .sa-chip{background:var(--card);border-color:var(--brd);color:var(--t1)}
+body.theme-treasure .pk-divider-label{background:var(--card)}
+body.theme-treasure .vfy-item{border-color:var(--brd)}
+body.theme-treasure .vfy-btn{background:var(--card);border-color:var(--brd)}
+body.theme-treasure .vfy-pn{color:var(--t1)}.vfy-qty{color:var(--t1)}
 /* Settings modal */
 .settings-section{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--brd)}.settings-section:last-child{border-bottom:none}
 .settings-section h3{font-size:.88rem;font-weight:700;color:var(--t1);margin-bottom:10px}
@@ -95,6 +100,18 @@ a{color:inherit;text-decoration:none}
 /* Pickup */
 .pk-info{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .pk-tag{font-size:.78rem;padding:4px 12px;border-radius:16px;background:var(--pri-bg);color:var(--pri);font-weight:600}
+/* Sub-assembly chips */
+.sa-section{margin-bottom:14px}
+.sa-title{font-size:.82rem;font-weight:700;color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.sa-chips{display:flex;flex-wrap:wrap;gap:6px}
+.sa-chip{padding:8px 14px;border-radius:10px;font-size:.8rem;font-weight:600;border:2px solid var(--brd);background:var(--card);cursor:pointer;transition:all .15s;color:var(--t1);display:flex;align-items:center;gap:6px}
+.sa-chip:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-bg)}
+.sa-chip:active{transform:scale(.96)}
+.sa-chip .sa-cnt{font-size:.68rem;padding:1px 6px;border-radius:8px;background:var(--pri-bg);color:var(--pri);font-weight:700}
+.sa-chip.sa-added{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);opacity:.6;pointer-events:none}
+/* Divider */
+.pk-divider{height:1px;background:var(--brd);margin:14px 0}
+.pk-divider-label{font-size:.72rem;color:var(--t3);text-align:center;margin:-8px auto 10px;background:var(--card);display:inline-block;padding:0 10px;position:relative;left:50%;transform:translateX(-50%)}
 .add-box{background:var(--add-grad);border:2px solid var(--add-brd);border-radius:12px;padding:16px;margin-bottom:16px}
 .add-box h3{font-size:.9rem;font-weight:700;color:var(--pri);margin-bottom:10px}
 .add-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
@@ -137,6 +154,32 @@ a{color:inherit;text-decoration:none}
 .action-btn{flex:1;padding:10px;border-radius:10px;border:2px solid var(--brd);background:var(--card);font-size:.82rem;font-weight:600;cursor:pointer;text-align:center;color:var(--t2);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
 .action-btn:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-bg)}
 .action-btn.active{border-color:var(--pri);color:var(--pri);background:var(--pri-bg)}
+/* Verification mode */
+.vfy-progress{margin-bottom:14px}
+.vfy-bar{height:8px;background:var(--brd);border-radius:4px;overflow:hidden;margin-top:6px}
+.vfy-fill{height:100%;border-radius:4px;transition:width .3s}
+.vfy-stats{display:flex;gap:12px;font-size:.78rem;font-weight:600;margin-bottom:4px}
+.vfy-stats .vs-picked{color:var(--ok)}.vfy-stats .vs-missing{color:var(--err)}.vfy-stats .vs-pending{color:var(--t3)}
+.vfy-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--brd);transition:all .2s}
+.vfy-item:last-child{border-bottom:none}
+.vfy-item.vfy-picked{background:var(--ok-bg)}
+.vfy-item.vfy-missing{background:var(--err-bg)}
+.vfy-num{width:24px;font-size:.72rem;color:var(--t3);text-align:center;flex-shrink:0}
+.vfy-body{flex:1;min-width:0}
+.vfy-pn{font-family:monospace;font-weight:600;font-size:.88rem;color:var(--t1)}.vfy-picked .vfy-pn{text-decoration:line-through;color:var(--t3)}
+.vfy-name{font-size:.75rem;color:var(--t2);margin-top:1px}.vfy-picked .vfy-name{text-decoration:line-through;color:var(--t3)}
+.vfy-qty{font-weight:700;font-size:.88rem;color:var(--t1);min-width:32px;text-align:center;flex-shrink:0}
+.vfy-btns{display:flex;gap:4px;flex-shrink:0}
+.vfy-btn{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;border:2px solid var(--brd);background:var(--card);font-size:1rem;cursor:pointer;transition:all .12s;-webkit-tap-highlight-color:transparent}
+.vfy-btn:active{transform:scale(.92)}
+.vfy-btn.vb-pick{color:var(--t3)}.vfy-btn.vb-pick:hover{border-color:var(--ok);color:var(--ok)}
+.vfy-btn.vb-pick.on{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:0 2px 6px rgba(5,150,105,.3)}
+.vfy-btn.vb-miss{color:var(--t3)}.vfy-btn.vb-miss:hover{border-color:var(--err);color:var(--err)}
+.vfy-btn.vb-miss.on{background:var(--err);border-color:var(--err);color:#fff;box-shadow:0 2px 6px rgba(220,38,38,.3)}
+.vfy-submit{display:flex;gap:8px;margin-top:14px}
+.vfy-submit button{flex:1;padding:12px;border-radius:10px;border:none;font-size:.88rem;font-weight:700;cursor:pointer}
+.vfy-sub-go{background:var(--pri);color:#fff}.vfy-sub-go:hover{filter:brightness(1.1)}
+.vfy-sub-back{background:var(--pri-bg);color:var(--pri)}
 @media(max-width:600px){.shell{padding:10px}.bar{padding:12px 14px}.card{padding:14px}.ugrid{grid-template-columns:1fr 1fr}.add-row{flex-direction:column}.add-row input.qty{width:100%}}
 </style>
 </head>
@@ -165,6 +208,7 @@ a{color:inherit;text-decoration:none}
     </div>
     <div id="sec-home" style="display:none"></div>
     <div id="sec-pickup" style="display:none"></div>
+    <div id="sec-verify" style="display:none"></div>
 </div>
 <!-- Paste Modal -->
 <div class="modal-overlay" id="paste-modal">
@@ -217,7 +261,7 @@ const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,a
 // =====================================================
 // STATE
 // =====================================================
-let user=null,units=[],selUnit=null,cart=[],sheetId=localStorage.getItem('soroi_sid')||'',authReady=false,addBoxOpen=false;
+let user=null,units=[],selUnit=null,bom=[],cart=[],sheetId=localStorage.getItem('soroi_sid')||'',authReady=false,addBoxOpen=false,verifyMode=false;
 let gisTokenClient=null,sheetsToken=localStorage.getItem('soroi_stk')||null;
 let LANG=localStorage.getItem('soroi_lang')||'en';
 let currentView='loading';
@@ -226,8 +270,8 @@ let currentView='loading';
 // i18n
 // =====================================================
 const TR={
-    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup Cart',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items in cart yet. Add parts above.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list'},
-    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップカート',submit:'📋 シートに送信',clear:'全てクリア',noItems:'カートは空です。上から部品を追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加'}
+    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup List',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items yet. Add from sub-assemblies or manually.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list',startVerify:'🔍 Start Verification',verifyTitle:'Verification',picked:'Picked',missing:'Missing',pending:'Pending',backToCart:'← Back to List',submitVerified:'📋 Submit Results',allDone:'All items verified!',notAllVerified:'Verify all items first',bulkSection:'📦 Sub-assemblies',bulkHint:'Tap to add all parts from a group',manualSection:'Or add manually',partsAdded:'parts added',loadingBom:'Loading BOM...',noBom:'No BOM data for this unit'},
+    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップリスト',submit:'📋 シートに送信',clear:'全てクリア',noItems:'まだ部品がありません。サブアセンブリまたは手動で追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加',startVerify:'🔍 照合開始',verifyTitle:'照合',picked:'ピック済',missing:'欠品',pending:'未確認',backToCart:'← リストに戻る',submitVerified:'📋 結果を送信',allDone:'全ての部品を確認しました！',notAllVerified:'全ての部品を確認してください',bulkSection:'📦 サブアセンブリ',bulkHint:'タップしてグループの全部品を追加',manualSection:'または手動で追加',partsAdded:'部品追加済',loadingBom:'BOM読込中...',noBom:'このユニットにBOMデータがありません'}
 };
 function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
 function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);var en=$('s-lang-en'),ja=$('s-lang-ja');if(en){en.className='stp-lb'+(l==='en'?' on':'');}if(ja){ja.className='stp-lb'+(l==='ja'?' on':'');}if(currentView==='home')renderHome();if(currentView==='pickup')renderPickup();}
@@ -365,21 +409,33 @@ async function loadAll(){
         console.log('Units loaded:',units.length);
     }catch(e){console.error('loadAll:',e);units=[];}
 }
+async function loadBom(uid){
+    try{const{data,error}=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');
+    if(error){console.error('loadBom:',error);bom=[];}else{bom=data||[];}
+    console.log('BOM loaded:',bom.length,'for',uid);}catch(e){console.error('loadBom:',e);bom=[];}
+}
+// BOM helpers — get sub-assemblies (groups with children) and leaf parts
+function getSubAssemblies(){
+    var childSet=new Set();bom.forEach(b=>{if(b.parent_id)childSet.add(b.parent_id);});
+    return bom.filter(b=>childSet.has(b.id)&&b.level>=2);
+}
+function getLeaves(pid){
+    var out=[];bom.forEach(b=>{if(isDesc(b.id,pid)&&!bom.some(c=>c.parent_id===b.id))out.push(b);});return out;
+}
+function isDesc(id,anc){var cur=bom.find(b=>b.id===id);while(cur){if(cur.parent_id===anc)return true;cur=bom.find(b=>b.id===cur.parent_id);}return false;}
 
 // =====================================================
 // NAVIGATION
 // =====================================================
 function nav(view){
     currentView=view;
-    $('sec-loading').style.display='none';
-    $('sec-login').style.display='none';
-    $('sec-home').style.display='none';
-    $('sec-pickup').style.display='none';
+    ['sec-loading','sec-login','sec-home','sec-pickup','sec-verify'].forEach(id=>{$(id).style.display='none';});
     switch(view){
         case'loading':$('sec-loading').style.display='block';break;
         case'login':$('sec-login').style.display='block';$('login-sub').textContent=t('sub');break;
         case'home':renderHome();$('sec-home').style.display='block';break;
         case'pickup':renderPickup();$('sec-pickup').style.display='block';break;
+        case'verify':renderVerify();$('sec-verify').style.display='block';break;
     }
 }
 
@@ -400,11 +456,15 @@ function renderHome(){
     el.innerHTML=h;
 }
 
-function openUnit(id){
+async function openUnit(id){
     selUnit=units.find(u=>u.id===id);
     if(!selUnit)return;
-    cart=[];
+    cart=[];bom=[];addBoxOpen=false;
     nav('pickup');
+    // Show spinner while loading BOM
+    $('sec-pickup').innerHTML='<div class="card"><div style="text-align:center;padding:40px"><div class="spinner"></div><p style="color:var(--t3)">'+t('loadingBom')+'</p></div></div>';
+    await loadBom(id);
+    renderPickup();
 }
 
 // =====================================================
@@ -413,10 +473,37 @@ function openUnit(id){
 function renderPickup(){
     if(!selUnit)return;
     const el=$('sec-pickup');
+    // Track which sub-assemblies were already added
+    var addedGroups=new Set(cart.filter(c=>c._group).map(c=>c._group));
+    var subAssys=getSubAssemblies();
+    var GC=['#2e7d32','#1565c0','#c62828','#6a1b9a','#e65100','#00838f','#f57f17','#4e342e','#283593','#bf360c'];
+
     let h='<div class="card">';
     h+='<div class="shdr"><h2>'+(selUnit.icon||'📦')+' '+esc(selUnit.name)+'</h2><button class="btn btn-s btn-sm" onclick="goHome()">← Back</button></div>';
     h+='<div class="pk-info"><span class="pk-tag">📅 '+today()+'</span><span class="pk-tag">👤 '+esc(user?user.name:'')+'</span></div>';
-    // Action buttons
+
+    // === SECTION 1: Sub-assembly chips ===
+    if(subAssys.length){
+        h+='<div class="sa-section">';
+        h+='<div class="sa-title">'+t('bulkSection')+' <span style="font-weight:400;font-size:.72rem;color:var(--t3)">'+t('bulkHint')+'</span></div>';
+        h+='<div class="sa-chips">';
+        subAssys.forEach((g,i)=>{
+            var leaves=getLeaves(g.id);
+            var added=addedGroups.has(g.id);
+            var clr=GC[i%GC.length];
+            h+='<div class="sa-chip'+(added?' sa-added':'')+'" onclick="'+(added?'':'addSubAssembly(\''+g.id+'\')')+'" style="border-left:4px solid '+clr+'">';
+            h+=esc(g.component)+' <span class="sa-cnt">'+leaves.length+'</span>';
+            if(added)h+=' ✓';
+            h+='</div>';
+        });
+        h+='</div></div>';
+    }else if(bom.length){
+        h+='<div style="color:var(--t3);font-size:.82rem;margin-bottom:12px">'+t('noBom').replace('BOM','sub-assembly')+'</div>';
+    }
+
+    // === SECTION 2: Manual add / Paste ===
+    h+='<div class="pk-divider"></div>';
+    h+='<div style="text-align:center"><span class="pk-divider-label">'+t('manualSection')+'</span></div>';
     h+='<div class="action-row">';
     h+='<button class="action-btn" onclick="openPasteModal()">'+t('pasteList')+'</button>';
     h+='<button class="action-btn" onclick="toggleAddBox()">'+t('addPart')+'</button>';
@@ -426,17 +513,18 @@ function renderPickup(){
     h+='<div class="add-row"><input id="inp-pn" placeholder="'+t('pnPh')+'" style="font-family:monospace" onkeydown="if(event.key===\'Enter\')addToCart()"><input id="inp-name" placeholder="'+t('namePh')+'" onkeydown="if(event.key===\'Enter\')addToCart()"><input id="inp-qty" class="qty" type="number" value="1" min="1" placeholder="'+t('qtyPh')+'" onkeydown="if(event.key===\'Enter\')addToCart()"></div>';
     h+='<button class="btn btn-p" onclick="addToCart()">'+t('add')+'</button>';
     h+='</div>';
-    // Cart
-    h+='<div class="shdr" style="margin-top:8px"><h2>'+t('cart')+' ('+cart.length+')</h2>';
+
+    // === SECTION 3: Working list (cart) ===
+    h+='<div class="shdr" style="margin-top:12px"><h2>'+t('cart')+' ('+cart.length+')</h2>';
     if(cart.length)h+='<button class="btn btn-d btn-sm" onclick="cart=[];renderPickup()">'+t('clear')+'</button>';
     h+='</div>';
     if(cart.length){
         h+='<table class="ctbl"><thead><tr><th>#</th><th>'+t('pnPh')+'</th><th>'+t('namePh')+'</th><th>'+t('qtyPh')+'</th><th class="act"></th></tr></thead><tbody>';
         cart.forEach((c,i)=>{
-            h+='<tr><td>'+(i+1)+'</td><td class="pn">'+esc(c.pn)+'</td><td>'+esc(c.name)+'</td><td class="qc">'+c.qty+'</td><td class="act"><button class="dbtn" onclick="cart.splice('+i+',1);renderPickup()">✕</button></td></tr>';
+            h+='<tr><td>'+(i+1)+'</td><td class="pn">'+esc(c.pn)+'</td><td>'+esc(c.name)+'</td><td class="qc">'+c.qty+'</td><td class="act"><button class="dbtn" onclick="removeCartItem('+i+')">✕</button></td></tr>';
         });
         h+='</tbody></table>';
-        h+='<button class="btn btn-g" onclick="submitToSheet()" style="width:100%">'+t('submit')+'</button>';
+        h+='<button class="btn btn-g" onclick="startVerify()" style="width:100%">'+t('startVerify')+'</button>';
     }else{
         h+='<div class="empty"><div class="ico">📋</div><p>'+t('noItems')+'</p></div>';
     }
@@ -446,7 +534,23 @@ function renderPickup(){
     if(addBoxOpen)setTimeout(()=>{const inp=$('inp-pn');if(inp)inp.focus();},50);
 }
 
-function goHome(){selUnit=null;cart=[];addBoxOpen=false;nav('home');}
+function goHome(){selUnit=null;cart=[];bom=[];addBoxOpen=false;verifyMode=false;nav('home');}
+
+function addSubAssembly(gid){
+    var g=bom.find(b=>b.id===gid);if(!g)return;
+    var leaves=getLeaves(gid);if(!leaves.length)return;
+    leaves.forEach(p=>{
+        cart.push({pn:p.part_number||'',name:p.component||p.part_number||'',qty:p.qty||1,_group:gid});
+    });
+    showSt('pk-status','✅ '+leaves.length+' '+t('partsAdded')+' — '+g.component,'ok');
+    renderPickup();
+    setTimeout(()=>{const s=$('pk-status');if(s)s.className='status';},3000);
+}
+
+function removeCartItem(idx){
+    cart.splice(idx,1);
+    renderPickup();
+}
 
 function addToCart(){
     const pn=($('inp-pn').value||'').trim();
@@ -489,6 +593,77 @@ function processPastedList(){
 }
 
 // =====================================================
+// VERIFICATION MODE
+// =====================================================
+function startVerify(){
+    if(!cart.length)return;
+    // Initialize status for each item: null=pending, 'picked', 'missing'
+    cart.forEach(c=>{if(!c.status)c.status=null;});
+    verifyMode=true;
+    nav('verify');
+}
+
+function backToCart(){
+    verifyMode=false;
+    nav('pickup');
+}
+
+function markItem(idx,status){
+    if(idx<0||idx>=cart.length)return;
+    // Toggle: if already same status, reset to pending
+    cart[idx].status=(cart[idx].status===status)?null:status;
+    renderVerify();
+}
+
+function renderVerify(){
+    if(!selUnit||!cart.length)return;
+    const el=$('sec-verify');
+    const picked=cart.filter(c=>c.status==='picked').length;
+    const missing=cart.filter(c=>c.status==='missing').length;
+    const pending=cart.length-picked-missing;
+    const pct=Math.round((picked+missing)/cart.length*100);
+    const allDone=pending===0;
+
+    let h='<div class="card">';
+    // Header
+    h+='<div class="shdr"><h2>'+(selUnit.icon||'📦')+' '+t('verifyTitle')+'</h2><button class="btn btn-s btn-sm" onclick="backToCart()">'+t('backToCart')+'</button></div>';
+    h+='<div class="pk-info"><span class="pk-tag">📅 '+today()+'</span><span class="pk-tag">👤 '+esc(user?user.name:'')+'</span><span class="pk-tag">'+esc(selUnit.name)+'</span></div>';
+    // Progress
+    h+='<div class="vfy-progress">';
+    h+='<div class="vfy-stats"><span class="vs-picked">✅ '+picked+' '+t('picked')+'</span><span class="vs-missing">❌ '+missing+' '+t('missing')+'</span><span class="vs-pending">⏳ '+pending+' '+t('pending')+'</span></div>';
+    var fillColor=allDone?(missing>0?'var(--ylw)':'var(--ok)'):'var(--pri)';
+    h+='<div class="vfy-bar"><div class="vfy-fill" style="width:'+pct+'%;background:'+fillColor+'"></div></div>';
+    h+='</div>';
+    // Items
+    cart.forEach((c,i)=>{
+        var cls=c.status==='picked'?'vfy-picked':c.status==='missing'?'vfy-missing':'';
+        h+='<div class="vfy-item '+cls+'">';
+        h+='<span class="vfy-num">'+(i+1)+'</span>';
+        h+='<div class="vfy-body"><div class="vfy-pn">'+esc(c.pn||c.name)+'</div>';
+        if(c.name&&c.name!==c.pn)h+='<div class="vfy-name">'+esc(c.name)+'</div>';
+        h+='</div>';
+        h+='<span class="vfy-qty">×'+c.qty+'</span>';
+        h+='<div class="vfy-btns">';
+        h+='<button class="vfy-btn vb-pick'+(c.status==='picked'?' on':'')+'" onclick="markItem('+i+',\'picked\')">✓</button>';
+        h+='<button class="vfy-btn vb-miss'+(c.status==='missing'?' on':'')+'" onclick="markItem('+i+',\'missing\')">✕</button>';
+        h+='</div></div>';
+    });
+    // Submit buttons
+    h+='<div class="vfy-submit">';
+    h+='<button class="vfy-sub-back" onclick="backToCart()">'+t('backToCart')+'</button>';
+    if(allDone){
+        h+='<button class="vfy-sub-go" onclick="submitToSheet()">'+t('submitVerified')+'</button>';
+    }else{
+        h+='<button class="vfy-sub-go" disabled style="opacity:.4;cursor:not-allowed">'+t('notAllVerified')+'</button>';
+    }
+    h+='</div>';
+    if(allDone)h+='<div style="text-align:center;padding:10px;color:var(--ok);font-weight:600;font-size:.85rem">'+t('allDone')+'</div>';
+    h+='<div class="status" id="pk-status"></div>';
+    h+='</div>';
+    el.innerHTML=h;
+}
+
+// =====================================================
 // SUBMIT TO GOOGLE SHEETS (Part Inventory pattern)
 // =====================================================
 async function submitToSheet(){
@@ -501,17 +676,19 @@ async function submitToSheet(){
         const info=await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'?fields=sheets.properties.title');
         if(!info.sheets.some(s=>s.properties.title===tab)){
             await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+':batchUpdate',{method:'POST',body:JSON.stringify({requests:[{addSheet:{properties:{title:tab}}}]})});
-            await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A1:F1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Time','Operator','Part Number','Description','Qty']]})});
+            await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A1:G1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Time','Operator','Part Number','Description','Qty','Status']]})});
         }
         // Find next row
         const col=await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A:A');
         const nextRow=(col.values?col.values.length:0)+1;
         // Write rows
-        const rows=cart.map(c=>[today(),nowTime(),user?user.name:'',c.pn,c.name,c.qty]);
-        await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nextRow+':F'+(nextRow+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
-        showSt('pk-status','✅ '+cart.length+' '+t('submitOk'),'ok');
-        cart=[];
-        setTimeout(()=>{renderPickup();},2000);
+        const rows=cart.map(c=>[today(),nowTime(),user?user.name:'',c.pn,c.name,c.qty,c.status||'picked']);
+        await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nextRow+':G'+(nextRow+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
+        const pickedN=cart.filter(c=>c.status==='picked').length;
+        const missingN=cart.filter(c=>c.status==='missing').length;
+        showSt('pk-status','✅ '+pickedN+' '+t('picked')+(missingN?', ❌ '+missingN+' '+t('missing'):''),'ok');
+        cart=[];verifyMode=false;
+        setTimeout(()=>{nav('pickup');},2000);
     }catch(e){
         console.error(e);
         if(e.message==='NEEDS_GIS_AUTH'){
