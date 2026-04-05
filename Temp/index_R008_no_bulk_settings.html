@@ -40,8 +40,6 @@ body.theme-treasure .modal textarea{background:#1a1a2e;color:var(--t1);border-co
 body.theme-treasure .mbtn-cancel{background:var(--brd);color:var(--t2)}
 body.theme-treasure .action-btn{background:var(--card);border-color:var(--brd);color:var(--t2)}
 body.theme-treasure .sa-chip{background:var(--card);border-color:var(--brd);color:var(--t1)}
-body.theme-treasure .u-chip{background:var(--card);border-color:var(--brd);color:var(--t1)}
-body.theme-treasure .u-chip.u-on{background:var(--pri);color:#1a1a2e}
 body.theme-treasure .pk-divider-label{background:var(--card)}
 body.theme-treasure .vfy-item{border-color:var(--brd)}
 body.theme-treasure .vfy-btn{background:var(--card);border-color:var(--brd)}
@@ -103,38 +101,14 @@ a{color:inherit;text-decoration:none}
 .pk-info{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .pk-tag{font-size:.78rem;padding:4px 12px;border-radius:16px;background:var(--pri-bg);color:var(--pri);font-weight:600}
 /* Sub-assembly chips */
-.sa-section{margin-bottom:10px}
-.sa-title{font-size:.78rem;font-weight:600;color:var(--t2);margin-bottom:8px}
+.sa-section{margin-bottom:14px}
+.sa-title{font-size:.82rem;font-weight:700;color:var(--t2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .sa-chips{display:flex;flex-wrap:wrap;gap:6px}
-/* Unit chips */
-.u-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-.u-chip{padding:10px 16px;border-radius:10px;font-size:.85rem;font-weight:700;border:2px solid var(--brd);background:var(--card);cursor:pointer;transition:all .15s;color:var(--t1);display:flex;align-items:center;gap:8px}
-.u-chip:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-bg)}
-.u-chip:active{transform:scale(.96)}
-.u-chip.u-on{border-color:var(--pri);background:var(--pri);color:#fff}
-.u-chip .u-ico{font-size:1.2rem}
-/* SA chips */
 .sa-chip{padding:8px 14px;border-radius:10px;font-size:.8rem;font-weight:600;border:2px solid var(--brd);background:var(--card);cursor:pointer;transition:all .15s;color:var(--t1);display:flex;align-items:center;gap:6px}
 .sa-chip:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-bg)}
 .sa-chip:active{transform:scale(.96)}
 .sa-chip .sa-cnt{font-size:.68rem;padding:1px 6px;border-radius:8px;background:var(--pri-bg);color:var(--pri);font-weight:700}
 .sa-chip.sa-added{border-color:var(--ok);background:var(--ok-bg);color:var(--ok);opacity:.6;pointer-events:none}
-.sa-chip.sa-drill{border-color:var(--pri);background:var(--pri-bg);color:var(--pri)}
-/* Breadcrumb inside bulk */
-.bulk-bread{display:flex;align-items:center;gap:4px;font-size:.78rem;color:var(--t2);margin-bottom:8px;flex-wrap:wrap}
-.bulk-bread a{color:var(--pri);cursor:pointer;font-weight:600;text-decoration:none}.bulk-bread a:hover{text-decoration:underline}
-.bulk-bread .sep{color:var(--t3)}
-/* Bulk panel (like Part Inventory) */
-.bulk-panel{border:2px solid var(--brd);border-radius:12px;margin-bottom:14px;overflow:hidden}
-.bulk-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--pri-bg);cursor:pointer;user-select:none}
-.bulk-header h3{font-size:.88rem;font-weight:700;color:var(--pri);display:flex;align-items:center;gap:6px}
-.bulk-header .toggle-ico{font-size:.7rem;transition:transform .2s}
-.bulk-header .toggle-ico.collapsed{transform:rotate(-90deg)}
-.bulk-summary{font-size:.72rem;color:var(--t2);font-weight:600}
-.bulk-body{padding:14px 16px;display:none;border-top:1px solid var(--brd)}.bulk-body.open{display:block}
-.bulk-field{margin-bottom:10px}
-.bulk-field label{display:block;font-size:.72rem;font-weight:600;color:var(--t2);margin-bottom:4px}
-.bulk-field select{width:100%;padding:8px 10px;border:1.5px solid var(--brd);border-radius:8px;font-size:.88rem;background:var(--card);color:var(--t1)}.bulk-field select:focus{outline:none;border-color:var(--pri)}
 /* Divider */
 .pk-divider{height:1px;background:var(--brd);margin:14px 0}
 .pk-divider-label{font-size:.72rem;color:var(--t3);text-align:center;margin:-8px auto 10px;background:var(--card);display:inline-block;padding:0 10px;position:relative;left:50%;transform:translateX(-50%)}
@@ -233,6 +207,7 @@ a{color:inherit;text-decoration:none}
         <p id="login-error"></p>
     </div>
     <div id="sec-home" style="display:none"></div>
+    <div id="sec-pickup" style="display:none"></div>
     <div id="sec-verify" style="display:none"></div>
 </div>
 <!-- Paste Modal -->
@@ -286,7 +261,7 @@ const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,a
 // =====================================================
 // STATE
 // =====================================================
-let user=null,units=[],selUnit=null,bom=[],cart=[],sheetId=localStorage.getItem('soroi_sid')||'',authReady=false,addBoxOpen=false,bulkOpen=true,selSubAssy=null;
+let user=null,units=[],selUnit=null,bom=[],cart=[],sheetId=localStorage.getItem('soroi_sid')||'',authReady=false,addBoxOpen=false,verifyMode=false;
 let gisTokenClient=null,sheetsToken=localStorage.getItem('soroi_stk')||null;
 let LANG=localStorage.getItem('soroi_lang')||'en';
 let currentView='loading';
@@ -295,11 +270,11 @@ let currentView='loading';
 // i18n
 // =====================================================
 const TR={
-    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup List',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items yet. Add from sub-assemblies or manually.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list',startVerify:'🔍 Start Verification',verifyTitle:'Verification',picked:'Picked',missing:'Missing',pending:'Pending',backToCart:'← Back to List',submitVerified:'📋 Submit Results',allDone:'All items verified!',notAllVerified:'Verify all items first',bulkSection:'📦 Bulk Settings',bulkHint:'Tap to add all parts from a group',manualSection:'Or add manually',partsAdded:'parts added',loadingBom:'Loading BOM...',noBom:'No BOM data for this unit'},
-    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップリスト',submit:'📋 シートに送信',clear:'全てクリア',noItems:'まだ部品がありません。サブアセンブリまたは手動で追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加',startVerify:'🔍 照合開始',verifyTitle:'照合',picked:'ピック済',missing:'欠品',pending:'未確認',backToCart:'← リストに戻る',submitVerified:'📋 結果を送信',allDone:'全ての部品を確認しました！',notAllVerified:'全ての部品を確認してください',bulkSection:'📦 一括設定',bulkHint:'タップしてグループの全部品を追加',manualSection:'または手動で追加',partsAdded:'部品追加済',loadingBom:'BOM読込中...',noBom:'このユニットにBOMデータがありません'}
+    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup List',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items yet. Add from sub-assemblies or manually.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list',startVerify:'🔍 Start Verification',verifyTitle:'Verification',picked:'Picked',missing:'Missing',pending:'Pending',backToCart:'← Back to List',submitVerified:'📋 Submit Results',allDone:'All items verified!',notAllVerified:'Verify all items first',bulkSection:'📦 Sub-assemblies',bulkHint:'Tap to add all parts from a group',manualSection:'Or add manually',partsAdded:'parts added',loadingBom:'Loading BOM...',noBom:'No BOM data for this unit'},
+    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップリスト',submit:'📋 シートに送信',clear:'全てクリア',noItems:'まだ部品がありません。サブアセンブリまたは手動で追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加',startVerify:'🔍 照合開始',verifyTitle:'照合',picked:'ピック済',missing:'欠品',pending:'未確認',backToCart:'← リストに戻る',submitVerified:'📋 結果を送信',allDone:'全ての部品を確認しました！',notAllVerified:'全ての部品を確認してください',bulkSection:'📦 サブアセンブリ',bulkHint:'タップしてグループの全部品を追加',manualSection:'または手動で追加',partsAdded:'部品追加済',loadingBom:'BOM読込中...',noBom:'このユニットにBOMデータがありません'}
 };
 function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
-function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);var en=$('s-lang-en'),ja=$('s-lang-ja');if(en){en.className='stp-lb'+(l==='en'?' on':'');}if(ja){ja.className='stp-lb'+(l==='ja'?' on':'');}if(currentView==='home')renderHome();if(currentView==='verify')renderVerify();}
+function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);var en=$('s-lang-en'),ja=$('s-lang-ja');if(en){en.className='stp-lb'+(l==='en'?' on':'');}if(ja){ja.className='stp-lb'+(l==='ja'?' on':'');}if(currentView==='home')renderHome();if(currentView==='pickup')renderPickup();}
 function setTheme(t){document.body.classList.remove('theme-default','theme-market','theme-treasure');document.body.classList.add('theme-'+t);localStorage.setItem('soroi-theme',t);renderThemeGrid();}
 function loadSavedTheme(){var t=localStorage.getItem('soroi-theme')||'default';document.body.classList.remove('theme-default','theme-market','theme-treasure');document.body.classList.add('theme-'+t);}
 function renderThemeGrid(){
@@ -439,11 +414,11 @@ async function loadBom(uid){
     if(error){console.error('loadBom:',error);bom=[];}else{bom=data||[];}
     console.log('BOM loaded:',bom.length,'for',uid);}catch(e){console.error('loadBom:',e);bom=[];}
 }
-// BOM helpers
-function getChildSet(){var s=new Set();bom.forEach(b=>{if(b.parent_id)s.add(b.parent_id);});return s;}
-function getSubAssemblies(){var cs=getChildSet();return bom.filter(b=>cs.has(b.id)&&b.level>=2);}
-function getDirectChildren(pid){return bom.filter(b=>b.parent_id===pid);}
-function hasChildren(id){return bom.some(b=>b.parent_id===id);}
+// BOM helpers — get sub-assemblies (groups with children) and leaf parts
+function getSubAssemblies(){
+    var childSet=new Set();bom.forEach(b=>{if(b.parent_id)childSet.add(b.parent_id);});
+    return bom.filter(b=>childSet.has(b.id)&&b.level>=2);
+}
 function getLeaves(pid){
     var out=[];bom.forEach(b=>{if(isDesc(b.id,pid)&&!bom.some(c=>c.parent_id===b.id))out.push(b);});return out;
 }
@@ -454,11 +429,12 @@ function isDesc(id,anc){var cur=bom.find(b=>b.id===id);while(cur){if(cur.parent_
 // =====================================================
 function nav(view){
     currentView=view;
-    ['sec-loading','sec-login','sec-home','sec-verify'].forEach(id=>{$(id).style.display='none';});
+    ['sec-loading','sec-login','sec-home','sec-pickup','sec-verify'].forEach(id=>{$(id).style.display='none';});
     switch(view){
         case'loading':$('sec-loading').style.display='block';break;
         case'login':$('sec-login').style.display='block';$('login-sub').textContent=t('sub');break;
         case'home':renderHome();$('sec-home').style.display='block';break;
+        case'pickup':renderPickup();$('sec-pickup').style.display='block';break;
         case'verify':renderVerify();$('sec-verify').style.display='block';break;
     }
 }
@@ -468,109 +444,84 @@ function nav(view){
 // =====================================================
 function renderHome(){
     const el=$('sec-home');
+    let h='<div class="card"><div class="shdr"><h2>'+t('selectUnit')+'</h2></div><p style="color:var(--t3);font-size:.85rem;margin-bottom:16px">'+t('selectP')+'</p>';
+    // Unit grid
+    h+='<div class="ugrid">';
+    units.forEach(u=>{
+        const c=u.color||'#2563eb';
+        h+='<div class="ucard" onclick="openUnit(\''+u.id+'\')" style="border-top:3px solid '+c+'"><div class="ico">'+esc(u.icon||'📦')+'</div><h3>'+esc(u.name)+'</h3><p>'+t('tapStart')+'</p></div>';
+    });
+    if(!units.length)h+='<div class="empty"><div class="ico">📦</div><p>'+t('noUnits')+'</p></div>';
+    h+='</div></div>';
+    el.innerHTML=h;
+}
+
+async function openUnit(id){
+    selUnit=units.find(u=>u.id===id);
+    if(!selUnit)return;
+    cart=[];bom=[];addBoxOpen=false;
+    nav('pickup');
+    // Show spinner while loading BOM
+    $('sec-pickup').innerHTML='<div class="card"><div style="text-align:center;padding:40px"><div class="spinner"></div><p style="color:var(--t3)">'+t('loadingBom')+'</p></div></div>';
+    await loadBom(id);
+    renderPickup();
+}
+
+// =====================================================
+// PICKUP VIEW
+// =====================================================
+function renderPickup(){
+    if(!selUnit)return;
+    const el=$('sec-pickup');
+    // Track which sub-assemblies were already added
     var addedGroups=new Set(cart.filter(c=>c._group).map(c=>c._group));
+    var subAssys=getSubAssemblies();
     var GC=['#2e7d32','#1565c0','#c62828','#6a1b9a','#e65100','#00838f','#f57f17','#4e342e','#283593','#bf360c'];
 
     let h='<div class="card">';
+    h+='<div class="shdr"><h2>'+(selUnit.icon||'📦')+' '+esc(selUnit.name)+'</h2><button class="btn btn-s btn-sm" onclick="goHome()">← Back</button></div>';
+    h+='<div class="pk-info"><span class="pk-tag">📅 '+today()+'</span><span class="pk-tag">👤 '+esc(user?user.name:'')+'</span></div>';
 
-    // === BULK SETTINGS PANEL ===
-    h+='<div class="bulk-panel">';
-    h+='<div class="bulk-header" onclick="toggleBulk()">';
-    h+='<h3>'+t('bulkSection')+' <span class="toggle-ico'+(bulkOpen?'':' collapsed')+'">▼</span></h3>';
-    var summary=selUnit?esc(selUnit.icon||'📦')+' '+esc(selUnit.name):'—';
-    h+='<span class="bulk-summary">'+summary+'</span>';
-    h+='</div>';
-    h+='<div class="bulk-body'+(bulkOpen?' open':'')+'">';
-
-    // Unit chips
-    h+='<div class="sa-title">'+t('selectUnit')+'</div>';
-    h+='<div class="u-chips">';
-    units.forEach(u=>{
-        var on=selUnit&&selUnit.id===u.id;
-        h+='<div class="u-chip'+(on?' u-on':'')+'" onclick="onUnitChip(\''+u.id+'\')">';
-        h+='<span class="u-ico">'+esc(u.icon||'📦')+'</span>'+esc(u.name)+'</div>';
-    });
-    if(!units.length)h+='<span style="color:var(--t3);font-size:.82rem">'+t('noUnits')+'</span>';
-    h+='</div>';
-
-    // Sub-assembly chips (hierarchical)
-    if(selUnit&&bom.length){
-        var cs=getChildSet();
-        // Determine which level to show
-        var parentId=selSubAssy||null;
-        var children=parentId?getDirectChildren(parentId):bom.filter(b=>(b.level===1&&cs.has(b.id))?false:!b.parent_id||(b.level===2));
-        // If we have a parentId, get direct children
-        if(parentId)children=getDirectChildren(parentId);
-        else children=bom.filter(b=>b.level<=2&&cs.has(b.id));
-        var groups=children.filter(b=>cs.has(b.id));
-        var leafChildren=children.filter(b=>!cs.has(b.id));
-
-        if(groups.length||leafChildren.length){
-            // Breadcrumb
-            if(selSubAssy){
-                h+='<div class="bulk-bread"><a onclick="drillTo(null)">'+esc(selUnit.name)+'</a>';
-                // Build breadcrumb path
-                var path=[];var cur=bom.find(b=>b.id===selSubAssy);
-                while(cur){path.unshift(cur);var p=bom.find(b=>b.id===cur.parent_id);if(!p||p.level<2)break;cur=p;}
-                path.forEach((p,i)=>{
-                    h+='<span class="sep">›</span>';
-                    if(i<path.length-1)h+='<a onclick="drillTo(\''+p.id+'\')">'+esc(p.component)+'</a>';
-                    else h+='<span style="color:var(--t1);font-weight:600">'+esc(p.component)+'</span>';
-                });
-                h+='</div>';
-            }
-
-            h+='<div class="sa-section">';
-            if(!selSubAssy)h+='<div class="sa-title">'+t('bulkHint')+'</div>';
-            h+='<div class="sa-chips">';
-            // Groups (have children — drill into)
-            groups.forEach((g,i)=>{
-                var leaves=getLeaves(g.id);
-                var added=addedGroups.has(g.id);
-                var clr=GC[(i)%GC.length];
-                if(added){
-                    h+='<div class="sa-chip sa-added" style="border-left:4px solid '+clr+'">'+esc(g.component)+' <span class="sa-cnt">'+leaves.length+'</span> ✓</div>';
-                }else{
-                    // Check if it has sub-groups to drill, or just leaves
-                    var subGroups=getDirectChildren(g.id).filter(c=>cs.has(c.id));
-                    if(subGroups.length){
-                        // Has sub-sub-assemblies — drill
-                        h+='<div class="sa-chip" onclick="drillTo(\''+g.id+'\')" style="border-left:4px solid '+clr+'">'+esc(g.component)+' <span class="sa-cnt">'+leaves.length+'</span> ›</div>';
-                    }else{
-                        // Leaf group — add directly
-                        h+='<div class="sa-chip" onclick="addSubAssembly(\''+g.id+'\')" style="border-left:4px solid '+clr+'">'+esc(g.component)+' <span class="sa-cnt">'+leaves.length+'</span></div>';
-                    }
-                }
-            });
-            // Leaf parts at this level (can add individually)
-            leafChildren.forEach(p=>{
-                h+='<div class="sa-chip" onclick="addSingleBomPart(\''+p.id+'\')" style="border-left:4px solid var(--t3)">'+esc(p.component)+' <span class="sa-cnt">×'+p.qty+'</span></div>';
-            });
-            h+='</div></div>';
-        }
-    }else if(selUnit&&!bom.length){
-        h+='<div style="text-align:center;padding:12px;color:var(--t3);font-size:.82rem"><div class="spinner" style="width:20px;height:20px;border-width:2px;margin:0 auto 6px"></div>'+t('loadingBom')+'</div>';
+    // === SECTION 1: Sub-assembly chips ===
+    if(subAssys.length){
+        h+='<div class="sa-section">';
+        h+='<div class="sa-title">'+t('bulkSection')+' <span style="font-weight:400;font-size:.72rem;color:var(--t3)">'+t('bulkHint')+'</span></div>';
+        h+='<div class="sa-chips">';
+        subAssys.forEach((g,i)=>{
+            var leaves=getLeaves(g.id);
+            var added=addedGroups.has(g.id);
+            var clr=GC[i%GC.length];
+            h+='<div class="sa-chip'+(added?' sa-added':'')+'" onclick="'+(added?'':'addSubAssembly(\''+g.id+'\')')+'" style="border-left:4px solid '+clr+'">';
+            h+=esc(g.component)+' <span class="sa-cnt">'+leaves.length+'</span>';
+            if(added)h+=' ✓';
+            h+='</div>';
+        });
+        h+='</div></div>';
+    }else if(bom.length){
+        h+='<div style="color:var(--t3);font-size:.82rem;margin-bottom:12px">'+t('noBom').replace('BOM','sub-assembly')+'</div>';
     }
-    h+='</div></div>'; // end bulk-body, bulk-panel
 
-    // === PASTE LIST + ADD PART ===
+    // === SECTION 2: Manual add / Paste ===
+    h+='<div class="pk-divider"></div>';
+    h+='<div style="text-align:center"><span class="pk-divider-label">'+t('manualSection')+'</span></div>';
     h+='<div class="action-row">';
     h+='<button class="action-btn" onclick="openPasteModal()">'+t('pasteList')+'</button>';
     h+='<button class="action-btn" onclick="toggleAddBox()">'+t('addPart')+'</button>';
     h+='</div>';
+    // Add part box (collapsible)
     h+='<div class="add-box" id="add-box" style="display:'+(addBoxOpen?'block':'none')+'">';
     h+='<div class="add-row"><input id="inp-pn" placeholder="'+t('pnPh')+'" style="font-family:monospace" onkeydown="if(event.key===\'Enter\')addToCart()"><input id="inp-name" placeholder="'+t('namePh')+'" onkeydown="if(event.key===\'Enter\')addToCart()"><input id="inp-qty" class="qty" type="number" value="1" min="1" placeholder="'+t('qtyPh')+'" onkeydown="if(event.key===\'Enter\')addToCart()"></div>';
     h+='<button class="btn btn-p" onclick="addToCart()">'+t('add')+'</button>';
     h+='</div>';
 
-    // === PICKUP LIST ===
+    // === SECTION 3: Working list (cart) ===
     h+='<div class="shdr" style="margin-top:12px"><h2>'+t('cart')+' ('+cart.length+')</h2>';
-    if(cart.length)h+='<button class="btn btn-d btn-sm" onclick="cart=[];renderHome()">'+t('clear')+'</button>';
+    if(cart.length)h+='<button class="btn btn-d btn-sm" onclick="cart=[];renderPickup()">'+t('clear')+'</button>';
     h+='</div>';
     if(cart.length){
-        h+='<table class="ctbl"><thead><tr><th class="act"></th><th>#</th><th>'+t('pnPh')+'</th><th>'+t('namePh')+'</th><th>'+t('qtyPh')+'</th></tr></thead><tbody>';
+        h+='<table class="ctbl"><thead><tr><th>#</th><th>'+t('pnPh')+'</th><th>'+t('namePh')+'</th><th>'+t('qtyPh')+'</th><th class="act"></th></tr></thead><tbody>';
         cart.forEach((c,i)=>{
-            h+='<tr><td class="act"><button class="dbtn" onclick="removeCartItem('+i+')">✕</button></td><td>'+(i+1)+'</td><td class="pn">'+esc(c.pn)+'</td><td>'+esc(c.name)+'</td><td class="qc">'+c.qty+'</td></tr>';
+            h+='<tr><td>'+(i+1)+'</td><td class="pn">'+esc(c.pn)+'</td><td>'+esc(c.name)+'</td><td class="qc">'+c.qty+'</td><td class="act"><button class="dbtn" onclick="removeCartItem('+i+')">✕</button></td></tr>';
         });
         h+='</tbody></table>';
         h+='<button class="btn btn-g" onclick="startVerify()" style="width:100%">'+t('startVerify')+'</button>';
@@ -583,29 +534,7 @@ function renderHome(){
     if(addBoxOpen)setTimeout(()=>{const inp=$('inp-pn');if(inp)inp.focus();},50);
 }
 
-// Unit chip handler
-async function onUnitChip(id){
-    if(selUnit&&selUnit.id===id){selUnit=null;bom=[];selSubAssy=null;renderHome();return;}
-    selUnit=units.find(u=>u.id===id);
-    if(!selUnit)return;
-    bom=[];selSubAssy=null;renderHome();
-    await loadBom(id);
-    renderHome();
-}
-
-// Drill into sub-assembly
-function drillTo(id){selSubAssy=id;renderHome();}
-
-// Add single BOM part
-function addSingleBomPart(bid){
-    var b=bom.find(p=>p.id===bid);if(!b)return;
-    cart.push({pn:b.part_number||'',name:b.component||'',qty:b.qty||1,_group:null});
-    renderHome();
-}
-
-function toggleBulk(){bulkOpen=!bulkOpen;renderHome();}
-
-function goHome(){nav('home');}
+function goHome(){selUnit=null;cart=[];bom=[];addBoxOpen=false;verifyMode=false;nav('home');}
 
 function addSubAssembly(gid){
     var g=bom.find(b=>b.id===gid);if(!g)return;
@@ -614,13 +543,13 @@ function addSubAssembly(gid){
         cart.push({pn:p.part_number||'',name:p.component||p.part_number||'',qty:p.qty||1,_group:gid});
     });
     showSt('pk-status','✅ '+leaves.length+' '+t('partsAdded')+' — '+g.component,'ok');
-    renderHome();
+    renderPickup();
     setTimeout(()=>{const s=$('pk-status');if(s)s.className='status';},3000);
 }
 
 function removeCartItem(idx){
     cart.splice(idx,1);
-    renderHome();
+    renderPickup();
 }
 
 function addToCart(){
@@ -629,10 +558,10 @@ function addToCart(){
     const qty=parseInt($('inp-qty').value)||1;
     if(!pn&&!name)return;
     cart.push({pn:pn,name:name||pn,qty:qty});
-    renderHome();
+    renderPickup();
 }
 
-function toggleAddBox(){addBoxOpen=!addBoxOpen;renderHome();}
+function toggleAddBox(){addBoxOpen=!addBoxOpen;renderPickup();}
 
 // Paste List Modal
 function openPasteModal(){
@@ -659,7 +588,7 @@ function processPastedList(){
     });
     closePasteModal();
     if(added)showSt('pk-status','✅ '+added+' '+t('pasted'),'ok');
-    renderHome();
+    renderPickup();
     setTimeout(()=>{const s=$('pk-status');if(s)s.className='status';},3000);
 }
 
@@ -676,7 +605,7 @@ function startVerify(){
 
 function backToCart(){
     verifyMode=false;
-    nav('home');
+    nav('pickup');
 }
 
 function markItem(idx,status){
@@ -759,7 +688,7 @@ async function submitToSheet(){
         const missingN=cart.filter(c=>c.status==='missing').length;
         showSt('pk-status','✅ '+pickedN+' '+t('picked')+(missingN?', ❌ '+missingN+' '+t('missing'):''),'ok');
         cart=[];verifyMode=false;
-        setTimeout(()=>{nav('home');},2000);
+        setTimeout(()=>{nav('pickup');},2000);
     }catch(e){
         console.error(e);
         if(e.message==='NEEDS_GIS_AUTH'){
