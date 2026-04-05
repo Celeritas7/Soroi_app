@@ -146,9 +146,10 @@ async function checkRole(u){
     user={email:u.email,name:fb,isAdmin:false};
     try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){user.name=r.data[0].name||fb;user.isAdmin=(r.data[0].role||'').toLowerCase().trim()==='admin';}}catch(e){console.warn('Role check:',e);}
     if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')user.isAdmin=true;
-    console.log('Auth:',user.email,'admin:',user.isAdmin);
+    console.log('Auth:',user.email,'admin:',user.isAdmin,'view:',currentView);
     await loadAll();
-    nav('home');
+    if(currentView==='loading'||currentView==='login'){nav('home');}
+    else{updateHeader();renderSettings();if(currentView==='home')renderHome();}
 }
 function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);toast(t('connected'),'ok');}}});}
 
