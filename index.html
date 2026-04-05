@@ -8,13 +8,47 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--pri:#2563eb;--pri-dk:#1e40af;--pri-bg:rgba(37,99,235,.08);--pri-bg2:rgba(37,99,235,.14);--grn:#059669;--grn-bg:rgba(5,150,105,.08);--red:#dc2626;--red-bg:#fef2f2;--ylw:#d97706;--ylw-bg:#fffbeb;--card:#fff;--t1:#1e293b;--t2:#64748b;--t3:#94a3b8;--brd:#e2e8f0;--r:10px;--ok-bg:#f0fdf4;--ok:#15803d;--err-bg:#fef2f2;--err:#b91c1c;--sb:env(safe-area-inset-bottom,0px)}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;min-height:100dvh;color:var(--t1)}
+:root{--pri:#2563eb;--pri-dk:#1e40af;--pri-bg:rgba(37,99,235,.08);--pri-bg2:rgba(37,99,235,.14);--grn:#059669;--grn-bg:rgba(5,150,105,.08);--red:#dc2626;--red-bg:#fef2f2;--ylw:#d97706;--ylw-bg:#fffbeb;--card:#fff;--t1:#1e293b;--t2:#64748b;--t3:#94a3b8;--brd:#e2e8f0;--bg:#f1f5f9;--r:10px;--ok-bg:#f0fdf4;--ok:#15803d;--err-bg:#fef2f2;--err:#b91c1c;--sb:env(safe-area-inset-bottom,0px);--add-grad:linear-gradient(135deg,#eff6ff,#f0fdf4);--add-brd:#bfdbfe;--login-sh:rgba(37,99,235,.3)}
+/* 🔵 Default Blue */
+body.theme-default{--pri:#2563eb;--pri-dk:#1e40af;--pri-bg:rgba(37,99,235,.08);--pri-bg2:rgba(37,99,235,.14);--bg:#f1f5f9;--card:#fff;--t1:#1e293b;--t2:#64748b;--t3:#94a3b8;--brd:#e2e8f0;--add-grad:linear-gradient(135deg,#eff6ff,#f0fdf4);--add-brd:#bfdbfe;--login-sh:rgba(37,99,235,.3)}
+/* 🛒 Market */
+body.theme-market{--pri:#059669;--pri-dk:#047857;--pri-bg:rgba(5,150,105,.08);--pri-bg2:rgba(5,150,105,.14);--bg:#faf7f2;--card:#fffdf7;--t1:#1c1917;--t2:#78716c;--t3:#a8a29e;--brd:#e7e5e4;--add-grad:linear-gradient(135deg,#f0fdf4,#fefce8);--add-brd:#86efac;--login-sh:rgba(5,150,105,.3)}
+body.theme-market .bar{background:var(--card);border-bottom:2px solid var(--pri)}
+body.theme-market .login-ico{background:linear-gradient(135deg,#059669,#047857)}
+body.theme-market .ucard{border-top-color:var(--pri)!important}
+/* 🏴‍☠️ Treasure Hunt */
+body.theme-treasure{--pri:#d97706;--pri-dk:#b45309;--pri-bg:rgba(217,119,6,.1);--pri-bg2:rgba(217,119,6,.16);--bg:#1a1a2e;--card:#16213e;--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;--brd:#334155;--add-grad:linear-gradient(135deg,rgba(217,119,6,.08),rgba(245,158,11,.06));--add-brd:#92400e;--login-sh:rgba(217,119,6,.4);--ok-bg:rgba(5,150,105,.15);--ok:#34d399;--err-bg:rgba(220,38,38,.15);--err:#fca5a5}
+body.theme-treasure .bar{background:var(--card);border:1px solid var(--brd);box-shadow:0 2px 12px rgba(0,0,0,.3)}
+body.theme-treasure .bar h1{color:var(--pri)}
+body.theme-treasure .chip{background:var(--card);border-color:var(--brd);color:var(--t2)}
+body.theme-treasure .lbtn{border-color:var(--brd);color:var(--t2)}
+body.theme-treasure .card{background:var(--card);box-shadow:0 4px 16px rgba(0,0,0,.3)}
+body.theme-treasure .login-ico{background:linear-gradient(135deg,#d97706,#92400e);box-shadow:0 12px 32px rgba(217,119,6,.4)}
+body.theme-treasure .login-h span{color:var(--pri)}
+body.theme-treasure .login-btn{background:var(--pri);color:#1a1a2e}.login-btn:hover{background:var(--pri-dk)}
+body.theme-treasure .ucard{background:var(--card);border-color:var(--brd);border-top-color:var(--pri)!important}
+body.theme-treasure .ucard:hover{border-color:var(--pri);box-shadow:0 4px 16px rgba(217,119,6,.2)}
+body.theme-treasure .ucard h3{color:var(--t1)}
+body.theme-treasure .ctbl th{background:#1e293b;color:var(--t2);border-color:var(--brd)}
+body.theme-treasure .ctbl td{border-color:var(--brd);color:var(--t1)}
+body.theme-treasure .stp-lb{background:var(--card);color:var(--t2);border-color:var(--brd)}
+body.theme-treasure .stp-sid{background:var(--card);color:var(--t1);border-color:var(--brd)}
+body.theme-treasure .add-row input{background:var(--card);color:var(--t1);border-color:var(--pri)}
+body.theme-treasure .shdr h2{color:var(--t1)}
+/* Theme picker */
+.theme-grid{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.theme-card{flex:1;min-width:90px;padding:10px 8px;border:2.5px solid var(--brd);border-radius:10px;text-align:center;cursor:pointer;transition:all .15s;background:var(--card)}
+.theme-card:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.theme-card.active{border-color:var(--pri);box-shadow:0 0 0 2px var(--pri-bg)}
+.theme-card .tc-dot{width:32px;height:32px;border-radius:50%;margin:0 auto 6px}
+.theme-card .tc-name{font-size:.72rem;font-weight:700}
+.theme-card .tc-ico{font-size:1.2rem;margin-bottom:4px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);min-height:100dvh;color:var(--t1);transition:background .3s,color .3s}
 button{font:inherit;cursor:pointer;border:none;background:none}
 input,select{font:inherit}
 a{color:inherit;text-decoration:none}
 .shell{max-width:700px;margin:0 auto;padding:16px}
-.bar{background:#fff;border-radius:var(--r);padding:14px 20px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.bar{background:var(--card);border-radius:var(--r);padding:14px 20px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .bar-left{display:flex;align-items:center;gap:10px}
 .bar h1{font-size:1.1rem;font-weight:700}
 .bar-right{display:flex;align-items:center;gap:8px}
@@ -22,7 +56,7 @@ a{color:inherit;text-decoration:none}
 .chip .rt{font-weight:600;color:var(--pri);margin-left:4px}
 .lbtn{background:none;border:1px solid var(--brd);color:var(--t2);padding:5px 10px;border-radius:6px;font-size:.75rem;cursor:pointer}.lbtn:hover{border-color:var(--pri);color:var(--pri)}
 .abtn{background:var(--pri-bg);border:none;border-radius:8px;padding:5px 10px;font-size:.78rem;cursor:pointer;color:var(--pri);font-weight:600;display:inline-flex;align-items:center;gap:4px}.abtn:hover{background:var(--pri-bg2)}
-.card{background:#fff;border-radius:var(--r);padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px}
+.card{background:var(--card);border-radius:var(--r);padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px}
 .shdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .shdr h2{font-size:1.05rem;font-weight:700}
 .btn{padding:8px 16px;border-radius:8px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
@@ -35,7 +69,7 @@ a{color:inherit;text-decoration:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 /* Login */
 #sec-login{text-align:center;padding:40px 20px}
-.login-ico{width:80px;height:80px;border-radius:20px;margin:0 auto 16px;background:var(--pri);display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 12px 32px rgba(37,99,235,.3);color:#fff}
+.login-ico{width:80px;height:80px;border-radius:20px;margin:0 auto 16px;background:var(--pri);display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 12px 32px var(--login-sh);color:#fff}
 .login-h{font-size:1.6rem;font-weight:800;margin-bottom:4px}.login-h span{color:var(--pri)}
 .login-p{color:var(--t3);margin-bottom:20px;font-size:.9rem}
 .login-btn{background:var(--pri);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:10px}.login-btn:hover{background:var(--pri-dk)}
@@ -50,7 +84,7 @@ a{color:inherit;text-decoration:none}
 /* Pickup */
 .pk-info{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .pk-tag{font-size:.78rem;padding:4px 12px;border-radius:16px;background:var(--pri-bg);color:var(--pri);font-weight:600}
-.add-box{background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:2px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:16px}
+.add-box{background:var(--add-grad);border:2px solid var(--add-brd);border-radius:12px;padding:16px;margin-bottom:16px}
 .add-box h3{font-size:.9rem;font-weight:700;color:var(--pri);margin-bottom:10px}
 .add-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
 .add-row input{flex:1;min-width:120px;padding:10px 12px;border:2px solid var(--pri);border-radius:8px;font-size:.95rem;font-weight:500}
@@ -80,7 +114,7 @@ a{color:inherit;text-decoration:none}
 @media(max-width:600px){.shell{padding:10px}.bar{padding:12px 14px}.card{padding:14px}.ugrid{grid-template-columns:1fr 1fr}.add-row{flex-direction:column}.add-row input.qty{width:100%}}
 </style>
 </head>
-<body>
+<body class="theme-default">
 <div class="shell">
     <!-- BAR (static) -->
     <div class="bar">
@@ -132,6 +166,8 @@ const TR={
 };
 function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
 function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);if(currentView==='home')renderHome();if(currentView==='pickup')renderPickup();}
+function setTheme(t){document.body.classList.remove('theme-default','theme-market','theme-treasure');document.body.classList.add('theme-'+t);localStorage.setItem('soroi-theme',t);if(currentView==='home')renderHome();}
+function loadSavedTheme(){var t=localStorage.getItem('soroi-theme')||'default';document.body.classList.remove('theme-default','theme-market','theme-treasure');document.body.classList.add('theme-'+t);}
 
 // =====================================================
 // HELPERS
@@ -147,6 +183,7 @@ function hideSt(id){const e=$(id);if(e)e.className='status';}
 // AUTH (copied from Part Inventory — proven pattern)
 // =====================================================
 window.onload=function(){
+    loadSavedTheme();
     sb.auth.onAuthStateChange(async(ev,session)=>{
         if(session&&session.user&&(ev==='SIGNED_IN'||ev==='TOKEN_REFRESHED'||ev==='INITIAL_SESSION')){
             await checkRole(session.user);authReady=true;
@@ -273,6 +310,13 @@ function renderHome(){
     h+='<div class="stp">';
     h+='<div class="stp-row"><span class="stp-label">'+t('language')+'</span><div class="stp-lang"><button class="stp-lb'+(LANG==='en'?' on':'')+'" onclick="setLang(\'en\')">EN</button><button class="stp-lb'+(LANG==='ja'?' on':'')+'" onclick="setLang(\'ja\')">日本語</button></div></div>';
     h+='<div class="stp-row"><span class="stp-label">'+t('sheetId')+'</span><input class="stp-sid" value="'+esc(sheetId)+'" placeholder="Google Sheet ID" onchange="sheetId=this.value.trim();localStorage.setItem(\'soroi_sid\',sheetId)"></div>';
+    // Theme picker
+    var curTheme=localStorage.getItem('soroi-theme')||'default';
+    h+='<div class="theme-grid">';
+    h+='<div class="theme-card'+(curTheme==='default'?' active':'')+'" onclick="setTheme(\'default\')"><div class="tc-ico">🔵</div><div class="tc-dot" style="background:linear-gradient(135deg,#2563eb,#1e40af)"></div><div class="tc-name">Default</div></div>';
+    h+='<div class="theme-card'+(curTheme==='market'?' active':'')+'" onclick="setTheme(\'market\')"><div class="tc-ico">🛒</div><div class="tc-dot" style="background:linear-gradient(135deg,#059669,#047857)"></div><div class="tc-name">Market</div></div>';
+    h+='<div class="theme-card'+(curTheme==='treasure'?' active':'')+'" onclick="setTheme(\'treasure\')"><div class="tc-ico">🏴‍☠️</div><div class="tc-dot" style="background:linear-gradient(135deg,#d97706,#92400e)"></div><div class="tc-name">Treasure</div></div>';
+    h+='</div>';
     h+='</div>';
     // Unit grid
     h+='<div class="ugrid">';
