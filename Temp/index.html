@@ -4,295 +4,375 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>揃い Soroi — Shop Floor Pickup</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--pri:#2563eb;--pri-dk:#1e40af;--pri-bg:rgba(37,99,235,.08);--grn:#059669;--grn-bg:#ecfdf5;--red:#dc2626;--red-bg:#fef2f2;--ylw:#d97706;--ylw-bg:#fffbeb;--bg:#f1f5f9;--sf:#fff;--tx:#1e293b;--t2:#64748b;--t3:#94a3b8;--bd:#e2e8f0;--ft:'Outfit',system-ui,sans-serif;--mn:'IBM Plex Mono',monospace;--r:12px;--sh:0 1px 3px rgba(0,0,0,.06);--sb:env(safe-area-inset-bottom,0px)}
-html{font-family:var(--ft);font-size:14px;color:var(--tx);background:var(--bg)}
-body{min-height:100dvh}
-button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
-input,select{font:inherit;color:inherit}
-a{color:inherit}
-.hdr{background:var(--pri);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(37,99,235,.25)}
-.hdr-bk{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0;text-decoration:none;color:#fff;cursor:pointer}.hdr-bk:hover{background:rgba(255,255,255,.15)}
-.hdr svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.hdr-b{flex:1;min-width:0}.hdr-t{font-weight:700;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hdr-s{font-size:.7rem;opacity:.7}
-.hdr-r{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.hdr-btn{padding:6px 12px;border-radius:8px;font-size:.78rem;font-weight:600;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;gap:5px;text-decoration:none;cursor:pointer}.hdr-btn:hover{background:rgba(255,255,255,.25)}
-.lgn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90dvh;padding:32px 24px;text-align:center;background:linear-gradient(170deg,#f1f5f9,#dbeafe)}
-.lgn-ic{width:80px;height:80px;border-radius:20px;margin-bottom:20px;background:var(--pri);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(37,99,235,.3)}
-.lgn-ic svg{width:38px;height:38px;stroke:#fff;fill:none;stroke-width:1.8}
-.lgn-h{font-size:1.8rem;font-weight:800;letter-spacing:-.02em;margin-bottom:2px}.lgn-h span{color:var(--pri)}
-.lgn-p{font-size:.85rem;color:var(--t3);margin-bottom:24px}
-.lgn-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--tx);font-weight:600;font-size:.9rem;padding:12px 28px;border-radius:var(--r);box-shadow:var(--sh);border:1.5px solid var(--bd)}.lgn-btn:hover{border-color:var(--pri)}
-.home-hdr{padding:24px 20px 12px;text-align:center}.home-hdr h2{font-size:1.3rem;font-weight:800;margin-bottom:4px}.home-hdr p{font-size:.82rem;color:var(--t3)}
-.info-bar{max-width:600px;margin:0 auto 12px;padding:10px 20px;display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
-.info-chip{font-size:.8rem;padding:5px 14px;border-radius:20px;background:var(--sf);border:1.5px solid var(--bd);font-weight:500;display:flex;align-items:center;gap:5px}.info-chip b{color:var(--pri)}
-.ugrid{padding:8px 20px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;max-width:800px;margin:0 auto;width:100%}
-.ucard{background:var(--sf);border-radius:var(--r);padding:20px;box-shadow:var(--sh);border:1.5px solid var(--bd);border-top:3.5px solid var(--pri);display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s}
-.ucard:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);border-color:var(--pri)}.ucard:active{transform:scale(.98)}
-.ucard-ico{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;background:var(--pri-bg)}
-.ucard-b{flex:1;min-width:0}.ucard-n{font-weight:700;font-size:1rem}.ucard-d{font-size:.75rem;color:var(--t3);margin-top:2px}
-.ucard-a{color:var(--t3)}.ucard-a svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.5}
-.mode-bar{display:flex;margin:8px 16px;border-radius:var(--r);overflow:hidden;border:1.5px solid var(--bd);background:var(--sf)}
-.mode-btn{flex:1;padding:10px;font-size:.85rem;font-weight:700;text-align:center;cursor:pointer;transition:all .15s;color:var(--t2)}.mode-btn.on{background:var(--pri);color:#fff}
-.sub-list{padding:8px 16px;max-width:800px;margin:0 auto;width:100%}
-.sub-card{background:var(--sf);border-radius:var(--r);padding:14px 16px;margin-bottom:8px;border:1.5px solid var(--bd);display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .12s}
-.sub-card:hover{border-color:var(--pri);background:var(--pri-bg)}.sub-card:active{transform:scale(.985)}
-.sub-ico{width:8px;height:40px;border-radius:4px;flex-shrink:0}
-.sub-b{flex:1;min-width:0}.sub-n{font-weight:700;font-size:.9rem}.sub-d{font-size:.72rem;color:var(--t3);margin-top:2px}
-.sub-cnt{font-size:.82rem;font-weight:700;color:var(--pri);flex-shrink:0}
-.sub-a svg{width:18px;height:18px;stroke:var(--t3);fill:none;stroke-width:2.5}
-.search-wrap{padding:8px 16px;max-width:800px;margin:0 auto;width:100%}
-.search-box{position:relative;margin-bottom:10px}
-.search-in{width:100%;padding:12px 16px 12px 40px;border:2px solid var(--bd);border-radius:var(--r);font-size:1rem;background:var(--sf)}.search-in:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-.search-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--t3)}.search-ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
-.chip-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.f-chip{padding:7px 14px;border-radius:20px;font-size:.8rem;font-weight:600;border:1.5px solid var(--bd);background:var(--sf);cursor:pointer;transition:all .12s;font-family:var(--mn)}.f-chip:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-bg)}
-.cf-list{max-height:300px;overflow-y:auto;border:1px solid var(--bd);border-radius:8px;margin:10px 0}
-.cf-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid #f5f5f5;font-size:.82rem}
-.cf-pn{font-family:var(--mn);font-weight:600;min-width:100px}.cf-nm{flex:1;color:var(--t2)}.cf-qty{font-weight:700;min-width:30px;text-align:center}
-.cart{position:sticky;bottom:0;background:var(--sf);border-top:2px solid var(--bd);padding:10px 16px calc(10px + var(--sb));z-index:60;box-shadow:0 -4px 12px rgba(0,0,0,.06)}
-.cart-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.cart-t{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:6px}.cart-t svg{width:16px;height:16px}
-.cart-badge{background:var(--pri);color:#fff;font-size:.72rem;padding:2px 8px;border-radius:10px}
-.cart-expand{font-size:.72rem;color:var(--pri);cursor:pointer;font-weight:600}
-.cart-items{max-height:200px;overflow-y:auto;border:1px solid var(--bd);border-radius:8px;margin-top:6px;display:none}.cart-items.open{display:block}
-.ci{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid #f5f5f5;font-size:.82rem}
-.ci-pn{font-family:var(--mn);font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ci-qty{font-weight:700;color:var(--pri)}.ci-mode{font-size:.65rem;padding:1px 6px;border-radius:4px;background:var(--pri-bg);color:var(--pri);font-weight:600}
-.ci-del{color:var(--t3);padding:4px;cursor:pointer}.ci-del:hover{color:var(--red)}.ci-del svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
-.cart-acts{display:flex;gap:6px}.cart-btn{flex:1;padding:10px;border-radius:8px;font-size:.85rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
-.cart-sub{background:var(--grn);color:#fff}.cart-sub:hover{background:#047857}
-.cart-clr{background:var(--red-bg);color:var(--red)}.cart-clr:hover{background:#fecaca}
-.stp{max-width:800px;margin:0 auto;width:100%;overflow:hidden;max-height:0;transition:max-height .3s ease,opacity .2s;opacity:0}
-.stp.open{max-height:400px;opacity:1}
-.stp-inner{padding:12px 20px 16px}
-.stp-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--pri:#2563eb;--pri-dk:#1e40af;--pri-bg:rgba(37,99,235,.08);--pri-bg2:rgba(37,99,235,.14);--grn:#059669;--grn-bg:rgba(5,150,105,.08);--red:#dc2626;--red-bg:#fef2f2;--ylw:#d97706;--ylw-bg:#fffbeb;--card:#fff;--t1:#1e293b;--t2:#64748b;--t3:#94a3b8;--brd:#e2e8f0;--r:10px;--ok-bg:#f0fdf4;--ok:#15803d;--err-bg:#fef2f2;--err:#b91c1c;--sb:env(safe-area-inset-bottom,0px)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;min-height:100dvh;color:var(--t1)}
+button{font:inherit;cursor:pointer;border:none;background:none}
+input,select{font:inherit}
+a{color:inherit;text-decoration:none}
+.shell{max-width:700px;margin:0 auto;padding:16px}
+.bar{background:#fff;border-radius:var(--r);padding:14px 20px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.bar-left{display:flex;align-items:center;gap:10px}
+.bar h1{font-size:1.1rem;font-weight:700}
+.bar-right{display:flex;align-items:center;gap:8px}
+.chip{font-size:.8rem;color:var(--t2);background:#f8fafc;padding:4px 10px;border-radius:20px;border:1px solid var(--brd)}
+.chip .rt{font-weight:600;color:var(--pri);margin-left:4px}
+.lbtn{background:none;border:1px solid var(--brd);color:var(--t2);padding:5px 10px;border-radius:6px;font-size:.75rem;cursor:pointer}.lbtn:hover{border-color:var(--pri);color:var(--pri)}
+.abtn{background:var(--pri-bg);border:none;border-radius:8px;padding:5px 10px;font-size:.78rem;cursor:pointer;color:var(--pri);font-weight:600;display:inline-flex;align-items:center;gap:4px}.abtn:hover{background:var(--pri-bg2)}
+.card{background:#fff;border-radius:var(--r);padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px}
+.shdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.shdr h2{font-size:1.05rem;font-weight:700}
+.btn{padding:8px 16px;border-radius:8px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-p{background:var(--pri);color:#fff}.btn-p:hover{background:var(--pri-dk)}
+.btn-g{background:var(--grn);color:#fff}.btn-g:hover{background:#047857}
+.btn-s{background:var(--pri-bg);color:var(--pri)}.btn-s:hover{background:var(--pri-bg2)}
+.btn-d{background:var(--err-bg);color:var(--err)}.btn-d:hover{background:#fecaca}
+.btn-sm{padding:5px 10px;font-size:.8rem}
+.spinner{border:3px solid #e2e8f0;border-top:3px solid var(--pri);border-radius:50%;width:36px;height:36px;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Login */
+#sec-login{text-align:center;padding:40px 20px}
+.login-ico{width:80px;height:80px;border-radius:20px;margin:0 auto 16px;background:var(--pri);display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 12px 32px rgba(37,99,235,.3);color:#fff}
+.login-h{font-size:1.6rem;font-weight:800;margin-bottom:4px}.login-h span{color:var(--pri)}
+.login-p{color:var(--t3);margin-bottom:20px;font-size:.9rem}
+.login-btn{background:var(--pri);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:10px}.login-btn:hover{background:var(--pri-dk)}
+#login-error{color:var(--err);margin-top:14px;display:none;font-size:.9rem}
+/* Unit grid */
+.ugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.ucard{border:2px solid var(--brd);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .15s}
+.ucard:hover{border-color:var(--pri);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.ucard .ico{font-size:2.2rem;margin-bottom:8px}
+.ucard h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.ucard p{font-size:.78rem;color:var(--t3)}
+/* Pickup */
+.pk-info{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.pk-tag{font-size:.78rem;padding:4px 12px;border-radius:16px;background:var(--pri-bg);color:var(--pri);font-weight:600}
+.add-box{background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:2px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:16px}
+.add-box h3{font-size:.9rem;font-weight:700;color:var(--pri);margin-bottom:10px}
+.add-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.add-row input{flex:1;min-width:120px;padding:10px 12px;border:2px solid var(--pri);border-radius:8px;font-size:.95rem;font-weight:500}
+.add-row input:focus{outline:none;border-color:var(--pri-dk)}
+.add-row input.qty{width:70px;flex:none;text-align:center}
+/* Cart table */
+.ctbl{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:12px}
+.ctbl th{text-align:left;padding:6px 10px;background:#f8fafc;border:1px solid var(--brd);font-weight:700;font-size:.72rem;text-transform:uppercase;color:var(--t2)}
+.ctbl td{padding:6px 10px;border:1px solid var(--brd)}
+.ctbl .pn{font-family:monospace;font-weight:600}
+.ctbl .qc{width:50px;text-align:center;font-weight:700}
+.ctbl .act{width:36px;text-align:center}
+.ctbl .dbtn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:1rem;padding:2px 4px;border-radius:4px}.ctbl .dbtn:hover{color:var(--err)}
+/* Settings */
+.stp{margin-bottom:16px}
+.stp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .stp-label{font-size:.78rem;font-weight:600;color:var(--t2);min-width:70px;flex-shrink:0}
-.stp-lang{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1.5px solid var(--bd)}
-.stp-lb{padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .12s;background:var(--sf);color:var(--t2);border:none}.stp-lb.on{background:var(--pri);color:#fff}
-.stp-sid{flex:1;padding:8px 12px;border:1.5px solid var(--bd);border-radius:8px;font-size:.8rem;font-family:var(--mn);background:var(--sf)}.stp-sid:focus{outline:none;border-color:var(--pri)}
-.stp-link{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:.8rem;font-weight:600;background:var(--sf);border:1.5px solid var(--bd);color:var(--t2);text-decoration:none;transition:all .12s}.stp-link:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-bg)}
-.stp-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.stp-divider{height:1px;background:var(--bd);margin:10px 0}
-.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%) translateY(-80px);padding:10px 20px;border-radius:var(--r);font-size:.85rem;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:1000;max-width:90vw;text-align:center;transition:transform .3s;background:var(--tx);color:#fff}.toast.show{transform:translateX(-50%) translateY(0)}.toast.err{background:var(--red)}.toast.ok{background:var(--grn)}
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}.mo.show{opacity:1;pointer-events:auto}
-.mo .md{background:var(--sf);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + var(--sb));width:100%;max-width:500px;transform:translateY(100%);transition:transform .3s}.mo.show .md{transform:translateY(0)}
-.md-t{font-weight:700;font-size:1.05rem;margin-bottom:6px}.md-p{font-size:.85rem;color:var(--t2);margin-bottom:14px;line-height:1.5}
-.md-a{display:flex;gap:8px}.md-a button{flex:1;padding:11px;border-radius:var(--r);font-weight:600;font-size:.88rem}
-.mdc{background:#f1f5f9;border:1.5px solid var(--bd)}.mdo{background:var(--grn);color:#fff}.mdd{background:var(--red);color:#fff}
-.md-input{width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:8px;margin-bottom:10px;font-size:.9rem}.md-input:focus{outline:none;border-color:var(--pri)}
-.lc{display:flex;flex-direction:column;align-items:center;gap:12px;padding:60px 40px;color:var(--t3)}
-.spin{width:24px;height:24px;border:3px solid var(--bd);border-top-color:var(--pri);border-radius:50%;animation:sp .6s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
-.fade{animation:fi .15s ease}@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.empty-msg{text-align:center;padding:40px 20px;color:var(--t3);font-size:.9rem}
-@media(max-width:600px){.ugrid{grid-template-columns:1fr}.info-bar{flex-direction:column;gap:6px}.stp-row{flex-wrap:wrap}}
+.stp-lang{display:flex;border-radius:6px;overflow:hidden;border:1.5px solid var(--brd)}
+.stp-lb{padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:#fff;color:var(--t2);border:none}.stp-lb.on{background:var(--pri);color:#fff}
+.stp-sid{flex:1;padding:7px 10px;border:1.5px solid var(--brd);border-radius:6px;font-size:.78rem;font-family:monospace;min-width:0}.stp-sid:focus{outline:none;border-color:var(--pri)}
+/* Status */
+.status{padding:10px 14px;border-radius:8px;margin-top:10px;text-align:center;font-size:.88rem;font-weight:500;display:none}
+.status.ok{background:var(--ok-bg);color:var(--ok);display:block}
+.status.err{background:var(--err-bg);color:var(--err);display:block}
+.status.loading{background:var(--pri-bg);color:var(--pri);display:block}
+.empty{text-align:center;padding:40px;color:var(--t3)}.empty .ico{font-size:2rem;margin-bottom:8px}
+@media(max-width:600px){.shell{padding:10px}.bar{padding:12px 14px}.card{padding:14px}.ugrid{grid-template-columns:1fr 1fr}.add-row{flex-direction:column}.add-row input.qty{width:100%}}
 </style>
 </head>
 <body>
-<div class="hdr" id="hdr-bar">
-  <div id="hdr-back" style="display:none"></div>
-  <div class="hdr-b"><div class="hdr-t" id="hdr-title">🛒 揃い Soroi</div><div class="hdr-s" id="hdr-sub">Shop Floor Pickup</div></div>
-  <div class="hdr-r" id="hdr-right"></div>
+<div class="shell">
+    <!-- BAR (static) -->
+    <div class="bar">
+        <div class="bar-left">
+            <h1 id="pg-title">🛒 揃い Soroi</h1>
+        </div>
+        <div class="bar-right" id="bar-right" style="display:none">
+            <span class="chip" id="user-chip" style="display:none"></span>
+            <a href="admin.html" class="abtn" id="admin-link" style="display:none">⚙️ Admin</a>
+            <button class="lbtn" id="login-btn" onclick="doLogin()" style="display:none">Sign In</button>
+            <button class="lbtn" id="logout-btn" onclick="doLogout()" style="display:none">Out</button>
+        </div>
+    </div>
+    <!-- SECTIONS -->
+    <div class="card" id="sec-loading"><div style="text-align:center;padding:40px"><div class="spinner"></div><p style="color:var(--t3)">Loading...</p></div></div>
+    <div class="card" id="sec-login" style="display:none">
+        <div class="login-ico">🛒</div>
+        <div class="login-h"><span>揃い</span> Soroi</div>
+        <div class="login-p" id="login-sub">Shop Floor Pickup</div>
+        <button class="login-btn" onclick="doLogin()">🔑 Sign in with Google</button>
+        <p id="login-error"></p>
+    </div>
+    <div id="sec-home" style="display:none"></div>
+    <div id="sec-pickup" style="display:none"></div>
 </div>
-<div id="sec-loading"><div class="lc" style="min-height:80dvh;justify-content:center"><div class="spin"></div></div></div>
-<div id="sec-login" style="display:none"></div>
-<div id="sec-settings" class="stp"></div>
-<div id="sec-home" style="display:none"></div>
-<div id="sec-pickup" style="display:none"></div>
-<div id="toast" class="toast"></div>
-<div id="modal" class="mo"><div class="md"><div class="md-t" id="mt"></div><div class="md-p" id="mp"></div><div id="mc"></div><div class="md-a" id="ma"></div></div></div>
 <script>
-var SB_URL='https://wylxvmkcrexwfpjpbhyy.supabase.co';
-var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bHh2bWtjcmV4d2ZwanBiaHl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MzkxMDYsImV4cCI6MjA4NDIxNTEwNn0.6Bxo42hx4jwlJGWnfjiTpiDUsYfc1QLTN3YtrU1efak';
-var GIS_CID='1088099187141-ut0dn0scqt3h99htf3rg8gsrg2oo1ad8.apps.googleusercontent.com';
-var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'sb-soroi2-auth'}});
-var user=null,units=[],selUnit=null,bom=[],allBom={},mode='bulk',cart=[],cartOpen=false,searchQ='',sheetId=localStorage.getItem('soroi_sid')||'',authReady=false,settingsOpen=false,currentView='loading';
-var gisC=null,sTk=localStorage.getItem('soroi_stk')||null;
-var IC={back:'<polyline points="15 18 9 12 15 6"/>',check:'<polyline points="20 6 9 17 4 12"/>',x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',chev:'<polyline points="9 18 15 12 9 6"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68 1.65 1.65 0 0010 3.17V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>',extlink:'<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>'};
-function svg(n){return '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'+(IC[n]||'')+'</svg>';}
-var GL='<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>';
-var LANG=localStorage.getItem('soroi_lang')||'en';
-var TR={en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectUnitP:'Choose an assembly unit to start picking',tapStart:'Tap to start pickup',noUnits:'No units available. Ask admin to create units.',signIn:'Sign In',out:'Out',bulk:'📦 Bulk Pickup',indiv:'🔍 Individual',cart:'Cart',submit:'📦 Submit','clear':'Clear',hide:'▲ Hide',show:'▼ Show',settings:'Settings',language:'Language',sheetId:'Sheet ID',adminTools:'Admin Tools',openAdmin:'Open BOM Manager',addAll:'Add All',cancel:'Cancel',addPart:'Add Part',parts:'parts',noSub:'No sub-assemblies. Use Individual mode.',noBom:'No BOM data. Ask admin to import.',searchPh:'Search part number or name...',notFound:'No parts found for',foundIn:'not found in',foundInOther:'Found in:',loginFirst:'Sign in to start picking',sheetReq:'Enter Google Sheet ID.',saveSubmit:'Save & Submit',submitting:'Submitting',connected:'Sheets connected',reauth:'Re-authenticating...',failed:'Failed:',cartEmpty:'Cart is empty',added:'Added',items:'items'},ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectUnitP:'ピックアップするユニットを選択してください',tapStart:'タップして開始',noUnits:'ユニットがありません。管理者に作成を依頼してください。',signIn:'ログイン',out:'ログアウト',bulk:'📦 一括',indiv:'🔍 個別',cart:'カート',submit:'📦 提出','clear':'クリア',hide:'▲ 閉じる',show:'▼ 表示',settings:'設定',language:'言語',sheetId:'シートID',adminTools:'管理ツール',openAdmin:'BOM管理を開く',addAll:'全て追加',cancel:'キャンセル',addPart:'部品追加',parts:'部品',noSub:'サブアセンブリなし。個別モードをご利用ください。',noBom:'BOMデータなし。管理者にインポートを依頼してください。',searchPh:'部品番号または名前で検索...',notFound:'見つかりません：',foundIn:'に該当なし',foundInOther:'以下で発見：',loginFirst:'ピックアップにはログインが必要です',sheetReq:'Google Sheet IDを入力してください。',saveSubmit:'保存して提出',submitting:'提出中',connected:'Sheets接続済',reauth:'再認証中...',failed:'失敗：',cartEmpty:'カートは空です',added:'追加済',items:'件'}};
-function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
-function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);updateHeader();renderSettings();if(currentView==='home')renderHome();if(currentView==='pickup')renderPickup();}
-function $(id){return document.getElementById(id);}
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function toast(m,tp){var e=$('toast');e.textContent=m;e.className='toast show '+(tp||'');clearTimeout(toast._t);toast._t=setTimeout(function(){e.className='toast';},2500);}
-function modal(title,body,extra,acts){$('mt').textContent=title;$('mp').innerHTML=body;$('mc').innerHTML=extra||'';var el=$('ma');el.innerHTML='';acts.forEach(function(a){var b=document.createElement('button');b.textContent=a.label;b.className=a.cls||'mdc';b.onclick=function(){$('modal').classList.remove('show');if(a.fn)a.fn();};el.appendChild(b);});$('modal').classList.add('show');}
-function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();}
-function nowTime(){var d=new Date();return(d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();}
+// =====================================================
+// CONFIG
+// =====================================================
+const SB_URL='https://wylxvmkcrexwfpjpbhyy.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bHh2bWtjcmV4d2ZwanBiaHl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MzkxMDYsImV4cCI6MjA4NDIxNTEwNn0.6Bxo42hx4jwlJGWnfjiTpiDUsYfc1QLTN3YtrU1efak';
+const GIS_CID='1088099187141-ut0dn0scqt3h99htf3rg8gsrg2oo1ad8.apps.googleusercontent.com';
+const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'sb-wylxvmkcrexwfpjpbhyy-auth-token'}});
 
-/* === AUTH (pick_list pattern) === */
+// =====================================================
+// STATE
+// =====================================================
+let user=null,units=[],selUnit=null,cart=[],sheetId=localStorage.getItem('soroi_sid')||'',authReady=false;
+let gisTokenClient=null,sheetsToken=localStorage.getItem('soroi_stk')||null;
+let LANG=localStorage.getItem('soroi_lang')||'en';
+let currentView='loading';
+
+// =====================================================
+// i18n
+// =====================================================
+const TR={
+    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup Cart',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items in cart yet. Add parts above.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...'},
+    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップカート',submit:'📋 シートに送信',clear:'全てクリア',noItems:'カートは空です。上から部品を追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...'}
+};
+function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
+function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);if(currentView==='home')renderHome();if(currentView==='pickup')renderPickup();}
+
+// =====================================================
+// HELPERS
+// =====================================================
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function $(id){return document.getElementById(id);}
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function nowTime(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+function showSt(id,msg,type){const e=$(id);if(!e)return;e.textContent=msg;e.className='status '+type;}
+function hideSt(id){const e=$(id);if(e)e.className='status';}
+
+// =====================================================
+// AUTH (copied from Part Inventory — proven pattern)
+// =====================================================
 window.onload=function(){
-    sb.auth.onAuthStateChange(async function(ev,sess){
-        if(sess&&sess.user&&['SIGNED_IN','TOKEN_REFRESHED','INITIAL_SESSION'].indexOf(ev)>=0){
-            await checkRole(sess.user);authReady=true;
-        }else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){
-            user=null;authReady=true;await loadAll();nav('home');
+    sb.auth.onAuthStateChange(async(ev,session)=>{
+        if(session&&session.user&&(ev==='SIGNED_IN'||ev==='TOKEN_REFRESHED'||ev==='INITIAL_SESSION')){
+            await checkRole(session.user);authReady=true;
         }
+        else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!session)){user=null;authReady=true;$('bar-right').style.display='flex';$('login-btn').style.display='inline';await loadAll();nav('home');}
     });
-    setTimeout(async function(){if(!authReady){await loadAll();nav('home');}},4000);
+    setTimeout(async()=>{if(!authReady){$('bar-right').style.display='flex';$('login-btn').style.display='inline';await loadAll();nav('home');}},4000);
     initGIS();
 };
-async function doLogin(){var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(r.error)toast('Login failed','err');}
-async function doLogout(){await sb.auth.signOut();user=null;cart=[];nav('home');}
-async function checkRole(u){
-    var fb=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];
-    user={email:u.email,name:fb,isAdmin:false};
-    try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){user.name=r.data[0].name||fb;user.isAdmin=(r.data[0].role||'').toLowerCase().trim()==='admin';}}catch(e){console.warn('Role check:',e);}
-    if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')user.isAdmin=true;
-    console.log('Auth:',user.email,'admin:',user.isAdmin,'view:',currentView);
-    await loadAll();
-    if(currentView==='loading'||currentView==='login'){nav('home');}
-    else{updateHeader();renderSettings();if(currentView==='home')renderHome();}
+
+async function doLogin(){
+    const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});
+    if(error){$('login-error').textContent='Login failed: '+error.message;$('login-error').style.display='block';}
 }
-function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);toast(t('connected'),'ok');}}});}
+async function doLogout(){
+    await sb.auth.signOut();user=null;cart=[];sheetsToken=null;localStorage.removeItem('soroi_stk');
+    $('user-chip').style.display='none';$('admin-link').style.display='none';$('logout-btn').style.display='none';$('login-btn').style.display='inline';
+    nav('home');
+}
 
-/* === DATA === */
-async function loadAll(){try{var r=await sb.from('soroi_app_units').select('*').order('sort_order');if(r.error){console.error('loadAll RLS error:',r.error);toast('DB: '+r.error.message,'err');units=[];}else{units=r.data||[];}console.log('Units loaded:',units.length);}catch(e){console.error('loadAll exception:',e);toast('Load failed: '+e.message,'err');}}
-async function loadBom(uid){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');if(r.error){console.error('loadBom:',r.error);bom=[];}else{bom=r.data||[];}allBom[uid]=bom;console.log('BOM:',bom.length,'for',uid);}catch(e){console.error('loadBom:',e);bom=[];}}
-async function loadAllBom(){for(var i=0;i<units.length;i++){var uid=units[i].id;if(!allBom[uid]){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');allBom[uid]=r.data||[];}catch(e){}}}}
+async function checkRole(u){
+    const fb=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];
+    user={email:u.email,name:fb,isAdmin:false};
+    try{
+        const{data}=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);
+        if(data&&data.length>0){user.name=data[0].name||fb;user.isAdmin=(data[0].role||'').toLowerCase().trim()==='admin';}
+    }catch(e){console.warn('Role check:',e);}
+    if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')user.isAdmin=true;
+    console.log('Auth:',user.email,'admin:',user.isAdmin);
+    // Update header
+    $('user-chip').innerHTML=esc(user.name)+(user.isAdmin?'<span class="rt">admin</span>':'');
+    $('user-chip').style.display='inline';
+    $('bar-right').style.display='flex';
+    $('admin-link').style.display=user.isAdmin?'inline-flex':'none';
+    $('login-btn').style.display='none';
+    $('logout-btn').style.display='inline';
+    // Load data then navigate
+    await loadAll();
+    if(currentView==='loading'||currentView==='login')nav('home');
+    else if(currentView==='home')renderHome();
+}
 
-/* === NAV (show/hide) === */
+// =====================================================
+// GIS (copied from Part Inventory — silent re-auth)
+// =====================================================
+function initGIS(){
+    if(typeof google==='undefined'||!google.accounts){setTimeout(initGIS,300);return;}
+    gisTokenClient=google.accounts.oauth2.initTokenClient({
+        client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',
+        callback:r=>{if(r.access_token){sheetsToken=r.access_token;localStorage.setItem('soroi_stk',sheetsToken);console.log('GIS: token obtained');}}
+    });
+    console.log('GIS: initialized');
+}
+
+function gisReAuth(){
+    return new Promise((resolve,reject)=>{
+        if(!gisTokenClient){reject(new Error('GIS not ready'));return;}
+        let done=false;
+        const origCb=gisTokenClient.callback;
+        gisTokenClient.callback=r=>{
+            if(done)return;done=true;gisTokenClient.callback=origCb;
+            if(r.access_token){sheetsToken=r.access_token;localStorage.setItem('soroi_stk',sheetsToken);resolve();}
+            else reject(new Error('Token failed'));
+        };
+        gisTokenClient.requestAccessToken({prompt:''});
+        setTimeout(()=>{if(!done){done=true;gisTokenClient.callback=origCb;reject(new Error('Re-auth timeout'));}},15000);
+    });
+}
+
+function gisRequestToken(){
+    if(!gisTokenClient){alert('Google auth loading. Try again in a few seconds.');return;}
+    gisTokenClient.requestAccessToken();
+}
+
+async function sheetsApi(url,options={},isRetry=false){
+    if(!sheetsToken)sheetsToken=localStorage.getItem('soroi_stk');
+    if(!sheetsToken)throw new Error('NEEDS_GIS_AUTH');
+    const r=await fetch(url,{...options,headers:{'Authorization':'Bearer '+sheetsToken,'Content-Type':'application/json',...(options.headers||{})}});
+    if(r.status===401&&!isRetry){
+        try{await gisReAuth();return sheetsApi(url,options,true);}catch(e){
+            sheetsToken=null;localStorage.removeItem('soroi_stk');throw new Error('NEEDS_GIS_AUTH');
+        }
+    }
+    if(!r.ok){const txt=await r.text();throw new Error('Sheets '+r.status+': '+txt);}
+    return r.json();
+}
+
+// =====================================================
+// DATA
+// =====================================================
+async function loadAll(){
+    try{
+        const{data,error}=await sb.from('soroi_app_units').select('*').order('sort_order');
+        if(error){console.error('loadAll:',error);units=[];}
+        else{units=data||[];}
+        console.log('Units loaded:',units.length);
+    }catch(e){console.error('loadAll:',e);units=[];}
+}
+
+// =====================================================
+// NAVIGATION
+// =====================================================
 function nav(view){
-    currentView=view;settingsOpen=false;$('sec-settings').className='stp';
-    ['sec-loading','sec-login','sec-home','sec-pickup'].forEach(function(id){$(id).style.display='none';});
+    currentView=view;
+    $('sec-loading').style.display='none';
+    $('sec-login').style.display='none';
+    $('sec-home').style.display='none';
+    $('sec-pickup').style.display='none';
     switch(view){
         case'loading':$('sec-loading').style.display='block';break;
-        case'login':renderLogin();$('sec-login').style.display='block';break;
-        case'home':renderHome();$('sec-home').style.display='block';renderSettings();break;
-        case'pickup':$('sec-pickup').style.display='block';break;
-    }
-    updateHeader();
-}
-function updateHeader(){
-    var hb=$('hdr-back'),ht=$('hdr-title'),hs=$('hdr-sub'),hr=$('hdr-right');
-    if(currentView==='pickup'&&selUnit){
-        hb.innerHTML='<div class="hdr-bk" onclick="goBack()">'+svg('back')+'</div>';hb.style.display='block';
-        ht.textContent=(selUnit.icon||'📦')+' '+selUnit.name;
-        hs.textContent=today()+' · '+(user?user.name:'');
-        hr.innerHTML='<div class="hdr-bk" onclick="goBack()">'+svg('x')+'</div>';
-    }else{
-        hb.style.display='none';ht.textContent='🛒 揃い Soroi';hs.textContent=t('sub');
-        var h='';
-        if(user){h+='<span style="font-size:.78rem;opacity:.8;font-weight:500">'+esc(user.name)+'</span>';if(user.isAdmin)h+='<span style="font-size:.6rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-weight:700">ADMIN</span>';}
-        h+='<button class="hdr-btn" onclick="toggleSettings()" title="'+t('settings')+'">'+svg('gear')+'</button>';
-        if(user){h+='<button class="hdr-btn" onclick="doLogout()">'+t('out')+'</button>';}else{h+='<button class="hdr-btn" onclick="doLogin()" style="gap:6px">'+GL+' '+t('signIn')+'</button>';}
-        hr.innerHTML=h;
+        case'login':$('sec-login').style.display='block';$('login-sub').textContent=t('sub');break;
+        case'home':renderHome();$('sec-home').style.display='block';break;
+        case'pickup':renderPickup();$('sec-pickup').style.display='block';break;
     }
 }
-function toggleSettings(){settingsOpen=!settingsOpen;$('sec-settings').className=settingsOpen?'stp open':'stp';}
-function renderSettings(){
-    var h='<div class="stp-inner"><div class="stp-row"><span class="stp-label">'+t('language')+'</span><div class="stp-lang"><button class="stp-lb'+(LANG==='en'?' on':'')+'" onclick="setLang(\'en\')">EN</button><button class="stp-lb'+(LANG==='ja'?' on':'')+'" onclick="setLang(\'ja\')">日本語</button></div></div>';
-    h+='<div class="stp-row"><span class="stp-label">'+t('sheetId')+'</span><input class="stp-sid" value="'+esc(sheetId)+'" placeholder="Google Sheet ID" onchange="sheetId=this.value.trim();localStorage.setItem(\'soroi_sid\',sheetId)"></div>';
-    if(user&&user.isAdmin){h+='<div class="stp-divider"></div><div class="stp-row"><span class="stp-label">'+t('adminTools')+'</span><a class="stp-link" href="admin.html">'+svg('extlink')+' '+t('openAdmin')+'</a></div>';}
-    h+='</div>';$('sec-settings').innerHTML=h;
-}
-function renderLogin(){$('sec-login').innerHTML='<div class="lgn"><div class="lgn-ic">'+svg('cart')+'</div><div class="lgn-h"><span>揃い</span> Soroi</div><div class="lgn-p">'+t('sub')+'</div><button class="lgn-btn" onclick="doLogin()">'+GL+' '+t('signIn')+'</button></div>';}
 
-/* === HOME === */
+// =====================================================
+// HOME VIEW
+// =====================================================
 function renderHome(){
-    var h='<div class="home-hdr fade"><h2>'+t('selectUnit')+'</h2><p>'+t('selectUnitP')+'</p></div>';
-    if(user)h+='<div class="info-bar fade"><div class="info-chip">📅 <b>'+today()+'</b></div><div class="info-chip">👤 <b>'+esc(user.name)+'</b></div></div>';
-    h+='<div class="ugrid fade">';
-    units.forEach(function(u){var c=u.color||'#2563eb';h+='<div class="ucard" onclick="openUnit(\''+u.id+'\')" style="border-top-color:'+c+'"><div class="ucard-ico" style="background:'+c+'12">'+esc(u.icon||'📦')+'</div><div class="ucard-b"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-d">'+t('tapStart')+'</div></div><div class="ucard-a">'+svg('chev')+'</div></div>';});
-    if(!units.length)h+='<div class="empty-msg">'+t('noUnits')+'<br><button onclick="retryUnits()" style="margin-top:12px;padding:8px 20px;border-radius:var(--r);background:var(--pri);color:#fff;font-weight:600;font-size:.82rem;cursor:pointer;border:none">↻ Retry</button></div>';
-    h+='</div>';$('sec-home').innerHTML=h;
+    const el=$('sec-home');
+    let h='<div class="card"><div class="shdr"><h2>'+t('selectUnit')+'</h2></div><p style="color:var(--t3);font-size:.85rem;margin-bottom:16px">'+t('selectP')+'</p>';
+    // Settings row
+    h+='<div class="stp">';
+    h+='<div class="stp-row"><span class="stp-label">'+t('language')+'</span><div class="stp-lang"><button class="stp-lb'+(LANG==='en'?' on':'')+'" onclick="setLang(\'en\')">EN</button><button class="stp-lb'+(LANG==='ja'?' on':'')+'" onclick="setLang(\'ja\')">日本語</button></div></div>';
+    h+='<div class="stp-row"><span class="stp-label">'+t('sheetId')+'</span><input class="stp-sid" value="'+esc(sheetId)+'" placeholder="Google Sheet ID" onchange="sheetId=this.value.trim();localStorage.setItem(\'soroi_sid\',sheetId)"></div>';
+    h+='</div>';
+    // Unit grid
+    h+='<div class="ugrid">';
+    units.forEach(u=>{
+        const c=u.color||'#2563eb';
+        h+='<div class="ucard" onclick="openUnit(\''+u.id+'\')" style="border-top:3px solid '+c+'"><div class="ico">'+esc(u.icon||'📦')+'</div><h3>'+esc(u.name)+'</h3><p>'+t('tapStart')+'</p></div>';
+    });
+    if(!units.length)h+='<div class="empty"><div class="ico">📦</div><p>'+t('noUnits')+'</p></div>';
+    h+='</div></div>';
+    el.innerHTML=h;
 }
-function goBack(){selUnit=null;bom=[];mode='bulk';searchQ='';nav('home');}
-async function retryUnits(){toast('Retrying...','');await loadAll();renderHome();}
-async function openUnit(id){
-    if(!user){toast(t('loginFirst'),'err');doLogin();return;}
-    selUnit=units.find(function(u){return u.id===id;});cart=[];mode='bulk';searchQ='';
+
+function openUnit(id){
+    selUnit=units.find(u=>u.id===id);
+    if(!selUnit)return;
+    cart=[];
     nav('pickup');
-    $('sec-pickup').innerHTML='<div class="lc"><div class="spin"></div></div>';
-    await loadBom(id);loadAllBom();renderPickup();
 }
 
-/* === PICKUP === */
+// =====================================================
+// PICKUP VIEW
+// =====================================================
 function renderPickup(){
-    if(!selUnit){$('sec-pickup').innerHTML='';return;}
-    var childSet=new Set();bom.forEach(function(b){if(b.parent_id)childSet.add(b.parent_id);});
-    var h='<div class="mode-bar fade"><div class="mode-btn'+(mode==='bulk'?' on':'')+'" onclick="mode=\'bulk\';renderPickup()">'+t('bulk')+'</div><div class="mode-btn'+(mode==='individual'?' on':'')+'" onclick="mode=\'individual\';renderPickup()">'+t('indiv')+'</div></div>';
-    if(mode==='bulk')h+=buildBulk(childSet);else h+=buildIndiv(childSet);
-    if(cart.length)h+=buildCart();
-    $('sec-pickup').innerHTML=h;updateHeader();bindPickup();
-}
-function buildBulk(childSet){
-    var groups=bom.filter(function(b){return childSet.has(b.id)&&b.level>=2;});
-    var GC=['#2e7d32','#1565c0','#c62828','#6a1b9a','#e65100','#00838f','#f57f17','#4e342e','#283593','#bf360c'];
-    var h='<div class="sub-list fade">';
-    if(!groups.length){h+='<div class="empty-msg">'+(bom.length?t('noSub'):t('noBom'))+'</div></div>';return h;}
-    groups.forEach(function(g,i){var leaves=getLeaves(g.id);h+='<div class="sub-card" data-sub="'+g.id+'"><div class="sub-ico" style="background:'+GC[i%GC.length]+'"></div><div class="sub-b"><div class="sub-n">'+esc(g.component)+'</div><div class="sub-d">'+(g.part_number?esc(g.part_number)+' · ':'')+'L'+g.level+'</div></div><div class="sub-cnt">'+leaves.length+' '+t('parts')+'</div><div class="sub-a">'+svg('chev')+'</div></div>';});
-    h+='</div>';return h;
-}
-function buildIndiv(childSet){
-    var leaves=bom.filter(function(b){return !childSet.has(b.id);});
-    var fasteners={};leaves.forEach(function(b){var pn=(b.part_number||'').toUpperCase();if(/^CB[EST]/.test(pn)){var base=pn.replace(/-\d+$/,'');fasteners[base]=(fasteners[base]||0)+1;}});
-    var chips=Object.keys(fasteners).sort();
-    var h='<div class="search-wrap fade">';
-    if(chips.length){h+='<div class="chip-wrap">';chips.forEach(function(c){h+='<div class="f-chip" data-chip="'+esc(c)+'">'+esc(c)+'</div>';});h+='</div>';}
-    h+='<div class="search-box"><div class="search-ico">'+svg('search')+'</div><input class="search-in" id="searchIn" type="text" placeholder="'+t('searchPh')+'" value="'+esc(searchQ)+'" autocomplete="off"></div>';
-    if(searchQ.length>=2){
-        var q=searchQ.toLowerCase();
-        var matches=leaves.filter(function(b){return(b.part_number||'').toLowerCase().indexOf(q)>=0||(b.component||'').toLowerCase().indexOf(q)>=0;}).slice(0,20);
-        var others=[];units.forEach(function(ou){if(ou.id===selUnit.id)return;(allBom[ou.id]||[]).forEach(function(b){if((b.part_number||'').toLowerCase().indexOf(q)>=0||(b.component||'').toLowerCase().indexOf(q)>=0)others.push({b:b,unit:ou.name});});});
-        if(matches.length){h+='<div style="padding:6px 0;font-size:.78rem;color:var(--t2);font-weight:600">'+matches.length+' in '+esc(selUnit.name)+':</div>';matches.forEach(function(b){h+='<div class="sub-card" data-addpart="'+b.id+'" style="padding:10px 14px"><div class="sub-b"><div class="sub-n" style="font-family:var(--mn)">'+esc(b.part_number||'—')+'</div><div class="sub-d">'+esc(b.component)+'</div></div><div class="sub-cnt">×'+b.qty+'</div><div class="sub-a">'+svg('plus')+'</div></div>';});}
-        else if(!others.length)h+='<div class="empty-msg">'+t('notFound')+' "'+esc(searchQ)+'"</div>';
-        if(others.length&&!matches.length){var unames=[...new Set(others.map(function(m){return m.unit;}))];h+='<div style="padding:10px;margin-top:8px;background:var(--ylw-bg);border:1.5px solid #fbbf24;border-radius:8px;font-size:.82rem">⚠️ <b>"'+esc(searchQ)+'"</b> '+t('foundIn')+' <b>'+esc(selUnit.name)+'</b>. '+t('foundInOther')+' <b>'+unames.join(', ')+'</b></div>';}
+    if(!selUnit)return;
+    const el=$('sec-pickup');
+    let h='<div class="card">';
+    h+='<div class="shdr"><h2>'+(selUnit.icon||'📦')+' '+esc(selUnit.name)+'</h2><button class="btn btn-s btn-sm" onclick="goHome()">← Back</button></div>';
+    h+='<div class="pk-info"><span class="pk-tag">📅 '+today()+'</span><span class="pk-tag">👤 '+esc(user?user.name:'')+'</span></div>';
+    // Add part box
+    h+='<div class="add-box"><h3>'+t('addPart')+'</h3>';
+    h+='<div class="add-row"><input id="inp-pn" placeholder="'+t('pnPh')+'" style="font-family:monospace"><input id="inp-name" placeholder="'+t('namePh')+'"><input id="inp-qty" class="qty" type="number" value="1" min="1" placeholder="'+t('qtyPh')+'"></div>';
+    h+='<button class="btn btn-p" onclick="addToCart()">'+t('add')+'</button>';
+    h+='</div>';
+    // Cart
+    h+='<div class="shdr" style="margin-top:8px"><h2>'+t('cart')+' ('+cart.length+')</h2>';
+    if(cart.length)h+='<button class="btn btn-d btn-sm" onclick="cart=[];renderPickup()">'+t('clear')+'</button>';
+    h+='</div>';
+    if(cart.length){
+        h+='<table class="ctbl"><thead><tr><th>#</th><th>'+t('pnPh')+'</th><th>'+t('namePh')+'</th><th>'+t('qtyPh')+'</th><th class="act"></th></tr></thead><tbody>';
+        cart.forEach((c,i)=>{
+            h+='<tr><td>'+(i+1)+'</td><td class="pn">'+esc(c.pn)+'</td><td>'+esc(c.name)+'</td><td class="qc">'+c.qty+'</td><td class="act"><button class="dbtn" onclick="cart.splice('+i+',1);renderPickup()">✕</button></td></tr>';
+        });
+        h+='</tbody></table>';
+        h+='<button class="btn btn-g" onclick="submitToSheet()" style="width:100%">'+t('submit')+'</button>';
+    }else{
+        h+='<div class="empty"><div class="ico">📋</div><p>'+t('noItems')+'</p></div>';
     }
-    h+='</div>';return h;
-}
-function buildCart(){
-    var h='<div class="cart fade"><div class="cart-hdr"><div class="cart-t">'+svg('cart')+' '+t('cart')+' <span class="cart-badge">'+cart.length+'</span></div><span class="cart-expand" onclick="cartOpen=!cartOpen;renderPickup()">'+(cartOpen?t('hide'):t('show'))+'</span></div>';
-    h+='<div class="cart-items'+(cartOpen?' open':'')+'">';
-    cart.forEach(function(c,i){h+='<div class="ci"><span class="ci-pn">'+esc(c.part_number||c.component)+'</span><span class="ci-qty">×'+c.qty+'</span><span class="ci-mode">'+c.mode+'</span><button class="ci-del" onclick="event.stopPropagation();cart.splice('+i+',1);renderPickup()">'+svg('x')+'</button></div>';});
-    h+='</div><div class="cart-acts"><button class="cart-btn cart-clr" onclick="cart=[];renderPickup()">'+t('clear')+'</button><button class="cart-btn cart-sub" onclick="submitCart()">'+t('submit')+' ('+cart.length+')</button></div></div>';return h;
-}
-function bindPickup(){
-    document.querySelectorAll('[data-sub]').forEach(function(el){el.onclick=function(){confirmBulk(el.dataset.sub);};});
-    document.querySelectorAll('[data-addpart]').forEach(function(el){el.onclick=function(){addIndivPart(el.dataset.addpart);};});
-    document.querySelectorAll('[data-chip]').forEach(function(el){el.onclick=function(){searchQ=el.dataset.chip;renderPickup();setTimeout(function(){var inp=$('searchIn');if(inp){inp.focus();inp.selectionStart=inp.value.length;}},50);};});
-    var si=$('searchIn');if(si){si.oninput=function(){searchQ=this.value;renderPickup();setTimeout(function(){var inp=$('searchIn');if(inp){inp.focus();inp.selectionStart=inp.value.length;}},10);};}
-}
-function confirmBulk(gid){
-    var g=bom.find(function(b){return b.id===gid;});if(!g)return;
-    var leaves=getLeaves(gid);if(!leaves.length){toast('No parts','err');return;}
-    var lh='<div class="cf-list">';leaves.forEach(function(p){lh+='<div class="cf-row"><span class="cf-pn">'+esc(p.part_number||'—')+'</span><span class="cf-nm">'+esc(p.component)+'</span><span class="cf-qty">×'+p.qty+'</span></div>';});lh+='</div>';
-    modal('Bulk: '+g.component,t('addAll')+' '+leaves.length+' '+t('parts')+'?',lh,[{label:t('cancel'),cls:'mdc'},{label:t('addAll')+' ('+leaves.length+')',cls:'mdo',fn:function(){leaves.forEach(function(p){cart.push({part_number:p.part_number||'',component:p.component,qty:p.qty,mode:'bulk',group:g.component,unit:selUnit.name});});toast(t('added')+' '+leaves.length+' '+t('parts'),'ok');renderPickup();}}]);
-}
-function addIndivPart(bid){
-    var b=bom.find(function(p){return p.id===bid;});if(!b)return;
-    modal(t('addPart'),'<b>'+esc(b.part_number||b.component)+'</b>','<div style="margin-bottom:8px;font-size:.82rem;color:var(--t2)">'+esc(b.component)+'</div><input class="md-input" id="ind-qty" type="number" value="'+b.qty+'" min="1" placeholder="Quantity">',[{label:t('cancel'),cls:'mdc'},{label:t('addPart'),cls:'mdo',fn:function(){var qty=parseInt($('ind-qty').value)||1;cart.push({part_number:b.part_number||'',component:b.component,qty:qty,mode:'individual',group:'',unit:selUnit.name});toast(t('added')+': '+(b.part_number||b.component),'ok');searchQ='';renderPickup();}}]);
+    h+='<div class="status" id="pk-status"></div>';
+    h+='</div>';
+    el.innerHTML=h;
+    // Focus PN input
+    setTimeout(()=>{const inp=$('inp-pn');if(inp)inp.focus();},50);
 }
 
-/* === SHEETS === */
-async function submitCart(){
-    if(!cart.length){toast(t('cartEmpty'),'err');return;}
-    if(!sheetId){modal(t('sheetId'),t('sheetReq'),'<input class="md-input" id="sub-sid" placeholder="Sheet ID" value="'+esc(sheetId)+'">',[{label:t('cancel'),cls:'mdc'},{label:t('saveSubmit'),cls:'mdo',fn:function(){sheetId=$('sub-sid').value.trim();localStorage.setItem('soroi_sid',sheetId);if(sheetId)submitCart();}}]);return;}
-    if(!sTk){if(gisC)gisC.requestAccessToken();toast(t('connected')+'...','');return;}
-    toast(t('submitting')+' '+cart.length+' '+t('items')+'...','');
-    try{
-        var tab=selUnit?selUnit.name:'Pickup';
-        var info=await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'?fields=sheets.properties.title');
-        if(!info.sheets.some(function(s){return s.properties.title===tab;})){
-            await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+':batchUpdate',{method:'POST',body:JSON.stringify({requests:[{addSheet:{properties:{title:tab}}}]})});
-            await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A1:H1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Time','Operator','Part Number','Description','Qty','Mode','Sub-Assembly']]})});}
-        var col=await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A:A');
-        var nr=(col.values?col.values.length:0)+1;
-        var rows=cart.map(function(c){return[today(),nowTime(),user?user.name:'',c.part_number,c.component,c.qty,c.mode,c.group||''];});
-        await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nr+':H'+(nr+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
-        toast('✅ '+cart.length+' '+t('items')+' → "'+tab+'"','ok');cart=[];cartOpen=false;renderPickup();
-    }catch(e){console.error(e);if(e.message&&e.message.indexOf('401')>=0){sTk=null;localStorage.removeItem('soroi_stk');if(gisC)gisC.requestAccessToken();toast(t('reauth'),'');}else toast(t('failed')+' '+e.message,'err');}
+function goHome(){selUnit=null;cart=[];nav('home');}
+
+function addToCart(){
+    const pn=($('inp-pn').value||'').trim();
+    const name=($('inp-name').value||'').trim();
+    const qty=parseInt($('inp-qty').value)||1;
+    if(!pn&&!name)return;
+    cart.push({pn:pn,name:name||pn,qty:qty});
+    renderPickup();
 }
-async function sApi(url,opts){if(!sTk)throw new Error('No token');var r=await fetch(url,Object.assign({headers:{'Authorization':'Bearer '+sTk,'Content-Type':'application/json'}},opts||{}));if(!r.ok){var tx=await r.text();throw new Error(r.status+': '+tx);}return r.json();}
-function getLeaves(pid){var out=[];bom.forEach(function(b){if(isDesc(b.id,pid)&&!bom.some(function(c){return c.parent_id===b.id;}))out.push(b);});return out;}
-function isDesc(id,anc){var cur=bom.find(function(b){return b.id===id;});while(cur){if(cur.parent_id===anc)return true;cur=bom.find(function(b){return b.id===cur.parent_id;});}return false;}
+
+// =====================================================
+// SUBMIT TO GOOGLE SHEETS (Part Inventory pattern)
+// =====================================================
+async function submitToSheet(){
+    if(!cart.length)return;
+    if(!sheetId){showSt('pk-status','Set Sheet ID in settings first','err');return;}
+    showSt('pk-status',t('submitting'),'loading');
+    try{
+        const tab=selUnit?selUnit.name:'Pickup';
+        // Check/create tab
+        const info=await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'?fields=sheets.properties.title');
+        if(!info.sheets.some(s=>s.properties.title===tab)){
+            await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+':batchUpdate',{method:'POST',body:JSON.stringify({requests:[{addSheet:{properties:{title:tab}}}]})});
+            await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A1:F1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Time','Operator','Part Number','Description','Qty']]})});
+        }
+        // Find next row
+        const col=await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A:A');
+        const nextRow=(col.values?col.values.length:0)+1;
+        // Write rows
+        const rows=cart.map(c=>[today(),nowTime(),user?user.name:'',c.pn,c.name,c.qty]);
+        await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nextRow+':F'+(nextRow+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
+        showSt('pk-status','✅ '+cart.length+' '+t('submitOk'),'ok');
+        cart=[];
+        setTimeout(()=>{renderPickup();},2000);
+    }catch(e){
+        console.error(e);
+        if(e.message==='NEEDS_GIS_AUTH'){
+            showSt('pk-status',t('needAuth'),'err');
+            const st=$('pk-status');
+            if(st)st.innerHTML+='<br><button onclick="gisRequestToken()" style="margin-top:8px;padding:8px 16px;background:var(--pri);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer">🔑 Connect Google Sheets</button>';
+        }else{
+            showSt('pk-status',t('submitErr')+': '+e.message,'err');
+        }
+    }
+}
 </script>
 </body>
 </html>
