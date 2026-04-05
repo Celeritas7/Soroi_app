@@ -15,14 +15,14 @@ html{font-family:var(--ft);font-size:14px;color:var(--tx);background:var(--bg)}
 body{min-height:100dvh}
 button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input,select{font:inherit;color:inherit}
-#app{display:flex;flex-direction:column;min-height:100dvh}
+a{color:inherit}
 .hdr{background:var(--pri);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(37,99,235,.25)}
-.hdr-bk{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0}.hdr-bk:hover{background:rgba(255,255,255,.15)}
+.hdr-bk{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0;text-decoration:none;color:#fff;cursor:pointer}.hdr-bk:hover{background:rgba(255,255,255,.15)}
 .hdr svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .hdr-b{flex:1;min-width:0}.hdr-t{font-weight:700;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hdr-s{font-size:.7rem;opacity:.7}
 .hdr-r{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.hdr-btn{padding:6px 12px;border-radius:8px;font-size:.78rem;font-weight:600;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;gap:5px}.hdr-btn:hover{background:rgba(255,255,255,.25)}
-.lgn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:32px 24px;text-align:center;background:linear-gradient(170deg,#f1f5f9,#dbeafe)}
+.hdr-btn{padding:6px 12px;border-radius:8px;font-size:.78rem;font-weight:600;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;gap:5px;text-decoration:none;cursor:pointer}.hdr-btn:hover{background:rgba(255,255,255,.25)}
+.lgn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90dvh;padding:32px 24px;text-align:center;background:linear-gradient(170deg,#f1f5f9,#dbeafe)}
 .lgn-ic{width:80px;height:80px;border-radius:20px;margin-bottom:20px;background:var(--pri);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(37,99,235,.3)}
 .lgn-ic svg{width:38px;height:38px;stroke:#fff;fill:none;stroke-width:1.8}
 .lgn-h{font-size:1.8rem;font-weight:800;letter-spacing:-.02em;margin-bottom:2px}.lgn-h span{color:var(--pri)}
@@ -68,18 +68,6 @@ input,select{font:inherit;color:inherit}
 .cart-acts{display:flex;gap:6px}.cart-btn{flex:1;padding:10px;border-radius:8px;font-size:.85rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
 .cart-sub{background:var(--grn);color:#fff}.cart-sub:hover{background:#047857}
 .cart-clr{background:var(--red-bg);color:var(--red)}.cart-clr:hover{background:#fecaca}
-.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%) translateY(-80px);padding:10px 20px;border-radius:var(--r);font-size:.85rem;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:1000;max-width:90vw;text-align:center;transition:transform .3s;background:var(--tx);color:#fff}.toast.show{transform:translateX(-50%) translateY(0)}.toast.err{background:var(--red)}.toast.ok{background:var(--grn)}
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}.mo.show{opacity:1;pointer-events:auto}
-.mo .md{background:var(--sf);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + var(--sb));width:100%;max-width:500px;transform:translateY(100%);transition:transform .3s}.mo.show .md{transform:translateY(0)}
-.md-t{font-weight:700;font-size:1.05rem;margin-bottom:6px}.md-p{font-size:.85rem;color:var(--t2);margin-bottom:14px;line-height:1.5}
-.md-a{display:flex;gap:8px}.md-a button{flex:1;padding:11px;border-radius:var(--r);font-weight:600;font-size:.88rem}
-.mdc{background:#f1f5f9;border:1.5px solid var(--bd)}.mdo{background:var(--grn);color:#fff}.mdd{background:var(--red);color:#fff}
-.md-input{width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:8px;margin-bottom:10px;font-size:.9rem}.md-input:focus{outline:none;border-color:var(--pri)}
-.lc{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px;color:var(--t3)}
-.spin{width:24px;height:24px;border:3px solid var(--bd);border-top-color:var(--pri);border-radius:50%;animation:sp .6s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
-.fade{animation:fi .15s ease}@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.empty-msg{text-align:center;padding:40px 20px;color:var(--t3);font-size:.9rem}
-/* Settings panel */
 .stp{max-width:800px;margin:0 auto;width:100%;overflow:hidden;max-height:0;transition:max-height .3s ease,opacity .2s;opacity:0}
 .stp.open{max-height:400px;opacity:1}
 .stp-inner{padding:12px 20px 16px}
@@ -91,11 +79,31 @@ input,select{font:inherit;color:inherit}
 .stp-link{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:.8rem;font-weight:600;background:var(--sf);border:1.5px solid var(--bd);color:var(--t2);text-decoration:none;transition:all .12s}.stp-link:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-bg)}
 .stp-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .stp-divider{height:1px;background:var(--bd);margin:10px 0}
+.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%) translateY(-80px);padding:10px 20px;border-radius:var(--r);font-size:.85rem;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:1000;max-width:90vw;text-align:center;transition:transform .3s;background:var(--tx);color:#fff}.toast.show{transform:translateX(-50%) translateY(0)}.toast.err{background:var(--red)}.toast.ok{background:var(--grn)}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}.mo.show{opacity:1;pointer-events:auto}
+.mo .md{background:var(--sf);border-radius:16px 16px 0 0;padding:20px 16px calc(20px + var(--sb));width:100%;max-width:500px;transform:translateY(100%);transition:transform .3s}.mo.show .md{transform:translateY(0)}
+.md-t{font-weight:700;font-size:1.05rem;margin-bottom:6px}.md-p{font-size:.85rem;color:var(--t2);margin-bottom:14px;line-height:1.5}
+.md-a{display:flex;gap:8px}.md-a button{flex:1;padding:11px;border-radius:var(--r);font-weight:600;font-size:.88rem}
+.mdc{background:#f1f5f9;border:1.5px solid var(--bd)}.mdo{background:var(--grn);color:#fff}.mdd{background:var(--red);color:#fff}
+.md-input{width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:8px;margin-bottom:10px;font-size:.9rem}.md-input:focus{outline:none;border-color:var(--pri)}
+.lc{display:flex;flex-direction:column;align-items:center;gap:12px;padding:60px 40px;color:var(--t3)}
+.spin{width:24px;height:24px;border:3px solid var(--bd);border-top-color:var(--pri);border-radius:50%;animation:sp .6s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.fade{animation:fi .15s ease}@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.empty-msg{text-align:center;padding:40px 20px;color:var(--t3);font-size:.9rem}
 @media(max-width:600px){.ugrid{grid-template-columns:1fr}.info-bar{flex-direction:column;gap:6px}.stp-row{flex-wrap:wrap}}
 </style>
 </head>
 <body>
-<div id="app"></div>
+<div class="hdr" id="hdr-bar">
+  <div id="hdr-back" style="display:none"></div>
+  <div class="hdr-b"><div class="hdr-t" id="hdr-title">🛒 揃い Soroi</div><div class="hdr-s" id="hdr-sub">Shop Floor Pickup</div></div>
+  <div class="hdr-r" id="hdr-right"></div>
+</div>
+<div id="sec-loading"><div class="lc" style="min-height:80dvh;justify-content:center"><div class="spin"></div></div></div>
+<div id="sec-login" style="display:none"></div>
+<div id="sec-settings" class="stp"></div>
+<div id="sec-home" style="display:none"></div>
+<div id="sec-pickup" style="display:none"></div>
 <div id="toast" class="toast"></div>
 <div id="modal" class="mo"><div class="md"><div class="md-t" id="mt"></div><div class="md-p" id="mp"></div><div id="mc"></div><div class="md-a" id="ma"></div></div></div>
 <script>
@@ -103,160 +111,186 @@ var SB_URL='https://wylxvmkcrexwfpjpbhyy.supabase.co';
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bHh2bWtjcmV4d2ZwanBiaHl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MzkxMDYsImV4cCI6MjA4NDIxNTEwNn0.6Bxo42hx4jwlJGWnfjiTpiDUsYfc1QLTN3YtrU1efak';
 var GIS_CID='1088099187141-ut0dn0scqt3h99htf3rg8gsrg2oo1ad8.apps.googleusercontent.com';
 var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'sb-soroi2-auth'}});
-var S={user:null,view:'loading',units:[],selUnit:null,bom:[],allBom:{},mode:'bulk',cart:[],cartOpen:false,searchQ:'',sheetId:localStorage.getItem('soroi_sid')||'',authOk:false,settingsOpen:false,bomLoading:false};
+var user=null,units=[],selUnit=null,bom=[],allBom={},mode='bulk',cart=[],cartOpen=false,searchQ='',sheetId=localStorage.getItem('soroi_sid')||'',authReady=false,settingsOpen=false,currentView='loading';
 var gisC=null,sTk=localStorage.getItem('soroi_stk')||null;
-var IC={back:'<polyline points="15 18 9 12 15 6"/>',check:'<polyline points="20 6 9 17 4 12"/>',x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',chev:'<polyline points="9 18 15 12 9 6"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68 1.65 1.65 0 0010 3.17V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>',extlink:'<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>'};
+var IC={back:'<polyline points="15 18 9 12 15 6"/>',check:'<polyline points="20 6 9 17 4 12"/>',x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',chev:'<polyline points="9 18 15 12 9 6"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68 1.65 1.65 0 0010 3.17V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>',extlink:'<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>'};
 function svg(n){return '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'+(IC[n]||'')+'</svg>';}
-// Language
-var LANG=localStorage.getItem('soroi_lang')||'en';
-var T={
-  en:{title:'揃い Soroi',sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectUnitP:'Choose an assembly unit to start picking',tapStart:'Tap to start pickup',noUnits:'No units available. Ask admin to create units.',signIn:'Sign In',out:'Out',bulk:'📦 Bulk Pickup',indiv:'🔍 Individual',cart:'Cart',submit:'📦 Submit','clear':'Clear',hide:'▲ Hide',show:'▼ Show',settings:'Settings',language:'Language',sheetId:'Sheet ID',adminTools:'Admin Tools',openAdmin:'Open BOM Manager',addAll:'Add All',cancel:'Cancel',addPart:'Add Part',parts:'parts',noSub:'No sub-assemblies. Use Individual mode.',noBom:'No BOM data. Ask admin to import.',searchPh:'Search part number or name...',notFound:'No parts found for',foundIn:'not found in',foundInOther:'Found in:',loginFirst:'Sign in to start picking',sheetReq:'Enter Google Sheet ID.',saveSubmit:'Save & Submit',submitting:'Submitting',connected:'Sheets connected',reauth:'Re-authenticating...',failed:'Failed:',cartEmpty:'Cart is empty',added:'Added',items:'items'},
-  ja:{title:'揃い Soroi',sub:'工場ピックアップ',selectUnit:'ユニット選択',selectUnitP:'ピックアップするユニットを選択してください',tapStart:'タップして開始',noUnits:'ユニットがありません。管理者に作成を依頼してください。',signIn:'ログイン',out:'ログアウト',bulk:'📦 一括',indiv:'🔍 個別',cart:'カート',submit:'📦 提出','clear':'クリア',hide:'▲ 閉じる',show:'▼ 表示',settings:'設定',language:'言語',sheetId:'シートID',adminTools:'管理ツール',openAdmin:'BOM管理を開く',addAll:'全て追加',cancel:'キャンセル',addPart:'部品追加',parts:'部品',noSub:'サブアセンブリなし。個別モードをご利用ください。',noBom:'BOMデータなし。管理者にインポートを依頼してください。',searchPh:'部品番号または名前で検索...',notFound:'見つかりません：',foundIn:'に該当なし',foundInOther:'以下で発見：',loginFirst:'ピックアップにはログインが必要です',sheetReq:'Google Sheet IDを入力してください。',saveSubmit:'保存して提出',submitting:'提出中',connected:'Sheets接続済',reauth:'再認証中...',failed:'失敗：',cartEmpty:'カートは空です',added:'追加済',items:'件'}
-};
-function t(k){return(T[LANG]&&T[LANG][k])||T.en[k]||k;}
-function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);render();}
 var GL='<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>';
+var LANG=localStorage.getItem('soroi_lang')||'en';
+var TR={en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectUnitP:'Choose an assembly unit to start picking',tapStart:'Tap to start pickup',noUnits:'No units available. Ask admin to create units.',signIn:'Sign In',out:'Out',bulk:'📦 Bulk Pickup',indiv:'🔍 Individual',cart:'Cart',submit:'📦 Submit','clear':'Clear',hide:'▲ Hide',show:'▼ Show',settings:'Settings',language:'Language',sheetId:'Sheet ID',adminTools:'Admin Tools',openAdmin:'Open BOM Manager',addAll:'Add All',cancel:'Cancel',addPart:'Add Part',parts:'parts',noSub:'No sub-assemblies. Use Individual mode.',noBom:'No BOM data. Ask admin to import.',searchPh:'Search part number or name...',notFound:'No parts found for',foundIn:'not found in',foundInOther:'Found in:',loginFirst:'Sign in to start picking',sheetReq:'Enter Google Sheet ID.',saveSubmit:'Save & Submit',submitting:'Submitting',connected:'Sheets connected',reauth:'Re-authenticating...',failed:'Failed:',cartEmpty:'Cart is empty',added:'Added',items:'items'},ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectUnitP:'ピックアップするユニットを選択してください',tapStart:'タップして開始',noUnits:'ユニットがありません。管理者に作成を依頼してください。',signIn:'ログイン',out:'ログアウト',bulk:'📦 一括',indiv:'🔍 個別',cart:'カート',submit:'📦 提出','clear':'クリア',hide:'▲ 閉じる',show:'▼ 表示',settings:'設定',language:'言語',sheetId:'シートID',adminTools:'管理ツール',openAdmin:'BOM管理を開く',addAll:'全て追加',cancel:'キャンセル',addPart:'部品追加',parts:'部品',noSub:'サブアセンブリなし。個別モードをご利用ください。',noBom:'BOMデータなし。管理者にインポートを依頼してください。',searchPh:'部品番号または名前で検索...',notFound:'見つかりません：',foundIn:'に該当なし',foundInOther:'以下で発見：',loginFirst:'ピックアップにはログインが必要です',sheetReq:'Google Sheet IDを入力してください。',saveSubmit:'保存して提出',submitting:'提出中',connected:'Sheets接続済',reauth:'再認証中...',failed:'失敗：',cartEmpty:'カートは空です',added:'追加済',items:'件'}};
+function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
+function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);updateHeader();renderSettings();if(currentView==='home')renderHome();if(currentView==='pickup')renderPickup();}
 function $(id){return document.getElementById(id);}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function toast(m,t){var e=$('toast');e.textContent=m;e.className='toast show '+(t||'');clearTimeout(toast._t);toast._t=setTimeout(function(){e.className='toast';},2500);}
-function modal(t,p,extra,acts){$('mt').textContent=t;$('mp').innerHTML=p;$('mc').innerHTML=extra||'';var el=$('ma');el.innerHTML='';acts.forEach(function(a){var b=document.createElement('button');b.textContent=a.label;b.className=a.cls||'mdc';b.onclick=function(){$('modal').classList.remove('show');if(a.fn)a.fn();};el.appendChild(b);});$('modal').classList.add('show');}
+function toast(m,tp){var e=$('toast');e.textContent=m;e.className='toast show '+(tp||'');clearTimeout(toast._t);toast._t=setTimeout(function(){e.className='toast';},2500);}
+function modal(title,body,extra,acts){$('mt').textContent=title;$('mp').innerHTML=body;$('mc').innerHTML=extra||'';var el=$('ma');el.innerHTML='';acts.forEach(function(a){var b=document.createElement('button');b.textContent=a.label;b.className=a.cls||'mdc';b.onclick=function(){$('modal').classList.remove('show');if(a.fn)a.fn();};el.appendChild(b);});$('modal').classList.add('show');}
 function today(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();}
 function nowTime(){var d=new Date();return(d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();}
 
-// Auth
-window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(sess&&sess.user&&['SIGNED_IN','TOKEN_REFRESHED','INITIAL_SESSION'].indexOf(ev)>=0){await ckRole(sess.user);S.authOk=true;}else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){S.user=null;S.authOk=true;nav('home');loadUnits();}});setTimeout(function(){if(!S.authOk){nav('home');loadUnits();}},4000);initGIS();};
+/* === AUTH (pick_list pattern) === */
+window.onload=function(){
+    sb.auth.onAuthStateChange(async function(ev,sess){
+        if(sess&&sess.user&&['SIGNED_IN','TOKEN_REFRESHED','INITIAL_SESSION'].indexOf(ev)>=0){
+            await checkRole(sess.user);authReady=true;
+        }else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){
+            user=null;authReady=true;nav('home');
+        }
+    });
+    setTimeout(function(){if(!authReady)nav('home');},4000);
+    initGIS();
+};
 async function doLogin(){var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(r.error)toast('Login failed','err');}
-async function doLogout(){await sb.auth.signOut();S.user=null;S.cart=[];nav('home');loadUnits();}
-async function ckRole(u){var fb=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fb};var admin=false;try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){S.user.name=r.data[0].name||fb;admin=(r.data[0].role||'').toLowerCase().trim()==='admin';}}catch(e){console.warn('Role check failed:',e);}if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')admin=true;S.user.isAdmin=admin;console.log('Auth:',S.user.email,'admin:',admin,'view:',S.view);if(S.view==='login'||S.view==='loading'){nav('home');loadUnits();}else if(!S.units.length){loadUnits();}else{render();}}
+async function doLogout(){await sb.auth.signOut();user=null;cart=[];nav('home');}
+async function checkRole(u){
+    var fb=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];
+    user={email:u.email,name:fb,isAdmin:false};
+    try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){user.name=r.data[0].name||fb;user.isAdmin=(r.data[0].role||'').toLowerCase().trim()==='admin';}}catch(e){console.warn('Role check:',e);}
+    if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')user.isAdmin=true;
+    console.log('Auth:',user.email,'admin:',user.isAdmin);
+    await loadAll();
+    nav('home');
+}
 function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);toast(t('connected'),'ok');}}});}
 
-// Data
-async function loadUnits(){try{var r=await sb.from('soroi_app_units').select('*').order('sort_order');S.units=r.data||[];}catch(e){}render();}
-async function loadBom(uid){S.bomLoading=true;render();try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');if(r.error){console.error('loadBom error:',r.error);toast('BOM: '+r.error.message,'err');S.bom=[];}else{S.bom=r.data||[];console.log('BOM loaded:',S.bom.length,'items for',uid);}S.allBom[uid]=S.bom;}catch(e){console.error('loadBom exception:',e);toast('BOM load failed','err');}S.bomLoading=false;render();}
-function retryBom(){if(S.selUnit)loadBom(S.selUnit.id);}
-async function loadAllBom(){for(var i=0;i<S.units.length;i++){var uid=S.units[i].id;if(!S.allBom[uid]){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');S.allBom[uid]=r.data||[];}catch(e){}}}}
+/* === DATA === */
+async function loadAll(){try{var r=await sb.from('soroi_app_units').select('*').order('sort_order');units=r.data||[];console.log('Units loaded:',units.length);}catch(e){console.error('loadAll:',e);}}
+async function loadBom(uid){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');if(r.error){console.error('loadBom:',r.error);bom=[];}else{bom=r.data||[];}allBom[uid]=bom;console.log('BOM:',bom.length,'for',uid);}catch(e){console.error('loadBom:',e);bom=[];}}
+async function loadAllBom(){for(var i=0;i<units.length;i++){var uid=units[i].id;if(!allBom[uid]){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');allBom[uid]=r.data||[];}catch(e){}}}}
 
-// Nav
-function nav(v){S.view=v;S.searchQ='';render();}
-function goBack(){if(S.view==='pickup'){S.selUnit=null;S.bom=[];S.mode='bulk';S.view='home';render();loadUnits();}else nav('home');}
-function openUnit(id){if(!S.user){toast(t('loginFirst'),'err');doLogin();return;}S.selUnit=S.units.find(function(u){return u.id===id;});S.cart=[];S.mode='bulk';S.bomLoading=true;S.bom=[];nav('pickup');loadBom(id);loadAllBom();}
-
-// Render
-function render(){var a=$('app');switch(S.view){case'loading':a.innerHTML='<div class="lc" style="min-height:100dvh;justify-content:center"><div class="spin"></div></div>';break;case'login':a.innerHTML=vLogin();break;case'home':a.innerHTML=vHome();break;case'pickup':a.innerHTML=vPickup();break;}bindAll();}
-function vLogin(){return '<div class="lgn"><div class="lgn-ic">'+svg('cart')+'</div><div class="lgn-h"><span>揃い</span> Soroi</div><div class="lgn-p">'+t('sub')+'</div><button class="lgn-btn" onclick="doLogin()">'+GL+' '+t('signIn')+'</button></div>';}
-function vHome(){
-  var h='<div class="hdr"><div class="hdr-b"><div class="hdr-t">🛒 '+t('title')+'</div><div class="hdr-s">'+t('sub')+'</div></div><div class="hdr-r">';
-  if(S.user){
-    h+='<span style="font-size:.78rem;opacity:.8;font-weight:500">'+esc(S.user.name)+'</span>';
-    if(S.user.isAdmin)h+='<span style="font-size:.6rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-weight:700">ADMIN</span>';
-  }
-  h+='<button class="hdr-btn" onclick="S.settingsOpen=!S.settingsOpen;render()" title="'+t('settings')+'">'+svg('gear')+'</button>';
-  if(S.user){h+='<button class="hdr-btn" onclick="doLogout()">'+t('out')+'</button>';}
-  else{h+='<button class="hdr-btn" onclick="doLogin()" style="gap:6px">'+GL+' '+t('signIn')+'</button>';}
-  h+='</div></div>';
-  // Settings panel
-  h+='<div class="stp'+(S.settingsOpen?' open':'')+'">';
-  h+='<div class="stp-inner">';
-  h+='<div class="stp-row"><span class="stp-label">'+t('language')+'</span><div class="stp-lang"><button class="stp-lb'+(LANG==='en'?' on':'')+'" onclick="setLang(\'en\')">EN</button><button class="stp-lb'+(LANG==='ja'?' on':'')+'" onclick="setLang(\'ja\')">日本語</button></div></div>';
-  h+='<div class="stp-row"><span class="stp-label">'+t('sheetId')+'</span><input class="stp-sid" id="stpSid" value="'+esc(S.sheetId)+'" placeholder="Google Sheet ID" onchange="S.sheetId=this.value.trim();localStorage.setItem(\'soroi_sid\',S.sheetId)"></div>';
-  if(S.user&&S.user.isAdmin){h+='<div class="stp-divider"></div>';h+='<div class="stp-row"><span class="stp-label">'+t('adminTools')+'</span><a class="stp-link" href="admin.html">'+svg('extlink')+' '+t('openAdmin')+'</a></div>';}
-  h+='</div></div>';
-  h+='<div class="home-hdr fade"><h2>'+t('selectUnit')+'</h2><p>'+t('selectUnitP')+'</p></div>';
-  if(S.user)h+='<div class="info-bar fade"><div class="info-chip">📅 <b>'+today()+'</b></div><div class="info-chip">👤 <b>'+esc(S.user.name)+'</b></div></div>';
-  h+='<div class="ugrid fade">';
-  S.units.forEach(function(u){var c=u.color||'#2563eb';h+='<div class="ucard" data-unit="'+u.id+'" style="border-top-color:'+c+'"><div class="ucard-ico" style="background:'+c+'12">'+esc(u.icon||'📦')+'</div><div class="ucard-b"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-d">'+t('tapStart')+'</div></div><div class="ucard-a">'+svg('chev')+'</div></div>';});
-  if(!S.units.length)h+='<div class="empty-msg">'+t('noUnits')+'</div>';
-  h+='</div>';return h;}
-
-function vPickup(){
-  var u=S.selUnit;if(!u)return '';
-  var childSet=new Set();S.bom.forEach(function(b){if(b.parent_id)childSet.add(b.parent_id);});
-  var h='<div class="hdr"><button class="hdr-bk" onclick="goBack()">'+svg('back')+'</button><div class="hdr-b"><div class="hdr-t">'+esc(u.icon||'📦')+' '+esc(u.name)+'</div><div class="hdr-s">'+today()+' · '+esc(S.user?S.user.name:'')+'</div></div><div class="hdr-r"><button class="hdr-bk" onclick="goBack()">'+svg('x')+'</button></div></div>';
-  h+='<div class="mode-bar fade"><div class="mode-btn'+(S.mode==='bulk'?' on':'')+'" data-mode="bulk">'+t('bulk')+'</div><div class="mode-btn'+(S.mode==='individual'?' on':'')+'" data-mode="individual">'+t('indiv')+'</div></div>';
-  if(S.bomLoading){h+='<div class="lc" style="padding:60px"><div class="spin"></div></div>';if(S.cart.length)h+=vCart();return h;}
-  if(S.mode==='bulk')h+=vBulk(childSet);else h+=vIndiv(childSet);
-  if(S.cart.length)h+=vCart();return h;}
-
-function vBulk(childSet){
-  var groups=S.bom.filter(function(b){return childSet.has(b.id)&&b.level>=2;});
-  var GC=['#2e7d32','#1565c0','#c62828','#6a1b9a','#e65100','#00838f','#f57f17','#4e342e','#283593','#bf360c'];
-  var h='<div class="sub-list fade">';
-  if(!groups.length){h+='<div class="empty-msg">'+(S.bom.length?t('noSub'):t('noBom'))+'<br><button onclick="retryBom()" style="margin-top:12px;padding:8px 20px;border-radius:var(--r);background:var(--pri);color:#fff;font-weight:600;font-size:.82rem;cursor:pointer;border:none">↻ Retry</button></div></div>';return h;}
-  groups.forEach(function(g,i){var leaves=getLeaves(g.id);h+='<div class="sub-card" data-sub="'+g.id+'"><div class="sub-ico" style="background:'+GC[i%GC.length]+'"></div><div class="sub-b"><div class="sub-n">'+esc(g.component)+'</div><div class="sub-d">'+(g.part_number?esc(g.part_number)+' · ':'')+'L'+g.level+'</div></div><div class="sub-cnt">'+leaves.length+' '+t('parts')+'</div><div class="sub-a">'+svg('chev')+'</div></div>';});
-  h+='</div>';return h;}
-
-function confirmBulk(gid){
-  var g=S.bom.find(function(b){return b.id===gid;});if(!g)return;
-  var leaves=getLeaves(gid);if(!leaves.length){toast('No parts','err');return;}
-  var lh='<div class="cf-list">';leaves.forEach(function(p){lh+='<div class="cf-row"><span class="cf-pn">'+esc(p.part_number||'—')+'</span><span class="cf-nm">'+esc(p.component)+'</span><span class="cf-qty">×'+p.qty+'</span></div>';});lh+='</div>';
-  modal('Bulk: '+g.component,t('addAll')+' '+leaves.length+' '+t('parts')+'?',lh,[{label:t('cancel'),cls:'mdc'},{label:t('addAll')+' ('+leaves.length+')',cls:'mdo',fn:function(){
-    leaves.forEach(function(p){S.cart.push({part_number:p.part_number||'',component:p.component,qty:p.qty,mode:'bulk',group:g.component,unit:S.selUnit.name});});
-    toast(t('added')+' '+leaves.length+' '+t('parts'),'ok');render();}}]);}
-
-function vIndiv(childSet){
-  var leaves=S.bom.filter(function(b){return !childSet.has(b.id);});
-  var fasteners={};leaves.forEach(function(b){var pn=(b.part_number||'').toUpperCase();if(/^CB[EST]/.test(pn)){var base=pn.replace(/-\d+$/,'');fasteners[base]=(fasteners[base]||0)+1;}});
-  var chips=Object.keys(fasteners).sort();
-  var h='<div class="search-wrap fade">';
-  if(chips.length){h+='<div class="chip-wrap">';chips.forEach(function(c){h+='<div class="f-chip" data-chip="'+esc(c)+'">'+esc(c)+'</div>';});h+='</div>';}
-  h+='<div class="search-box"><div class="search-ico">'+svg('search')+'</div><input class="search-in" id="searchIn" type="text" placeholder="'+t('searchPh')+'" value="'+esc(S.searchQ)+'" autocomplete="off"></div>';
-  if(S.searchQ.length>=2){
-    var q=S.searchQ.toLowerCase();
-    var matches=leaves.filter(function(b){return(b.part_number||'').toLowerCase().indexOf(q)>=0||(b.component||'').toLowerCase().indexOf(q)>=0;}).slice(0,20);
-    var others=[];S.units.forEach(function(ou){if(ou.id===S.selUnit.id)return;(S.allBom[ou.id]||[]).forEach(function(b){if((b.part_number||'').toLowerCase().indexOf(q)>=0||(b.component||'').toLowerCase().indexOf(q)>=0)others.push({b:b,unit:ou.name});});});
-    if(matches.length){
-      h+='<div style="padding:6px 0;font-size:.78rem;color:var(--t2);font-weight:600">'+matches.length+' in '+esc(S.selUnit.name)+':</div>';
-      matches.forEach(function(b){h+='<div class="sub-card" data-addpart="'+b.id+'" style="padding:10px 14px"><div class="sub-b"><div class="sub-n" style="font-family:var(--mn)">'+esc(b.part_number||'—')+'</div><div class="sub-d">'+esc(b.component)+'</div></div><div class="sub-cnt">×'+b.qty+'</div><div class="sub-a">'+svg('plus')+'</div></div>';});}
-    else if(!others.length)h+='<div class="empty-msg">'+t('notFound')+' "'+esc(S.searchQ)+'"</div>';
-    if(others.length&&!matches.length){var unames=[...new Set(others.map(function(m){return m.unit;}))];h+='<div style="padding:10px;margin-top:8px;background:var(--ylw-bg);border:1.5px solid #fbbf24;border-radius:8px;font-size:.82rem">⚠️ <b>"'+esc(S.searchQ)+'"</b> '+t('foundIn')+' <b>'+esc(S.selUnit.name)+'</b>. '+t('foundInOther')+' <b>'+unames.join(', ')+'</b></div>';}
-  }
-  h+='</div>';return h;}
-
-function addIndivPart(bid){
-  var b=S.bom.find(function(p){return p.id===bid;});if(!b)return;
-  modal(t('addPart'),'<b>'+esc(b.part_number||b.component)+'</b>','<div style="margin-bottom:8px;font-size:.82rem;color:var(--t2)">'+esc(b.component)+'</div><input class="md-input" id="ind-qty" type="number" value="'+b.qty+'" min="1" placeholder="Quantity">',[{label:t('cancel'),cls:'mdc'},{label:t('addPart'),cls:'mdo',fn:function(){
-    var qty=parseInt($('ind-qty').value)||1;S.cart.push({part_number:b.part_number||'',component:b.component,qty:qty,mode:'individual',group:'',unit:S.selUnit.name});
-    toast(t('added')+': '+(b.part_number||b.component),'ok');S.searchQ='';render();}}]);}
-
-function vCart(){
-  var h='<div class="cart fade"><div class="cart-hdr"><div class="cart-t">'+svg('cart')+' '+t('cart')+' <span class="cart-badge">'+S.cart.length+'</span></div><span class="cart-expand" onclick="S.cartOpen=!S.cartOpen;render()">'+(S.cartOpen?t('hide'):t('show'))+'</span></div>';
-  h+='<div class="cart-items'+(S.cartOpen?' open':'')+'">';
-  S.cart.forEach(function(c,i){h+='<div class="ci"><span class="ci-pn">'+esc(c.part_number||c.component)+'</span><span class="ci-qty">×'+c.qty+'</span><span class="ci-mode">'+c.mode+'</span><button class="ci-del" onclick="event.stopPropagation();S.cart.splice('+i+',1);render()">'+svg('x')+'</button></div>';});
-  h+='</div><div class="cart-acts"><button class="cart-btn cart-clr" onclick="S.cart=[];render()">'+t('clear')+'</button><button class="cart-btn cart-sub" onclick="submitCart()">'+t('submit')+' ('+S.cart.length+')</button></div></div>';return h;}
-
-// Google Sheets Submit
-async function submitCart(){
-  if(!S.cart.length){toast(t('cartEmpty'),'err');return;}
-  if(!S.sheetId){modal(t('sheetId'),t('sheetReq'),'<input class="md-input" id="sub-sid" placeholder="Sheet ID" value="'+esc(S.sheetId)+'">',[{label:t('cancel'),cls:'mdc'},{label:t('saveSubmit'),cls:'mdo',fn:function(){S.sheetId=$('sub-sid').value.trim();localStorage.setItem('soroi_sid',S.sheetId);if(S.sheetId)submitCart();}}]);return;}
-  if(!sTk){if(gisC)gisC.requestAccessToken();toast(t('connected')+'...','');return;}
-  toast(t('submitting')+' '+S.cart.length+' '+t('items')+'...','');
-  try{
-    var tab=S.selUnit?S.selUnit.name:'Pickup';
-    var info=await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+S.sheetId+'?fields=sheets.properties.title');
-    if(!info.sheets.some(function(s){return s.properties.title===tab;})){
-      await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+S.sheetId+':batchUpdate',{method:'POST',body:JSON.stringify({requests:[{addSheet:{properties:{title:tab}}}]})});
-      await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+S.sheetId+'/values/'+encodeURIComponent(tab)+'!A1:H1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Time','Operator','Part Number','Description','Qty','Mode','Sub-Assembly']]})});}
-    var col=await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+S.sheetId+'/values/'+encodeURIComponent(tab)+'!A:A');
-    var nr=(col.values?col.values.length:0)+1;
-    var rows=S.cart.map(function(c){return[today(),nowTime(),S.user?S.user.name:'',c.part_number,c.component,c.qty,c.mode,c.group||''];});
-    await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+S.sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nr+':H'+(nr+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
-    toast('✅ '+S.cart.length+' '+t('items')+' → "'+tab+'"','ok');S.cart=[];S.cartOpen=false;render();
-  }catch(e){console.error(e);if(e.message&&e.message.indexOf('401')>=0){sTk=null;localStorage.removeItem('soroi_stk');if(gisC)gisC.requestAccessToken();toast(t('reauth'),'');}else toast(t('failed')+' '+e.message,'err');}}
-async function sApi(url,opts){if(!sTk)throw new Error('No token');var r=await fetch(url,Object.assign({headers:{'Authorization':'Bearer '+sTk,'Content-Type':'application/json'}},opts||{}));if(!r.ok){var t=await r.text();throw new Error(r.status+': '+t);}return r.json();}
-
-// Helpers
-function getLeaves(pid){var out=[];S.bom.forEach(function(b){if(isDesc(b.id,pid)&&!S.bom.some(function(c){return c.parent_id===b.id;}))out.push(b);});return out;}
-function isDesc(id,anc){var cur=S.bom.find(function(b){return b.id===id;});while(cur){if(cur.parent_id===anc)return true;cur=S.bom.find(function(b){return b.id===cur.parent_id;});}return false;}
-
-// Bindings
-function bindAll(){
-  document.querySelectorAll('[data-unit]').forEach(function(el){el.onclick=function(){openUnit(el.dataset.unit);};});
-  document.querySelectorAll('[data-mode]').forEach(function(el){el.onclick=function(){S.mode=el.dataset.mode;render();};});
-  document.querySelectorAll('[data-sub]').forEach(function(el){el.onclick=function(){confirmBulk(el.dataset.sub);};});
-  document.querySelectorAll('[data-addpart]').forEach(function(el){el.onclick=function(){addIndivPart(el.dataset.addpart);};});
-  document.querySelectorAll('[data-chip]').forEach(function(el){el.onclick=function(){S.searchQ=el.dataset.chip;render();setTimeout(function(){var inp=$('searchIn');if(inp){inp.focus();inp.selectionStart=inp.value.length;}},50);};});
-  var si=$('searchIn');if(si){si.oninput=function(){S.searchQ=this.value;render();setTimeout(function(){var inp=$('searchIn');if(inp){inp.focus();inp.selectionStart=inp.value.length;}},10);};}
+/* === NAV (show/hide) === */
+function nav(view){
+    currentView=view;settingsOpen=false;$('sec-settings').className='stp';
+    ['sec-loading','sec-login','sec-home','sec-pickup'].forEach(function(id){$(id).style.display='none';});
+    switch(view){
+        case'loading':$('sec-loading').style.display='block';break;
+        case'login':renderLogin();$('sec-login').style.display='block';break;
+        case'home':renderHome();$('sec-home').style.display='block';renderSettings();break;
+        case'pickup':$('sec-pickup').style.display='block';break;
+    }
+    updateHeader();
 }
+function updateHeader(){
+    var hb=$('hdr-back'),ht=$('hdr-title'),hs=$('hdr-sub'),hr=$('hdr-right');
+    if(currentView==='pickup'&&selUnit){
+        hb.innerHTML='<div class="hdr-bk" onclick="goBack()">'+svg('back')+'</div>';hb.style.display='block';
+        ht.textContent=(selUnit.icon||'📦')+' '+selUnit.name;
+        hs.textContent=today()+' · '+(user?user.name:'');
+        hr.innerHTML='<div class="hdr-bk" onclick="goBack()">'+svg('x')+'</div>';
+    }else{
+        hb.style.display='none';ht.textContent='🛒 揃い Soroi';hs.textContent=t('sub');
+        var h='';
+        if(user){h+='<span style="font-size:.78rem;opacity:.8;font-weight:500">'+esc(user.name)+'</span>';if(user.isAdmin)h+='<span style="font-size:.6rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-weight:700">ADMIN</span>';}
+        h+='<button class="hdr-btn" onclick="toggleSettings()" title="'+t('settings')+'">'+svg('gear')+'</button>';
+        if(user){h+='<button class="hdr-btn" onclick="doLogout()">'+t('out')+'</button>';}else{h+='<button class="hdr-btn" onclick="doLogin()" style="gap:6px">'+GL+' '+t('signIn')+'</button>';}
+        hr.innerHTML=h;
+    }
+}
+function toggleSettings(){settingsOpen=!settingsOpen;$('sec-settings').className=settingsOpen?'stp open':'stp';}
+function renderSettings(){
+    var h='<div class="stp-inner"><div class="stp-row"><span class="stp-label">'+t('language')+'</span><div class="stp-lang"><button class="stp-lb'+(LANG==='en'?' on':'')+'" onclick="setLang(\'en\')">EN</button><button class="stp-lb'+(LANG==='ja'?' on':'')+'" onclick="setLang(\'ja\')">日本語</button></div></div>';
+    h+='<div class="stp-row"><span class="stp-label">'+t('sheetId')+'</span><input class="stp-sid" value="'+esc(sheetId)+'" placeholder="Google Sheet ID" onchange="sheetId=this.value.trim();localStorage.setItem(\'soroi_sid\',sheetId)"></div>';
+    if(user&&user.isAdmin){h+='<div class="stp-divider"></div><div class="stp-row"><span class="stp-label">'+t('adminTools')+'</span><a class="stp-link" href="admin.html">'+svg('extlink')+' '+t('openAdmin')+'</a></div>';}
+    h+='</div>';$('sec-settings').innerHTML=h;
+}
+function renderLogin(){$('sec-login').innerHTML='<div class="lgn"><div class="lgn-ic">'+svg('cart')+'</div><div class="lgn-h"><span>揃い</span> Soroi</div><div class="lgn-p">'+t('sub')+'</div><button class="lgn-btn" onclick="doLogin()">'+GL+' '+t('signIn')+'</button></div>';}
+
+/* === HOME === */
+function renderHome(){
+    var h='<div class="home-hdr fade"><h2>'+t('selectUnit')+'</h2><p>'+t('selectUnitP')+'</p></div>';
+    if(user)h+='<div class="info-bar fade"><div class="info-chip">📅 <b>'+today()+'</b></div><div class="info-chip">👤 <b>'+esc(user.name)+'</b></div></div>';
+    h+='<div class="ugrid fade">';
+    units.forEach(function(u){var c=u.color||'#2563eb';h+='<div class="ucard" onclick="openUnit(\''+u.id+'\')" style="border-top-color:'+c+'"><div class="ucard-ico" style="background:'+c+'12">'+esc(u.icon||'📦')+'</div><div class="ucard-b"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-d">'+t('tapStart')+'</div></div><div class="ucard-a">'+svg('chev')+'</div></div>';});
+    if(!units.length)h+='<div class="empty-msg">'+t('noUnits')+'</div>';
+    h+='</div>';$('sec-home').innerHTML=h;
+}
+function goBack(){selUnit=null;bom=[];mode='bulk';searchQ='';nav('home');}
+async function openUnit(id){
+    if(!user){toast(t('loginFirst'),'err');doLogin();return;}
+    selUnit=units.find(function(u){return u.id===id;});cart=[];mode='bulk';searchQ='';
+    nav('pickup');
+    $('sec-pickup').innerHTML='<div class="lc"><div class="spin"></div></div>';
+    await loadBom(id);loadAllBom();renderPickup();
+}
+
+/* === PICKUP === */
+function renderPickup(){
+    if(!selUnit){$('sec-pickup').innerHTML='';return;}
+    var childSet=new Set();bom.forEach(function(b){if(b.parent_id)childSet.add(b.parent_id);});
+    var h='<div class="mode-bar fade"><div class="mode-btn'+(mode==='bulk'?' on':'')+'" onclick="mode=\'bulk\';renderPickup()">'+t('bulk')+'</div><div class="mode-btn'+(mode==='individual'?' on':'')+'" onclick="mode=\'individual\';renderPickup()">'+t('indiv')+'</div></div>';
+    if(mode==='bulk')h+=buildBulk(childSet);else h+=buildIndiv(childSet);
+    if(cart.length)h+=buildCart();
+    $('sec-pickup').innerHTML=h;updateHeader();bindPickup();
+}
+function buildBulk(childSet){
+    var groups=bom.filter(function(b){return childSet.has(b.id)&&b.level>=2;});
+    var GC=['#2e7d32','#1565c0','#c62828','#6a1b9a','#e65100','#00838f','#f57f17','#4e342e','#283593','#bf360c'];
+    var h='<div class="sub-list fade">';
+    if(!groups.length){h+='<div class="empty-msg">'+(bom.length?t('noSub'):t('noBom'))+'</div></div>';return h;}
+    groups.forEach(function(g,i){var leaves=getLeaves(g.id);h+='<div class="sub-card" data-sub="'+g.id+'"><div class="sub-ico" style="background:'+GC[i%GC.length]+'"></div><div class="sub-b"><div class="sub-n">'+esc(g.component)+'</div><div class="sub-d">'+(g.part_number?esc(g.part_number)+' · ':'')+'L'+g.level+'</div></div><div class="sub-cnt">'+leaves.length+' '+t('parts')+'</div><div class="sub-a">'+svg('chev')+'</div></div>';});
+    h+='</div>';return h;
+}
+function buildIndiv(childSet){
+    var leaves=bom.filter(function(b){return !childSet.has(b.id);});
+    var fasteners={};leaves.forEach(function(b){var pn=(b.part_number||'').toUpperCase();if(/^CB[EST]/.test(pn)){var base=pn.replace(/-\d+$/,'');fasteners[base]=(fasteners[base]||0)+1;}});
+    var chips=Object.keys(fasteners).sort();
+    var h='<div class="search-wrap fade">';
+    if(chips.length){h+='<div class="chip-wrap">';chips.forEach(function(c){h+='<div class="f-chip" data-chip="'+esc(c)+'">'+esc(c)+'</div>';});h+='</div>';}
+    h+='<div class="search-box"><div class="search-ico">'+svg('search')+'</div><input class="search-in" id="searchIn" type="text" placeholder="'+t('searchPh')+'" value="'+esc(searchQ)+'" autocomplete="off"></div>';
+    if(searchQ.length>=2){
+        var q=searchQ.toLowerCase();
+        var matches=leaves.filter(function(b){return(b.part_number||'').toLowerCase().indexOf(q)>=0||(b.component||'').toLowerCase().indexOf(q)>=0;}).slice(0,20);
+        var others=[];units.forEach(function(ou){if(ou.id===selUnit.id)return;(allBom[ou.id]||[]).forEach(function(b){if((b.part_number||'').toLowerCase().indexOf(q)>=0||(b.component||'').toLowerCase().indexOf(q)>=0)others.push({b:b,unit:ou.name});});});
+        if(matches.length){h+='<div style="padding:6px 0;font-size:.78rem;color:var(--t2);font-weight:600">'+matches.length+' in '+esc(selUnit.name)+':</div>';matches.forEach(function(b){h+='<div class="sub-card" data-addpart="'+b.id+'" style="padding:10px 14px"><div class="sub-b"><div class="sub-n" style="font-family:var(--mn)">'+esc(b.part_number||'—')+'</div><div class="sub-d">'+esc(b.component)+'</div></div><div class="sub-cnt">×'+b.qty+'</div><div class="sub-a">'+svg('plus')+'</div></div>';});}
+        else if(!others.length)h+='<div class="empty-msg">'+t('notFound')+' "'+esc(searchQ)+'"</div>';
+        if(others.length&&!matches.length){var unames=[...new Set(others.map(function(m){return m.unit;}))];h+='<div style="padding:10px;margin-top:8px;background:var(--ylw-bg);border:1.5px solid #fbbf24;border-radius:8px;font-size:.82rem">⚠️ <b>"'+esc(searchQ)+'"</b> '+t('foundIn')+' <b>'+esc(selUnit.name)+'</b>. '+t('foundInOther')+' <b>'+unames.join(', ')+'</b></div>';}
+    }
+    h+='</div>';return h;
+}
+function buildCart(){
+    var h='<div class="cart fade"><div class="cart-hdr"><div class="cart-t">'+svg('cart')+' '+t('cart')+' <span class="cart-badge">'+cart.length+'</span></div><span class="cart-expand" onclick="cartOpen=!cartOpen;renderPickup()">'+(cartOpen?t('hide'):t('show'))+'</span></div>';
+    h+='<div class="cart-items'+(cartOpen?' open':'')+'">';
+    cart.forEach(function(c,i){h+='<div class="ci"><span class="ci-pn">'+esc(c.part_number||c.component)+'</span><span class="ci-qty">×'+c.qty+'</span><span class="ci-mode">'+c.mode+'</span><button class="ci-del" onclick="event.stopPropagation();cart.splice('+i+',1);renderPickup()">'+svg('x')+'</button></div>';});
+    h+='</div><div class="cart-acts"><button class="cart-btn cart-clr" onclick="cart=[];renderPickup()">'+t('clear')+'</button><button class="cart-btn cart-sub" onclick="submitCart()">'+t('submit')+' ('+cart.length+')</button></div></div>';return h;
+}
+function bindPickup(){
+    document.querySelectorAll('[data-sub]').forEach(function(el){el.onclick=function(){confirmBulk(el.dataset.sub);};});
+    document.querySelectorAll('[data-addpart]').forEach(function(el){el.onclick=function(){addIndivPart(el.dataset.addpart);};});
+    document.querySelectorAll('[data-chip]').forEach(function(el){el.onclick=function(){searchQ=el.dataset.chip;renderPickup();setTimeout(function(){var inp=$('searchIn');if(inp){inp.focus();inp.selectionStart=inp.value.length;}},50);};});
+    var si=$('searchIn');if(si){si.oninput=function(){searchQ=this.value;renderPickup();setTimeout(function(){var inp=$('searchIn');if(inp){inp.focus();inp.selectionStart=inp.value.length;}},10);};}
+}
+function confirmBulk(gid){
+    var g=bom.find(function(b){return b.id===gid;});if(!g)return;
+    var leaves=getLeaves(gid);if(!leaves.length){toast('No parts','err');return;}
+    var lh='<div class="cf-list">';leaves.forEach(function(p){lh+='<div class="cf-row"><span class="cf-pn">'+esc(p.part_number||'—')+'</span><span class="cf-nm">'+esc(p.component)+'</span><span class="cf-qty">×'+p.qty+'</span></div>';});lh+='</div>';
+    modal('Bulk: '+g.component,t('addAll')+' '+leaves.length+' '+t('parts')+'?',lh,[{label:t('cancel'),cls:'mdc'},{label:t('addAll')+' ('+leaves.length+')',cls:'mdo',fn:function(){leaves.forEach(function(p){cart.push({part_number:p.part_number||'',component:p.component,qty:p.qty,mode:'bulk',group:g.component,unit:selUnit.name});});toast(t('added')+' '+leaves.length+' '+t('parts'),'ok');renderPickup();}}]);
+}
+function addIndivPart(bid){
+    var b=bom.find(function(p){return p.id===bid;});if(!b)return;
+    modal(t('addPart'),'<b>'+esc(b.part_number||b.component)+'</b>','<div style="margin-bottom:8px;font-size:.82rem;color:var(--t2)">'+esc(b.component)+'</div><input class="md-input" id="ind-qty" type="number" value="'+b.qty+'" min="1" placeholder="Quantity">',[{label:t('cancel'),cls:'mdc'},{label:t('addPart'),cls:'mdo',fn:function(){var qty=parseInt($('ind-qty').value)||1;cart.push({part_number:b.part_number||'',component:b.component,qty:qty,mode:'individual',group:'',unit:selUnit.name});toast(t('added')+': '+(b.part_number||b.component),'ok');searchQ='';renderPickup();}}]);
+}
+
+/* === SHEETS === */
+async function submitCart(){
+    if(!cart.length){toast(t('cartEmpty'),'err');return;}
+    if(!sheetId){modal(t('sheetId'),t('sheetReq'),'<input class="md-input" id="sub-sid" placeholder="Sheet ID" value="'+esc(sheetId)+'">',[{label:t('cancel'),cls:'mdc'},{label:t('saveSubmit'),cls:'mdo',fn:function(){sheetId=$('sub-sid').value.trim();localStorage.setItem('soroi_sid',sheetId);if(sheetId)submitCart();}}]);return;}
+    if(!sTk){if(gisC)gisC.requestAccessToken();toast(t('connected')+'...','');return;}
+    toast(t('submitting')+' '+cart.length+' '+t('items')+'...','');
+    try{
+        var tab=selUnit?selUnit.name:'Pickup';
+        var info=await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'?fields=sheets.properties.title');
+        if(!info.sheets.some(function(s){return s.properties.title===tab;})){
+            await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+':batchUpdate',{method:'POST',body:JSON.stringify({requests:[{addSheet:{properties:{title:tab}}}]})});
+            await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A1:H1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Time','Operator','Part Number','Description','Qty','Mode','Sub-Assembly']]})});}
+        var col=await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A:A');
+        var nr=(col.values?col.values.length:0)+1;
+        var rows=cart.map(function(c){return[today(),nowTime(),user?user.name:'',c.part_number,c.component,c.qty,c.mode,c.group||''];});
+        await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nr+':H'+(nr+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
+        toast('✅ '+cart.length+' '+t('items')+' → "'+tab+'"','ok');cart=[];cartOpen=false;renderPickup();
+    }catch(e){console.error(e);if(e.message&&e.message.indexOf('401')>=0){sTk=null;localStorage.removeItem('soroi_stk');if(gisC)gisC.requestAccessToken();toast(t('reauth'),'');}else toast(t('failed')+' '+e.message,'err');}
+}
+async function sApi(url,opts){if(!sTk)throw new Error('No token');var r=await fetch(url,Object.assign({headers:{'Authorization':'Bearer '+sTk,'Content-Type':'application/json'}},opts||{}));if(!r.ok){var tx=await r.text();throw new Error(r.status+': '+tx);}return r.json();}
+function getLeaves(pid){var out=[];bom.forEach(function(b){if(isDesc(b.id,pid)&&!bom.some(function(c){return c.parent_id===b.id;}))out.push(b);});return out;}
+function isDesc(id,anc){var cur=bom.find(function(b){return b.id===id;});while(cur){if(cur.parent_id===anc)return true;cur=bom.find(function(b){return b.id===cur.parent_id;});}return false;}
 </script>
 </body>
 </html>
