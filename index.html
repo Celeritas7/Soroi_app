@@ -430,7 +430,7 @@ async function loadAll(){
     try{
         const{data,error}=await sb.from('soroi_app_units').select('*').order('sort_order');
         if(error){console.error('loadAll:',error);units=[];}
-        else{units=data||[];}
+        else{units=(data||[]).filter(u=>u.visible!==false);}
         console.log('Units loaded:',units.length);
     }catch(e){console.error('loadAll:',e);units=[];}
 }

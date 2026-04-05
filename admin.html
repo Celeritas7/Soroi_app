@@ -212,7 +212,15 @@ async function moveUnit(idx,dir){
     await sb.from('soroi_app_units').update({sort_order:aSort}).eq('id',b.id);
     toast('Reordered','ok');loadUnits();
   }catch(e){toast('Reorder failed: '+e.message,'err');}
-}// Settings modal
+}
+async function toggleVis(id,hide){
+  try{
+    var r=await sb.from('soroi_app_units').update({visible:!hide}).eq('id',id);
+    if(r.error){toast('Error: '+r.error.message,'err');}
+    else{toast(hide?'Hidden from operators':'Visible to operators','ok');loadUnits();}
+  }catch(e){toast(e.message,'err');}
+}
+// Settings modal
 function openSettings(){
   modal('Settings','Configure app settings.',
     '<div style="margin-bottom:10px"><label style="font-size:.78rem;font-weight:600;color:#6b5a4e;display:block;margin-bottom:4px;">Google Sheet ID</label><input class="md-input" id="set-sid" value="'+esc(S.sheetId)+'" placeholder="Paste Google Sheet ID here" style="font-family:var(--mn);font-size:.78rem"></div><p style="font-size:.7rem;color:#a39485;line-height:1.4">Pickup logs will be written to separate tabs per unit inside this spreadsheet.</p>',
@@ -251,11 +259,13 @@ function vHome(){
   h+='<div class="ugrid fade">';
   S.units.forEach(function(u,i){
     var c=u.color||colors[i%colors.length];
-    h+='<div class="ucard" data-act="unit" data-id="'+u.id+'" style="border-top-color:'+c+'">';
+    var hidden=u.visible===false;
+    h+='<div class="ucard" data-act="unit" data-id="'+u.id+'" style="border-top-color:'+c+(hidden?';opacity:.45':'')+'"">';
     h+='<div class="ucard-main"><div class="ucard-ico" style="background:'+c+'18;color:'+c+'">'+esc(u.icon||'📦')+'</div>';
-    h+='<div class="ucard-info"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-sub">'+(u.description||'Tap to view BOM')+'</div></div></div>';
+    h+='<div class="ucard-info"><div class="ucard-n">'+esc(u.name)+(hidden?' <span style="font-size:.65rem;color:#a39485;font-weight:400">(hidden)</span>':'')+'</div><div class="ucard-sub">'+(u.description||'Tap to view BOM')+'</div></div></div>';
     if(S.isAdmin){
       h+='<div class="ucard-sep"></div><div class="ucard-acts">';
+      h+='<button class="ucard-ab" onclick="event.stopPropagation();toggleVis(\''+u.id+'\','+(!hidden)+')" title="'+(hidden?'Show':'Hide')+'" style="color:'+(hidden?'#a39485':'#64748b')+';font-size:1rem">'+(hidden?'👁‍🗨':'👁')+'</button>';
       if(i>0)h+='<button class="ucard-ab" onclick="event.stopPropagation();moveUnit('+i+',-1)" title="Move up" style="color:#64748b;font-size:1rem">▲</button>';
       else h+='<button class="ucard-ab" style="opacity:.2;cursor:default" disabled>▲</button>';
       if(i<S.units.length-1)h+='<button class="ucard-ab" onclick="event.stopPropagation();moveUnit('+i+',1)" title="Move down" style="color:#64748b;font-size:1rem">▼</button>';
