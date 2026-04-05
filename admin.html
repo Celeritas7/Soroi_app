@@ -229,9 +229,11 @@ function vHome(){
   if(S.user){
     h+='<span style="font-size:.75rem;opacity:.8;font-weight:500">'+esc(S.user.name)+'</span>';
     if(S.isAdmin)h+='<span style="font-size:.6rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-weight:700">ADMIN</span>';
+    h+='<a href="index.html" class="hdr-btn" style="text-decoration:none">🛒 Pickup</a>';
     if(S.isAdmin)h+='<button class="hdr-btn" onclick="openSettings()" title="Settings">'+svg('gear')+'</button>';
     h+='<button class="hdr-btn" onclick="doLogout()">Out</button>';
   }else{
+    h+='<a href="index.html" class="hdr-btn" style="text-decoration:none">🛒 Pickup</a>';
     h+='<button class="hdr-btn" onclick="doLogin()" style="gap:6px">'+GL+' Sign In</button>';
   }
   h+='</div></div>';
