@@ -79,19 +79,7 @@ input,select{font:inherit;color:inherit}
 .spin{width:24px;height:24px;border:3px solid var(--bd);border-top-color:var(--pri);border-radius:50%;animation:sp .6s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
 .fade{animation:fi .15s ease}@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 .empty-msg{text-align:center;padding:40px 20px;color:var(--t3);font-size:.9rem}
-/* Settings panel */
-.stp{max-width:800px;margin:0 auto;width:100%;overflow:hidden;max-height:0;transition:max-height .3s ease,opacity .2s;opacity:0}
-.stp.open{max-height:400px;opacity:1}
-.stp-inner{padding:12px 20px 16px}
-.stp-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.stp-label{font-size:.78rem;font-weight:600;color:var(--t2);min-width:70px;flex-shrink:0}
-.stp-lang{display:flex;gap:0;border-radius:8px;overflow:hidden;border:1.5px solid var(--bd)}
-.stp-lb{padding:7px 16px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .12s;background:var(--sf);color:var(--t2);border:none}.stp-lb.on{background:var(--pri);color:#fff}
-.stp-sid{flex:1;padding:8px 12px;border:1.5px solid var(--bd);border-radius:8px;font-size:.8rem;font-family:var(--mn);background:var(--sf)}.stp-sid:focus{outline:none;border-color:var(--pri)}
-.stp-link{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:8px;font-size:.8rem;font-weight:600;background:var(--sf);border:1.5px solid var(--bd);color:var(--t2);text-decoration:none;transition:all .12s}.stp-link:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-bg)}
-.stp-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.stp-divider{height:1px;background:var(--bd);margin:10px 0}
-@media(max-width:600px){.ugrid{grid-template-columns:1fr}.info-bar{flex-direction:column;gap:6px}.stp-row{flex-wrap:wrap}}
+@media(max-width:600px){.ugrid{grid-template-columns:1fr}.info-bar{flex-direction:column;gap:6px}}
 </style>
 </head>
 <body>
@@ -103,18 +91,10 @@ var SB_URL='https://wylxvmkcrexwfpjpbhyy.supabase.co';
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bHh2bWtjcmV4d2ZwanBiaHl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MzkxMDYsImV4cCI6MjA4NDIxNTEwNn0.6Bxo42hx4jwlJGWnfjiTpiDUsYfc1QLTN3YtrU1efak';
 var GIS_CID='1088099187141-ut0dn0scqt3h99htf3rg8gsrg2oo1ad8.apps.googleusercontent.com';
 var sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'sb-soroi2-auth'}});
-var S={user:null,view:'loading',units:[],selUnit:null,bom:[],allBom:{},mode:'bulk',cart:[],cartOpen:false,searchQ:'',sheetId:localStorage.getItem('soroi_sid')||'',authOk:false,settingsOpen:false};
+var S={user:null,view:'loading',units:[],selUnit:null,bom:[],allBom:{},mode:'bulk',cart:[],cartOpen:false,searchQ:'',sheetId:localStorage.getItem('soroi_sid')||'',authOk:false};
 var gisC=null,sTk=localStorage.getItem('soroi_stk')||null;
-var IC={back:'<polyline points="15 18 9 12 15 6"/>',check:'<polyline points="20 6 9 17 4 12"/>',x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',chev:'<polyline points="9 18 15 12 9 6"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68 1.65 1.65 0 0010 3.17V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>',extlink:'<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>'};
+var IC={back:'<polyline points="15 18 9 12 15 6"/>',check:'<polyline points="20 6 9 17 4 12"/>',x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',chev:'<polyline points="9 18 15 12 9 6"/>',cart:'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',trash:'<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>'};
 function svg(n){return '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">'+(IC[n]||'')+'</svg>';}
-// Language
-var LANG=localStorage.getItem('soroi_lang')||'en';
-var T={
-  en:{title:'揃い Soroi',sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectUnitP:'Choose an assembly unit to start picking',tapStart:'Tap to start pickup',noUnits:'No units available. Ask admin to create units.',signIn:'Sign In',out:'Out',bulk:'📦 Bulk Pickup',indiv:'🔍 Individual',cart:'Cart',submit:'📦 Submit','clear':'Clear',hide:'▲ Hide',show:'▼ Show',settings:'Settings',language:'Language',sheetId:'Sheet ID',adminTools:'Admin Tools',openAdmin:'Open BOM Manager',addAll:'Add All',cancel:'Cancel',addPart:'Add Part',parts:'parts',noSub:'No sub-assemblies. Use Individual mode.',noBom:'No BOM data. Ask admin to import.',searchPh:'Search part number or name...',notFound:'No parts found for',foundIn:'not found in',foundInOther:'Found in:',loginFirst:'Sign in to start picking',sheetReq:'Enter Google Sheet ID.',saveSubmit:'Save & Submit',submitting:'Submitting',connected:'Sheets connected',reauth:'Re-authenticating...',failed:'Failed:',cartEmpty:'Cart is empty',added:'Added',items:'items'},
-  ja:{title:'揃い Soroi',sub:'工場ピックアップ',selectUnit:'ユニット選択',selectUnitP:'ピックアップするユニットを選択してください',tapStart:'タップして開始',noUnits:'ユニットがありません。管理者に作成を依頼してください。',signIn:'ログイン',out:'ログアウト',bulk:'📦 一括',indiv:'🔍 個別',cart:'カート',submit:'📦 提出','clear':'クリア',hide:'▲ 閉じる',show:'▼ 表示',settings:'設定',language:'言語',sheetId:'シートID',adminTools:'管理ツール',openAdmin:'BOM管理を開く',addAll:'全て追加',cancel:'キャンセル',addPart:'部品追加',parts:'部品',noSub:'サブアセンブリなし。個別モードをご利用ください。',noBom:'BOMデータなし。管理者にインポートを依頼してください。',searchPh:'部品番号または名前で検索...',notFound:'見つかりません：',foundIn:'に該当なし',foundInOther:'以下で発見：',loginFirst:'ピックアップにはログインが必要です',sheetReq:'Google Sheet IDを入力してください。',saveSubmit:'保存して提出',submitting:'提出中',connected:'Sheets接続済',reauth:'再認証中...',failed:'失敗：',cartEmpty:'カートは空です',added:'追加済',items:'件'}
-};
-function t(k){return(T[LANG]&&T[LANG][k])||T.en[k]||k;}
-function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);render();}
 var GL='<svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>';
 function $(id){return document.getElementById(id);}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -128,7 +108,7 @@ window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(se
 async function doLogin(){var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(r.error)toast('Login failed','err');}
 async function doLogout(){await sb.auth.signOut();S.user=null;S.cart=[];nav('home');loadUnits();}
 async function ckRole(u){var fb=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fb};var admin=false;try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){S.user.name=r.data[0].name||fb;admin=(r.data[0].role||'').toLowerCase().trim()==='admin';}else if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com'){admin=true;}}catch(e){console.warn('Role check failed:',e);if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')admin=true;}S.user.isAdmin=admin;console.log('Auth:',S.user.email,'admin:',admin,'view:',S.view);if(S.view==='login'||S.view==='loading'){nav('home');loadUnits();}else{render();}}
-function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);toast(t('connected'),'ok');}}});}
+function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);toast('Sheets connected','ok');}}});}
 
 // Data
 async function loadUnits(){try{var r=await sb.from('soroi_app_units').select('*').order('sort_order');S.units=r.data||[];}catch(e){}render();}
@@ -138,40 +118,33 @@ async function loadAllBom(){for(var i=0;i<S.units.length;i++){var uid=S.units[i]
 // Nav
 function nav(v){S.view=v;S.searchQ='';render();}
 function goBack(){if(S.view==='pickup'){S.selUnit=null;S.bom=[];S.mode='bulk';S.view='home';render();loadUnits();}else nav('home');}
-function openUnit(id){if(!S.user){toast(t('loginFirst'),'err');doLogin();return;}S.selUnit=S.units.find(function(u){return u.id===id;});S.cart=[];S.mode='bulk';nav('pickup');loadBom(id);loadAllBom();}
+function openUnit(id){if(!S.user){toast('Sign in to start picking','err');doLogin();return;}S.selUnit=S.units.find(function(u){return u.id===id;});S.cart=[];S.mode='bulk';nav('pickup');loadBom(id);loadAllBom();}
 
 // Render
 function render(){var a=$('app');switch(S.view){case'loading':a.innerHTML='<div class="lc" style="min-height:100dvh;justify-content:center"><div class="spin"></div></div>';break;case'login':a.innerHTML=vLogin();break;case'home':a.innerHTML=vHome();break;case'pickup':a.innerHTML=vPickup();break;}bindAll();}
-function vLogin(){return '<div class="lgn"><div class="lgn-ic">'+svg('cart')+'</div><div class="lgn-h"><span>揃い</span> Soroi</div><div class="lgn-p">'+t('sub')+'</div><button class="lgn-btn" onclick="doLogin()">'+GL+' '+t('signIn')+'</button></div>';}
+function vLogin(){return '<div class="lgn"><div class="lgn-ic">'+svg('cart')+'</div><div class="lgn-h"><span>揃い</span> Soroi</div><div class="lgn-p">Shop Floor Pickup</div><button class="lgn-btn" onclick="doLogin()">'+GL+' Sign in with Google</button></div>';}
 function vHome(){
-  var h='<div class="hdr"><div class="hdr-b"><div class="hdr-t">🛒 '+t('title')+'</div><div class="hdr-s">'+t('sub')+'</div></div><div class="hdr-r">';
+  var h='<div class="hdr"><div class="hdr-b"><div class="hdr-t">🛒 揃い Soroi</div><div class="hdr-s">Shop Floor Pickup</div></div><div class="hdr-r">';
   if(S.user){
     h+='<span style="font-size:.78rem;opacity:.8;font-weight:500">'+esc(S.user.name)+'</span>';
     if(S.user.isAdmin)h+='<span style="font-size:.6rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:4px;font-weight:700">ADMIN</span>';
+    h+='<button class="hdr-btn" onclick="doLogout()">Out</button>';
+  }else{
+    h+='<button class="hdr-btn" onclick="doLogin()" style="gap:6px">'+GL+' Sign In</button>';
   }
-  h+='<button class="hdr-btn" onclick="S.settingsOpen=!S.settingsOpen;render()" title="'+t('settings')+'">'+svg('gear')+'</button>';
-  if(S.user){h+='<button class="hdr-btn" onclick="doLogout()">'+t('out')+'</button>';}
-  else{h+='<button class="hdr-btn" onclick="doLogin()" style="gap:6px">'+GL+' '+t('signIn')+'</button>';}
   h+='</div></div>';
-  // Settings panel
-  h+='<div class="stp'+(S.settingsOpen?' open':'')+'">';
-  h+='<div class="stp-inner">';
-  h+='<div class="stp-row"><span class="stp-label">'+t('language')+'</span><div class="stp-lang"><button class="stp-lb'+(LANG==='en'?' on':'')+'" onclick="setLang(\'en\')">EN</button><button class="stp-lb'+(LANG==='ja'?' on':'')+'" onclick="setLang(\'ja\')">日本語</button></div></div>';
-  h+='<div class="stp-row"><span class="stp-label">'+t('sheetId')+'</span><input class="stp-sid" id="stpSid" value="'+esc(S.sheetId)+'" placeholder="Google Sheet ID" onchange="S.sheetId=this.value.trim();localStorage.setItem(\'soroi_sid\',S.sheetId)"></div>';
-  if(S.user&&S.user.isAdmin){h+='<div class="stp-divider"></div>';h+='<div class="stp-row"><span class="stp-label">'+t('adminTools')+'</span><a class="stp-link" href="admin.html">'+svg('extlink')+' '+t('openAdmin')+'</a></div>';}
-  h+='</div></div>';
-  h+='<div class="home-hdr fade"><h2>'+t('selectUnit')+'</h2><p>'+t('selectUnitP')+'</p></div>';
+  h+='<div class="home-hdr fade"><h2>Select Unit</h2><p>Choose an assembly unit to start picking</p></div>';
   if(S.user)h+='<div class="info-bar fade"><div class="info-chip">📅 <b>'+today()+'</b></div><div class="info-chip">👤 <b>'+esc(S.user.name)+'</b></div></div>';
   h+='<div class="ugrid fade">';
-  S.units.forEach(function(u){var c=u.color||'#2563eb';h+='<div class="ucard" data-unit="'+u.id+'" style="border-top-color:'+c+'"><div class="ucard-ico" style="background:'+c+'12">'+esc(u.icon||'📦')+'</div><div class="ucard-b"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-d">'+t('tapStart')+'</div></div><div class="ucard-a">'+svg('chev')+'</div></div>';});
-  if(!S.units.length)h+='<div class="empty-msg">'+t('noUnits')+'</div>';
+  S.units.forEach(function(u){var c=u.color||'#2563eb';h+='<div class="ucard" data-unit="'+u.id+'" style="border-top-color:'+c+'"><div class="ucard-ico" style="background:'+c+'12">'+esc(u.icon||'📦')+'</div><div class="ucard-b"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-d">Tap to start pickup</div></div><div class="ucard-a">'+svg('chev')+'</div></div>';});
+  if(!S.units.length)h+='<div class="empty-msg">No units available. Ask admin to create units.</div>';
   h+='</div>';return h;}
 
 function vPickup(){
   var u=S.selUnit;if(!u)return '';
   var childSet=new Set();S.bom.forEach(function(b){if(b.parent_id)childSet.add(b.parent_id);});
   var h='<div class="hdr"><button class="hdr-bk" onclick="goBack()">'+svg('back')+'</button><div class="hdr-b"><div class="hdr-t">'+esc(u.icon||'📦')+' '+esc(u.name)+'</div><div class="hdr-s">'+today()+' · '+esc(S.user?S.user.name:'')+'</div></div><div class="hdr-r"><button class="hdr-bk" onclick="goBack()">'+svg('x')+'</button></div></div>';
-  h+='<div class="mode-bar fade"><div class="mode-btn'+(S.mode==='bulk'?' on':'')+'" data-mode="bulk">'+t('bulk')+'</div><div class="mode-btn'+(S.mode==='individual'?' on':'')+'" data-mode="individual">'+t('indiv')+'</div></div>';
+  h+='<div class="mode-bar fade"><div class="mode-btn'+(S.mode==='bulk'?' on':'')+'" data-mode="bulk">📦 Bulk Pickup</div><div class="mode-btn'+(S.mode==='individual'?' on':'')+'" data-mode="individual">🔍 Individual</div></div>';
   if(S.mode==='bulk')h+=vBulk(childSet);else h+=vIndiv(childSet);
   if(S.cart.length)h+=vCart();return h;}
 
@@ -179,17 +152,17 @@ function vBulk(childSet){
   var groups=S.bom.filter(function(b){return childSet.has(b.id)&&b.level>=2;});
   var GC=['#2e7d32','#1565c0','#c62828','#6a1b9a','#e65100','#00838f','#f57f17','#4e342e','#283593','#bf360c'];
   var h='<div class="sub-list fade">';
-  if(!groups.length){h+='<div class="empty-msg">'+(S.bom.length?t('noSub'):t('noBom'))+'</div></div>';return h;}
-  groups.forEach(function(g,i){var leaves=getLeaves(g.id);h+='<div class="sub-card" data-sub="'+g.id+'"><div class="sub-ico" style="background:'+GC[i%GC.length]+'"></div><div class="sub-b"><div class="sub-n">'+esc(g.component)+'</div><div class="sub-d">'+(g.part_number?esc(g.part_number)+' · ':'')+'L'+g.level+'</div></div><div class="sub-cnt">'+leaves.length+' '+t('parts')+'</div><div class="sub-a">'+svg('chev')+'</div></div>';});
+  if(!groups.length){h+='<div class="empty-msg">'+(S.bom.length?'No sub-assemblies. Use Individual mode.':'No BOM data. Ask admin to import.')+'</div></div>';return h;}
+  groups.forEach(function(g,i){var leaves=getLeaves(g.id);h+='<div class="sub-card" data-sub="'+g.id+'"><div class="sub-ico" style="background:'+GC[i%GC.length]+'"></div><div class="sub-b"><div class="sub-n">'+esc(g.component)+'</div><div class="sub-d">'+(g.part_number?esc(g.part_number)+' · ':'')+'L'+g.level+'</div></div><div class="sub-cnt">'+leaves.length+' parts</div><div class="sub-a">'+svg('chev')+'</div></div>';});
   h+='</div>';return h;}
 
 function confirmBulk(gid){
   var g=S.bom.find(function(b){return b.id===gid;});if(!g)return;
   var leaves=getLeaves(gid);if(!leaves.length){toast('No parts','err');return;}
   var lh='<div class="cf-list">';leaves.forEach(function(p){lh+='<div class="cf-row"><span class="cf-pn">'+esc(p.part_number||'—')+'</span><span class="cf-nm">'+esc(p.component)+'</span><span class="cf-qty">×'+p.qty+'</span></div>';});lh+='</div>';
-  modal('Bulk: '+g.component,t('addAll')+' '+leaves.length+' '+t('parts')+'?',lh,[{label:t('cancel'),cls:'mdc'},{label:t('addAll')+' ('+leaves.length+')',cls:'mdo',fn:function(){
+  modal('Bulk: '+g.component,'Add '+leaves.length+' parts to cart?',lh,[{label:'Cancel',cls:'mdc'},{label:'Add All ('+leaves.length+')',cls:'mdo',fn:function(){
     leaves.forEach(function(p){S.cart.push({part_number:p.part_number||'',component:p.component,qty:p.qty,mode:'bulk',group:g.component,unit:S.selUnit.name});});
-    toast(t('added')+' '+leaves.length+' '+t('parts'),'ok');render();}}]);}
+    toast('Added '+leaves.length+' parts','ok');render();}}]);}
 
 function vIndiv(childSet){
   var leaves=S.bom.filter(function(b){return !childSet.has(b.id);});
@@ -197,7 +170,7 @@ function vIndiv(childSet){
   var chips=Object.keys(fasteners).sort();
   var h='<div class="search-wrap fade">';
   if(chips.length){h+='<div class="chip-wrap">';chips.forEach(function(c){h+='<div class="f-chip" data-chip="'+esc(c)+'">'+esc(c)+'</div>';});h+='</div>';}
-  h+='<div class="search-box"><div class="search-ico">'+svg('search')+'</div><input class="search-in" id="searchIn" type="text" placeholder="'+t('searchPh')+'" value="'+esc(S.searchQ)+'" autocomplete="off"></div>';
+  h+='<div class="search-box"><div class="search-ico">'+svg('search')+'</div><input class="search-in" id="searchIn" type="text" placeholder="Search part number or name..." value="'+esc(S.searchQ)+'" autocomplete="off"></div>';
   if(S.searchQ.length>=2){
     var q=S.searchQ.toLowerCase();
     var matches=leaves.filter(function(b){return(b.part_number||'').toLowerCase().indexOf(q)>=0||(b.component||'').toLowerCase().indexOf(q)>=0;}).slice(0,20);
@@ -205,29 +178,29 @@ function vIndiv(childSet){
     if(matches.length){
       h+='<div style="padding:6px 0;font-size:.78rem;color:var(--t2);font-weight:600">'+matches.length+' in '+esc(S.selUnit.name)+':</div>';
       matches.forEach(function(b){h+='<div class="sub-card" data-addpart="'+b.id+'" style="padding:10px 14px"><div class="sub-b"><div class="sub-n" style="font-family:var(--mn)">'+esc(b.part_number||'—')+'</div><div class="sub-d">'+esc(b.component)+'</div></div><div class="sub-cnt">×'+b.qty+'</div><div class="sub-a">'+svg('plus')+'</div></div>';});}
-    else if(!others.length)h+='<div class="empty-msg">'+t('notFound')+' "'+esc(S.searchQ)+'"</div>';
-    if(others.length&&!matches.length){var unames=[...new Set(others.map(function(m){return m.unit;}))];h+='<div style="padding:10px;margin-top:8px;background:var(--ylw-bg);border:1.5px solid #fbbf24;border-radius:8px;font-size:.82rem">⚠️ <b>"'+esc(S.searchQ)+'"</b> '+t('foundIn')+' <b>'+esc(S.selUnit.name)+'</b>. '+t('foundInOther')+' <b>'+unames.join(', ')+'</b></div>';}
+    else if(!others.length)h+='<div class="empty-msg">No parts found for "'+esc(S.searchQ)+'"</div>';
+    if(others.length&&!matches.length){var unames=[...new Set(others.map(function(m){return m.unit;}))];h+='<div style="padding:10px;margin-top:8px;background:var(--ylw-bg);border:1.5px solid #fbbf24;border-radius:8px;font-size:.82rem">⚠️ <b>"'+esc(S.searchQ)+'"</b> not found in <b>'+esc(S.selUnit.name)+'</b>. Found in: <b>'+unames.join(', ')+'</b></div>';}
   }
   h+='</div>';return h;}
 
 function addIndivPart(bid){
   var b=S.bom.find(function(p){return p.id===bid;});if(!b)return;
-  modal(t('addPart'),'<b>'+esc(b.part_number||b.component)+'</b>','<div style="margin-bottom:8px;font-size:.82rem;color:var(--t2)">'+esc(b.component)+'</div><input class="md-input" id="ind-qty" type="number" value="'+b.qty+'" min="1" placeholder="Quantity">',[{label:t('cancel'),cls:'mdc'},{label:t('addPart'),cls:'mdo',fn:function(){
+  modal('Add Part','Add <b>'+esc(b.part_number||b.component)+'</b>?','<div style="margin-bottom:8px;font-size:.82rem;color:var(--t2)">'+esc(b.component)+'</div><input class="md-input" id="ind-qty" type="number" value="'+b.qty+'" min="1" placeholder="Quantity">',[{label:'Cancel',cls:'mdc'},{label:'Add',cls:'mdo',fn:function(){
     var qty=parseInt($('ind-qty').value)||1;S.cart.push({part_number:b.part_number||'',component:b.component,qty:qty,mode:'individual',group:'',unit:S.selUnit.name});
-    toast(t('added')+': '+(b.part_number||b.component),'ok');S.searchQ='';render();}}]);}
+    toast('Added: '+(b.part_number||b.component),'ok');S.searchQ='';render();}}]);}
 
 function vCart(){
-  var h='<div class="cart fade"><div class="cart-hdr"><div class="cart-t">'+svg('cart')+' '+t('cart')+' <span class="cart-badge">'+S.cart.length+'</span></div><span class="cart-expand" onclick="S.cartOpen=!S.cartOpen;render()">'+(S.cartOpen?t('hide'):t('show'))+'</span></div>';
+  var h='<div class="cart fade"><div class="cart-hdr"><div class="cart-t">'+svg('cart')+' Cart <span class="cart-badge">'+S.cart.length+'</span></div><span class="cart-expand" onclick="S.cartOpen=!S.cartOpen;render()">'+(S.cartOpen?'▲ Hide':'▼ Show')+'</span></div>';
   h+='<div class="cart-items'+(S.cartOpen?' open':'')+'">';
   S.cart.forEach(function(c,i){h+='<div class="ci"><span class="ci-pn">'+esc(c.part_number||c.component)+'</span><span class="ci-qty">×'+c.qty+'</span><span class="ci-mode">'+c.mode+'</span><button class="ci-del" onclick="event.stopPropagation();S.cart.splice('+i+',1);render()">'+svg('x')+'</button></div>';});
-  h+='</div><div class="cart-acts"><button class="cart-btn cart-clr" onclick="S.cart=[];render()">'+t('clear')+'</button><button class="cart-btn cart-sub" onclick="submitCart()">'+t('submit')+' ('+S.cart.length+')</button></div></div>';return h;}
+  h+='</div><div class="cart-acts"><button class="cart-btn cart-clr" onclick="S.cart=[];render()">Clear</button><button class="cart-btn cart-sub" onclick="submitCart()">📦 Submit ('+S.cart.length+')</button></div></div>';return h;}
 
 // Google Sheets Submit
 async function submitCart(){
-  if(!S.cart.length){toast(t('cartEmpty'),'err');return;}
-  if(!S.sheetId){modal(t('sheetId'),t('sheetReq'),'<input class="md-input" id="sub-sid" placeholder="Sheet ID" value="'+esc(S.sheetId)+'">',[{label:t('cancel'),cls:'mdc'},{label:t('saveSubmit'),cls:'mdo',fn:function(){S.sheetId=$('sub-sid').value.trim();localStorage.setItem('soroi_sid',S.sheetId);if(S.sheetId)submitCart();}}]);return;}
-  if(!sTk){if(gisC)gisC.requestAccessToken();toast(t('connected')+'...','');return;}
-  toast(t('submitting')+' '+S.cart.length+' '+t('items')+'...','');
+  if(!S.cart.length){toast('Cart is empty','err');return;}
+  if(!S.sheetId){modal('Sheet ID Required','Enter Google Sheet ID.','<input class="md-input" id="sub-sid" placeholder="Sheet ID" value="'+esc(S.sheetId)+'">',[{label:'Cancel',cls:'mdc'},{label:'Save & Submit',cls:'mdo',fn:function(){S.sheetId=$('sub-sid').value.trim();localStorage.setItem('soroi_sid',S.sheetId);if(S.sheetId)submitCart();}}]);return;}
+  if(!sTk){if(gisC)gisC.requestAccessToken();toast('Connecting to Sheets...','');return;}
+  toast('Submitting '+S.cart.length+' items...','');
   try{
     var tab=S.selUnit?S.selUnit.name:'Pickup';
     var info=await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+S.sheetId+'?fields=sheets.properties.title');
@@ -238,8 +211,8 @@ async function submitCart(){
     var nr=(col.values?col.values.length:0)+1;
     var rows=S.cart.map(function(c){return[today(),nowTime(),S.user?S.user.name:'',c.part_number,c.component,c.qty,c.mode,c.group||''];});
     await sApi('https://sheets.googleapis.com/v4/spreadsheets/'+S.sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nr+':H'+(nr+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
-    toast('✅ '+S.cart.length+' '+t('items')+' → "'+tab+'"','ok');S.cart=[];S.cartOpen=false;render();
-  }catch(e){console.error(e);if(e.message&&e.message.indexOf('401')>=0){sTk=null;localStorage.removeItem('soroi_stk');if(gisC)gisC.requestAccessToken();toast(t('reauth'),'');}else toast(t('failed')+' '+e.message,'err');}}
+    toast('✅ '+S.cart.length+' items → "'+tab+'"','ok');S.cart=[];S.cartOpen=false;render();
+  }catch(e){console.error(e);if(e.message&&e.message.indexOf('401')>=0){sTk=null;localStorage.removeItem('soroi_stk');if(gisC)gisC.requestAccessToken();toast('Re-authenticating...','');}else toast('Failed: '+e.message,'err');}}
 async function sApi(url,opts){if(!sTk)throw new Error('No token');var r=await fetch(url,Object.assign({headers:{'Authorization':'Bearer '+sTk,'Content-Type':'application/json'}},opts||{}));if(!r.ok){var t=await r.text();throw new Error(r.status+': '+t);}return r.json();}
 
 // Helpers
