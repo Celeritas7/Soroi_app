@@ -202,17 +202,7 @@ function clrP(){S.picks={};localStorage.removeItem(psk());}
 async function addUnit(){modal('New Unit','','<input class="md-input" id="nu-name" placeholder="Unit name (e.g. Compressor)"><input class="md-input" id="nu-icon" placeholder="Emoji icon" value="📦">',[{label:'Cancel',cls:'mdc'},{label:'Create',cls:'mdo',fn:async function(){var n=$('nu-name').value.trim(),ic=$('nu-icon').value.trim()||'📦';if(!n){toast('Enter a name','err');return;}var colors=['#c8553d','#2980b9','#27ae60','#8e44ad','#e67e22','#16a085'];try{var r=await sb.from('soroi_app_units').insert({name:n,icon:ic,color:colors[S.units.length%6],sort_order:S.units.length}).select();if(r.error){console.error('Insert error:',JSON.stringify(r.error));toast('Error: '+r.error.message,'err');}else{toast('Created: '+n,'ok');loadUnits();}}catch(e){console.error('addUnit exception:',e);toast('Failed: '+e.message,'err');}}}]);}
 async function delUnit(id){modal('Delete Unit','Delete this unit and all its BOM data?','',[{label:'Cancel',cls:'mdc'},{label:'Delete',cls:'mdd',fn:async function(){try{var r1=await sb.from('soroi_app_bom').delete().eq('unit_id',id);if(r1.error)console.warn('BOM delete:',r1.error);var r2=await sb.from('soroi_app_units').delete().eq('id',id);if(r2.error){toast('Delete error: '+r2.error.message,'err');}else{toast('Deleted','ok');}loadUnits();}catch(e){toast(e.message,'err');}}}]);}
 function renameUnit(id,curName){modal('Edit Unit','','<input class="md-input" id="ru-name" value="'+esc(curName)+'" placeholder="Unit name"><input class="md-input" id="ru-desc" value="'+esc((S.units.find(function(u){return u.id===id;})||{}).description||'')+'" placeholder="Description (optional)"><input class="md-input" id="ru-icon" value="'+esc((S.units.find(function(u){return u.id===id;})||{}).icon||'📦')+'" placeholder="Emoji icon">',[{label:'Cancel',cls:'mdc'},{label:'Save',cls:'mdo',fn:async function(){var n=$('ru-name').value.trim(),d=$('ru-desc').value.trim(),ic=$('ru-icon').value.trim()||'📦';if(!n){toast('Enter a name','err');return;}var r=await sb.from('soroi_app_units').update({name:n,description:d||null,icon:ic}).eq('id',id);if(r.error){toast('Error: '+r.error.message,'err');}else{toast('Updated','ok');loadUnits();}}}]);}
-async function moveUnit(idx,dir){
-  var j=idx+dir;if(j<0||j>=S.units.length)return;
-  var a=S.units[idx],b=S.units[j];
-  var aSort=a.sort_order!=null?a.sort_order:idx;
-  var bSort=b.sort_order!=null?b.sort_order:j;
-  try{
-    await sb.from('soroi_app_units').update({sort_order:bSort}).eq('id',a.id);
-    await sb.from('soroi_app_units').update({sort_order:aSort}).eq('id',b.id);
-    toast('Reordered','ok');loadUnits();
-  }catch(e){toast('Reorder failed: '+e.message,'err');}
-}// Settings modal
+// Settings modal
 function openSettings(){
   modal('Settings','Configure app settings.',
     '<div style="margin-bottom:10px"><label style="font-size:.78rem;font-weight:600;color:#6b5a4e;display:block;margin-bottom:4px;">Google Sheet ID</label><input class="md-input" id="set-sid" value="'+esc(S.sheetId)+'" placeholder="Paste Google Sheet ID here" style="font-family:var(--mn);font-size:.78rem"></div><p style="font-size:.7rem;color:#a39485;line-height:1.4">Pickup logs will be written to separate tabs per unit inside this spreadsheet.</p>',
@@ -256,10 +246,6 @@ function vHome(){
     h+='<div class="ucard-info"><div class="ucard-n">'+esc(u.name)+'</div><div class="ucard-sub">'+(u.description||'Tap to view BOM')+'</div></div></div>';
     if(S.isAdmin){
       h+='<div class="ucard-sep"></div><div class="ucard-acts">';
-      if(i>0)h+='<button class="ucard-ab" onclick="event.stopPropagation();moveUnit('+i+',-1)" title="Move up" style="color:#64748b;font-size:1rem">▲</button>';
-      else h+='<button class="ucard-ab" style="opacity:.2;cursor:default" disabled>▲</button>';
-      if(i<S.units.length-1)h+='<button class="ucard-ab" onclick="event.stopPropagation();moveUnit('+i+',1)" title="Move down" style="color:#64748b;font-size:1rem">▼</button>';
-      else h+='<button class="ucard-ab" style="opacity:.2;cursor:default" disabled>▼</button>';
       h+='<button class="ucard-ab ucard-ab-e" onclick="event.stopPropagation();renameUnit(\''+u.id+'\',\''+esc(u.name).replace(/'/g,"\\'")+'\')">'+svg('pencil')+'</button>';
       h+='<button class="ucard-ab ucard-ab-d" onclick="event.stopPropagation();delUnit(\''+u.id+'\')">'+svg('trash')+'</button>';
       h+='</div>';
