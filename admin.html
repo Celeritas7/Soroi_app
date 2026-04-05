@@ -23,7 +23,7 @@ const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const GIS_CID='1088099187141-ut0dn0scqt3h99htf3rg8gsrg2oo1ad8.apps.googleusercontent.com';
 const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'sb-soroi2-auth'}});
 
-let S={user:null,isAdmin:false,view:'loading',units:[],selUnit:null,bom:[],picks:{},filter:'all',subFilter:'all',sheetId:localStorage.getItem('soroi_sid')||'',authOk:false,bomCollapsed:new Set()};
+let S={user:null,isAdmin:false,view:'loading',units:[],selUnit:null,bom:[],picks:{},filter:'all',subFilter:'all',sheetId:localStorage.getItem('soroi_sid')||'',authOk:false,bomCollapsed:new Set(),bomLoading:false};
 let gisC=null,sTk=localStorage.getItem('soroi_stk')||null;
 
 // SVG
@@ -40,14 +40,15 @@ function modal(t,p,extra,acts){$('mt').textContent=t;$('mp').textContent=p;$('mc
 window.onload=function(){sb.auth.onAuthStateChange(async function(ev,sess){if(sess&&sess.user&&['SIGNED_IN','INITIAL_SESSION'].indexOf(ev)>=0){await ckRole(sess.user);S.authOk=true;}else if(ev==='TOKEN_REFRESHED'){S.authOk=true;}else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!sess)){S.user=null;S.isAdmin=false;S.authOk=true;nav('home');loadUnits();}});setTimeout(function(){if(!S.authOk){nav('home');loadUnits();}},4000);initGIS();};
 async function doLogin(){var r=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:location.origin+location.pathname}});if(r.error)toast('Login failed','err');}
 async function doLogout(){await sb.auth.signOut();S.user=null;S.isAdmin=false;nav('home');loadUnits();}
-async function ckRole(u){var fallback=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fallback};var admin=false;try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){S.user.name=r.data[0].name||fallback;admin=(r.data[0].role||'').toLowerCase().trim()==='admin';}else if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com'){admin=true;}}catch(e){console.warn('Role check failed:',e);if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')admin=true;}S.isAdmin=admin;console.log('Auth:',S.user.email,'admin:',S.isAdmin,'view:',S.view);if(S.view==='login'||S.view==='loading'){nav('home');loadUnits();}else{render();}}
+async function ckRole(u){var fallback=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];S.user={email:u.email,name:fallback};var admin=false;try{var r=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);if(r.data&&r.data.length>0){S.user.name=r.data[0].name||fallback;admin=(r.data[0].role||'').toLowerCase().trim()==='admin';}}catch(e){console.warn('Role check failed:',e);}if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')admin=true;S.isAdmin=admin;console.log('Auth:',S.user.email,'admin:',S.isAdmin,'view:',S.view);if(S.view==='login'||S.view==='loading'){nav('home');loadUnits();}else{render();}}
 
 // GIS
 function initGIS(){if(typeof google==='undefined'||!google||!google.accounts){setTimeout(initGIS,300);return;}gisC=google.accounts.oauth2.initTokenClient({client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',callback:function(r){if(r.access_token){sTk=r.access_token;localStorage.setItem('soroi_stk',sTk);}}});}
 
 // Data
 async function loadUnits(){try{var r=await sb.from('soroi_app_units').select('*').order('sort_order');if(r.error){console.error('loadUnits RLS/DB error:',r.error);toast('Units: '+r.error.message,'err');S.units=[];}else{S.units=r.data||[];}}catch(e){console.error('loadUnits exception:',e);toast('Units load failed','err');}render();}
-async function loadBom(uid){try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');if(r.error){console.error('loadBom RLS/DB error:',r.error);toast('BOM: '+r.error.message,'err');S.bom=[];}else{S.bom=r.data||[];}}catch(e){console.error('loadBom exception:',e);toast('BOM load failed','err');}render();}
+async function loadBom(uid){S.bomLoading=true;render();try{var r=await sb.from('soroi_app_bom').select('*').eq('unit_id',uid).order('sort_order');if(r.error){console.error('loadBom RLS/DB error:',r.error);toast('BOM: '+r.error.message,'err');S.bom=[];}else{S.bom=r.data||[];}}catch(e){console.error('loadBom exception:',e);toast('BOM load failed','err');}S.bomLoading=false;render();}
+function retryBom(){if(S.selUnit)loadBom(S.selUnit.id);}
 
 // CSV Import
 function trigCSV(){$('csvF').click();}
@@ -312,7 +313,8 @@ function vBom(){
 
   // BOM Table
   h+='<div class="bom-wrap fade">';
-  if(!sorted.length){h+='<div class="bom-empty">No BOM data yet.'+(S.isAdmin?' Import a CSV to get started.':'')+'</div>';h+='</div>';return h;}
+  if(S.bomLoading){h+='<div class="lc"><div class="spin"></div><div style="margin-top:8px;font-size:.82rem">Loading BOM...</div></div>';h+='</div>';return h;}
+  if(!sorted.length){h+='<div class="bom-empty">No BOM data yet.'+(S.isAdmin?' Import a CSV to get started.':'')+'<br><button onclick="retryBom()" style="margin-top:12px;padding:8px 20px;border-radius:8px;background:var(--br);color:#fff;font-weight:600;font-size:.82rem;cursor:pointer;border:none">↻ Retry</button></div>';h+='</div>';return h;}
 
   var num=0;var partIdx=0;
   sorted.forEach(function(b){
@@ -512,7 +514,7 @@ function exportCSV(){
 // Bind
 function bindAll(){
   document.querySelectorAll('[data-act="unit"]').forEach(function(el){el.onclick=function(){
-    var id=el.dataset.id;S.selUnit=S.units.find(function(u){return u.id===id;});S.subFilter='all';S.filter='all';S.bomCollapsed=new Set();lodP();nav('bom');loadBom(id);
+    var id=el.dataset.id;S.selUnit=S.units.find(function(u){return u.id===id;});S.subFilter='all';S.filter='all';S.bomCollapsed=new Set();S.bomLoading=true;S.bom=[];lodP();nav('bom');loadBom(id);
   };});
   document.querySelectorAll('[data-grp]').forEach(function(el){el.onclick=function(){toggleBomGrp(el.dataset.grp);};});
   document.querySelectorAll('[data-do="pick"]').forEach(function(el){el.onclick=function(e){e.stopPropagation();var id=el.dataset.id;S.picks[id]=S.picks[id]==='picked'?undefined:'picked';if(!S.picks[id])delete S.picks[id];savP();render();};});
