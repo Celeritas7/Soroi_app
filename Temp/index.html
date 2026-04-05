@@ -39,6 +39,12 @@ body.theme-treasure .modal{background:var(--card);color:var(--t1)}
 body.theme-treasure .modal textarea{background:#1a1a2e;color:var(--t1);border-color:var(--pri)}
 body.theme-treasure .mbtn-cancel{background:var(--brd);color:var(--t2)}
 body.theme-treasure .action-btn{background:var(--card);border-color:var(--brd);color:var(--t2)}
+/* Settings modal */
+.settings-section{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--brd)}.settings-section:last-child{border-bottom:none}
+.settings-section h3{font-size:.88rem;font-weight:700;color:var(--t1);margin-bottom:10px}
+.s-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+.s-row span{font-size:.85rem;color:var(--t1)}
+.s-val{font-size:.85rem;color:var(--pri);font-weight:600}
 /* Theme picker */
 .theme-grid{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .theme-card{flex:1;min-width:90px;padding:10px 8px;border:2.5px solid var(--brd);border-radius:10px;text-align:center;cursor:pointer;transition:all .15s;background:var(--card)}
@@ -60,6 +66,7 @@ a{color:inherit;text-decoration:none}
 .chip .rt{font-weight:600;color:var(--pri);margin-left:4px}
 .lbtn{background:none;border:1px solid var(--brd);color:var(--t2);padding:5px 10px;border-radius:6px;font-size:.75rem;cursor:pointer}.lbtn:hover{border-color:var(--pri);color:var(--pri)}
 .abtn{background:var(--pri-bg);border:none;border-radius:8px;padding:5px 10px;font-size:.78rem;cursor:pointer;color:var(--pri);font-weight:600;display:inline-flex;align-items:center;gap:4px}.abtn:hover{background:var(--pri-bg2)}
+.hdr-ico{width:32px;height:32px;border-radius:8px;border:1px solid var(--brd);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;transition:all .12s}.hdr-ico:hover{border-color:var(--pri);background:var(--pri-bg)}
 .card{background:var(--card);border-radius:var(--r);padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px}
 .shdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .shdr h2{font-size:1.05rem;font-weight:700}
@@ -142,7 +149,7 @@ a{color:inherit;text-decoration:none}
         </div>
         <div class="bar-right" id="bar-right" style="display:none">
             <span class="chip" id="user-chip" style="display:none"></span>
-            <a href="admin.html" class="abtn" id="admin-link" style="display:none">⚙️ Admin</a>
+            <button class="hdr-ico" onclick="openSettingsModal()" title="Settings">⚙️</button>
             <button class="lbtn" id="login-btn" onclick="doLogin()" style="display:none">Sign In</button>
             <button class="lbtn" id="logout-btn" onclick="doLogout()" style="display:none">Out</button>
         </div>
@@ -171,6 +178,33 @@ a{color:inherit;text-decoration:none}
         </div>
     </div>
 </div>
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settings-modal">
+    <div class="modal">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h2>⚙️ Settings</h2><button style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--t3);padding:4px 8px" onclick="closeSettingsModal()">✕</button></div>
+        <div class="settings-section">
+            <h3>👤 User</h3>
+            <div class="s-row"><span>Name</span><span class="s-val" id="s-user-name">—</span></div>
+            <div class="s-row"><span>Role</span><span class="s-val" id="s-user-role">—</span></div>
+        </div>
+        <div class="settings-section">
+            <h3>🌐 Language</h3>
+            <div class="s-row"><span>Display</span><div class="stp-lang"><button class="stp-lb" id="s-lang-en" onclick="setLang('en')">EN</button><button class="stp-lb" id="s-lang-ja" onclick="setLang('ja')">日本語</button></div></div>
+        </div>
+        <div class="settings-section">
+            <h3>📊 Sheet ID</h3>
+            <div class="s-row"><input class="stp-sid" id="s-sheet-id" placeholder="Google Sheet ID" onchange="sheetId=this.value.trim();localStorage.setItem('soroi_sid',sheetId)" style="width:100%"></div>
+        </div>
+        <div class="settings-section">
+            <h3>🎨 Theme</h3>
+            <div class="theme-grid" id="s-theme-grid"></div>
+        </div>
+        <div class="settings-section" id="s-admin-section" style="display:none">
+            <h3>🔧 Admin</h3>
+            <div class="s-row"><span>BOM Manager</span><a href="admin.html" class="abtn">⚙️ Open Admin</a></div>
+        </div>
+    </div>
+</div>
 <script>
 // =====================================================
 // CONFIG
@@ -196,9 +230,28 @@ const TR={
     ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップカート',submit:'📋 シートに送信',clear:'全てクリア',noItems:'カートは空です。上から部品を追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加'}
 };
 function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
-function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);if(currentView==='home')renderHome();if(currentView==='pickup')renderPickup();}
-function setTheme(t){document.body.classList.remove('theme-default','theme-market','theme-treasure');document.body.classList.add('theme-'+t);localStorage.setItem('soroi-theme',t);if(currentView==='home')renderHome();}
+function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);var en=$('s-lang-en'),ja=$('s-lang-ja');if(en){en.className='stp-lb'+(l==='en'?' on':'');}if(ja){ja.className='stp-lb'+(l==='ja'?' on':'');}if(currentView==='home')renderHome();if(currentView==='pickup')renderPickup();}
+function setTheme(t){document.body.classList.remove('theme-default','theme-market','theme-treasure');document.body.classList.add('theme-'+t);localStorage.setItem('soroi-theme',t);renderThemeGrid();}
 function loadSavedTheme(){var t=localStorage.getItem('soroi-theme')||'default';document.body.classList.remove('theme-default','theme-market','theme-treasure');document.body.classList.add('theme-'+t);}
+function renderThemeGrid(){
+    var el=$('s-theme-grid');if(!el)return;
+    var cur=localStorage.getItem('soroi-theme')||'default';
+    el.innerHTML='<div class="theme-card'+(cur==='default'?' active':'')+'" onclick="setTheme(\'default\')"><div class="tc-ico">🔵</div><div class="tc-dot" style="background:linear-gradient(135deg,#2563eb,#1e40af)"></div><div class="tc-name">Default</div></div>'
+    +'<div class="theme-card'+(cur==='market'?' active':'')+'" onclick="setTheme(\'market\')"><div class="tc-ico">🛒</div><div class="tc-dot" style="background:linear-gradient(135deg,#059669,#047857)"></div><div class="tc-name">Market</div></div>'
+    +'<div class="theme-card'+(cur==='treasure'?' active':'')+'" onclick="setTheme(\'treasure\')"><div class="tc-ico">🏴‍☠️</div><div class="tc-dot" style="background:linear-gradient(135deg,#d97706,#92400e)"></div><div class="tc-name">Treasure</div></div>';
+}
+// Settings Modal
+function openSettingsModal(){
+    if(user){$('s-user-name').textContent=user.name;$('s-user-role').textContent=user.isAdmin?'Admin':'Operator';}
+    else{$('s-user-name').textContent='Not signed in';$('s-user-role').textContent='—';}
+    $('s-sheet-id').value=sheetId;
+    $('s-lang-en').className='stp-lb'+(LANG==='en'?' on':'');
+    $('s-lang-ja').className='stp-lb'+(LANG==='ja'?' on':'');
+    $('s-admin-section').style.display=(user&&user.isAdmin)?'block':'none';
+    renderThemeGrid();
+    $('settings-modal').classList.add('active');
+}
+function closeSettingsModal(){$('settings-modal').classList.remove('active');}
 
 // =====================================================
 // HELPERS
@@ -231,7 +284,7 @@ async function doLogin(){
 }
 async function doLogout(){
     await sb.auth.signOut();user=null;cart=[];sheetsToken=null;localStorage.removeItem('soroi_stk');
-    $('user-chip').style.display='none';$('admin-link').style.display='none';$('logout-btn').style.display='none';$('login-btn').style.display='inline';
+    $('user-chip').style.display='none';$('logout-btn').style.display='none';$('login-btn').style.display='inline';
     nav('home');
 }
 
@@ -248,7 +301,6 @@ async function checkRole(u){
     $('user-chip').innerHTML=esc(user.name)+(user.isAdmin?'<span class="rt">admin</span>':'');
     $('user-chip').style.display='inline';
     $('bar-right').style.display='flex';
-    $('admin-link').style.display=user.isAdmin?'inline-flex':'none';
     $('login-btn').style.display='none';
     $('logout-btn').style.display='inline';
     // Load data then navigate
@@ -337,18 +389,6 @@ function nav(view){
 function renderHome(){
     const el=$('sec-home');
     let h='<div class="card"><div class="shdr"><h2>'+t('selectUnit')+'</h2></div><p style="color:var(--t3);font-size:.85rem;margin-bottom:16px">'+t('selectP')+'</p>';
-    // Settings row
-    h+='<div class="stp">';
-    h+='<div class="stp-row"><span class="stp-label">'+t('language')+'</span><div class="stp-lang"><button class="stp-lb'+(LANG==='en'?' on':'')+'" onclick="setLang(\'en\')">EN</button><button class="stp-lb'+(LANG==='ja'?' on':'')+'" onclick="setLang(\'ja\')">日本語</button></div></div>';
-    h+='<div class="stp-row"><span class="stp-label">'+t('sheetId')+'</span><input class="stp-sid" value="'+esc(sheetId)+'" placeholder="Google Sheet ID" onchange="sheetId=this.value.trim();localStorage.setItem(\'soroi_sid\',sheetId)"></div>';
-    // Theme picker
-    var curTheme=localStorage.getItem('soroi-theme')||'default';
-    h+='<div class="theme-grid">';
-    h+='<div class="theme-card'+(curTheme==='default'?' active':'')+'" onclick="setTheme(\'default\')"><div class="tc-ico">🔵</div><div class="tc-dot" style="background:linear-gradient(135deg,#2563eb,#1e40af)"></div><div class="tc-name">Default</div></div>';
-    h+='<div class="theme-card'+(curTheme==='market'?' active':'')+'" onclick="setTheme(\'market\')"><div class="tc-ico">🛒</div><div class="tc-dot" style="background:linear-gradient(135deg,#059669,#047857)"></div><div class="tc-name">Market</div></div>';
-    h+='<div class="theme-card'+(curTheme==='treasure'?' active':'')+'" onclick="setTheme(\'treasure\')"><div class="tc-ico">🏴‍☠️</div><div class="tc-dot" style="background:linear-gradient(135deg,#d97706,#92400e)"></div><div class="tc-name">Treasure</div></div>';
-    h+='</div>';
-    h+='</div>';
     // Unit grid
     h+='<div class="ugrid">';
     units.forEach(u=>{
