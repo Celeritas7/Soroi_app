@@ -8,438 +8,371 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#2563eb;--primary-dark:#1e40af;--primary-light:#60a5fa;--primary-bg:rgba(37,99,235,.1);--primary-bg-hover:rgba(37,99,235,.15);--accent:#2563eb;--accent-hover:#1d4ed8;--badge-admin-bg:#dbeafe;--badge-admin-text:#1e40af;--card-bg:white;--text-primary:#333;--text-secondary:#666;--text-muted:#999;--border-color:#e2e8f0;--input-focus:#2563eb;--success-bg:#f0fdf4;--success-text:#15803d;--error-bg:#fef2f2;--error-text:#b91c1c;--warning-bg:#fffbeb;--warning-text:#d97706}
-body.theme-blue{--primary:#2563eb;--primary-dark:#1e40af;--primary-light:#60a5fa;--primary-bg:rgba(37,99,235,.1);--primary-bg-hover:rgba(37,99,235,.15);--accent:#2563eb;--accent-hover:#1d4ed8;--badge-admin-bg:#dbeafe;--badge-admin-text:#1e40af;--input-focus:#2563eb}
-body.theme-purple{--primary:#667eea;--primary-dark:#764ba2;--primary-light:#8b9bf4;--primary-bg:rgba(102,126,234,.1);--primary-bg-hover:rgba(102,126,234,.15);--accent:#667eea;--accent-hover:#5a6fd6;--badge-admin-bg:#ede7f6;--badge-admin-text:#5e35b1;--input-focus:#667eea}
-body.theme-green{--primary:#059669;--primary-dark:#047857;--primary-light:#34d399;--primary-bg:rgba(5,150,105,.1);--primary-bg-hover:rgba(5,150,105,.15);--accent:#059669;--accent-hover:#047857;--badge-admin-bg:#ecfdf5;--badge-admin-text:#047857;--input-focus:#059669}
-body.theme-orange{--primary:#ea580c;--primary-dark:#c2410c;--primary-light:#fb923c;--primary-bg:rgba(234,88,12,.1);--primary-bg-hover:rgba(234,88,12,.15);--accent:#ea580c;--accent-hover:#c2410c;--badge-admin-bg:#fff7ed;--badge-admin-text:#c2410c;--input-focus:#ea580c}
-body.theme-dark{--primary:#475569;--primary-dark:#334155;--primary-light:#94a3b8;--primary-bg:rgba(71,85,105,.12);--primary-bg-hover:rgba(71,85,105,.18);--accent:#64748b;--accent-hover:#475569;--badge-admin-bg:#f1f5f9;--badge-admin-text:#334155;--input-focus:#64748b;--card-bg:#fafafa}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);min-height:100dvh;padding:20px;transition:background .3s}
-.container{max-width:600px;margin:0 auto}
-.card{background:var(--card-bg);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.2);overflow:hidden;padding:24px}
-/* Header */
-.app-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}
-.app-title h1{font-size:1.3rem;color:var(--text-primary);font-weight:700}.app-title .subtitle{font-size:.78rem;color:var(--text-muted);margin-top:2px}
-.header-icons{display:flex;gap:8px;align-items:center}
-.header-icon-btn{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--border-color);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .15s;text-decoration:none;color:inherit}.header-icon-btn:hover{border-color:var(--primary);background:var(--primary-bg)}
-.lang-toggle-btn{padding:4px 10px;border-radius:8px;border:1.5px solid var(--border-color);background:white;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--primary)}.lang-toggle-btn:hover{background:var(--primary-bg)}
-.user-info{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:10px 14px;background:var(--primary-bg);border-radius:10px}
-.user-name{font-size:.88rem;font-weight:600;color:var(--text-primary);flex:1}
-.user-badge{font-size:.7rem;padding:2px 8px;border-radius:6px;font-weight:600}
-.badge-admin{background:var(--badge-admin-bg);color:var(--badge-admin-text)}
-/* Loading/Login */
-.spinner{width:40px;height:40px;border:3px solid var(--border-color);border-top:3px solid var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin:40px auto 16px}
+:root{--pri:#2563eb;--pri-dk:#1e40af;--pri-bg:rgba(37,99,235,.08);--pri-bg2:rgba(37,99,235,.14);--grn:#059669;--grn-bg:rgba(5,150,105,.08);--red:#dc2626;--red-bg:#fef2f2;--ylw:#d97706;--ylw-bg:#fffbeb;--card:#fff;--t1:#1e293b;--t2:#64748b;--t3:#94a3b8;--brd:#e2e8f0;--r:10px;--ok-bg:#f0fdf4;--ok:#15803d;--err-bg:#fef2f2;--err:#b91c1c;--sb:env(safe-area-inset-bottom,0px)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f1f5f9;min-height:100dvh;color:var(--t1)}
+button{font:inherit;cursor:pointer;border:none;background:none}
+input,select{font:inherit}
+a{color:inherit;text-decoration:none}
+.shell{max-width:700px;margin:0 auto;padding:16px}
+.bar{background:#fff;border-radius:var(--r);padding:14px 20px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.bar-left{display:flex;align-items:center;gap:10px}
+.bar h1{font-size:1.1rem;font-weight:700}
+.bar-right{display:flex;align-items:center;gap:8px}
+.chip{font-size:.8rem;color:var(--t2);background:#f8fafc;padding:4px 10px;border-radius:20px;border:1px solid var(--brd)}
+.chip .rt{font-weight:600;color:var(--pri);margin-left:4px}
+.lbtn{background:none;border:1px solid var(--brd);color:var(--t2);padding:5px 10px;border-radius:6px;font-size:.75rem;cursor:pointer}.lbtn:hover{border-color:var(--pri);color:var(--pri)}
+.abtn{background:var(--pri-bg);border:none;border-radius:8px;padding:5px 10px;font-size:.78rem;cursor:pointer;color:var(--pri);font-weight:600;display:inline-flex;align-items:center;gap:4px}.abtn:hover{background:var(--pri-bg2)}
+.card{background:#fff;border-radius:var(--r);padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px}
+.shdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.shdr h2{font-size:1.05rem;font-weight:700}
+.btn{padding:8px 16px;border-radius:8px;border:none;font-size:.85rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-p{background:var(--pri);color:#fff}.btn-p:hover{background:var(--pri-dk)}
+.btn-g{background:var(--grn);color:#fff}.btn-g:hover{background:#047857}
+.btn-s{background:var(--pri-bg);color:var(--pri)}.btn-s:hover{background:var(--pri-bg2)}
+.btn-d{background:var(--err-bg);color:var(--err)}.btn-d:hover{background:#fecaca}
+.btn-sm{padding:5px 10px;font-size:.8rem}
+.spinner{border:3px solid #e2e8f0;border-top:3px solid var(--pri);border-radius:50%;width:36px;height:36px;animation:spin .8s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
-#loading-section{text-align:center;padding:40px 20px;color:var(--text-muted)}
-#login-section{text-align:center;padding:30px 20px;display:none}
-.login-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:600;cursor:pointer;margin-top:16px}.login-btn:hover{background:var(--primary-dark)}
-#login-error{color:var(--error-text);margin-top:12px;display:none;font-size:.85rem;white-space:pre-line}
+/* Login */
+#sec-login{text-align:center;padding:40px 20px}
+.login-ico{width:80px;height:80px;border-radius:20px;margin:0 auto 16px;background:var(--pri);display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 12px 32px rgba(37,99,235,.3);color:#fff}
+.login-h{font-size:1.6rem;font-weight:800;margin-bottom:4px}.login-h span{color:var(--pri)}
+.login-p{color:var(--t3);margin-bottom:20px;font-size:.9rem}
+.login-btn{background:var(--pri);color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:1rem;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:10px}.login-btn:hover{background:var(--pri-dk)}
+#login-error{color:var(--err);margin-top:14px;display:none;font-size:.9rem}
 /* Unit grid */
-.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:16px}
-.unit-card{border:2px solid var(--border-color);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .15s;border-top:3px solid var(--primary)}.unit-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
-.unit-card .ico{font-size:1.8rem;margin-bottom:6px}.unit-card h3{font-size:.9rem;font-weight:700;color:var(--text-primary);margin-bottom:3px}.unit-card p{font-size:.72rem;color:var(--text-muted)}
-.unit-empty{text-align:center;padding:30px;color:var(--text-muted)}
+.ugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.ucard{border:2px solid var(--brd);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .15s}
+.ucard:hover{border-color:var(--pri);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.ucard .ico{font-size:2.2rem;margin-bottom:8px}
+.ucard h3{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.ucard p{font-size:.78rem;color:var(--t3)}
 /* Pickup */
-.pk-back{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid var(--border-color);border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;background:white;color:var(--text-secondary);margin-bottom:12px}.pk-back:hover{border-color:var(--primary);color:var(--primary)}
 .pk-info{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.pk-tag{font-size:.75rem;padding:4px 10px;border-radius:14px;background:var(--primary-bg);color:var(--primary);font-weight:600}
-.add-box{background:var(--primary-bg);border:2px solid rgba(37,99,235,.15);border-radius:12px;padding:14px;margin-bottom:14px}
-.add-box h3{font-size:.88rem;font-weight:700;color:var(--primary);margin-bottom:8px}
-.add-row{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}
-.add-row input{flex:1;min-width:100px;padding:9px 12px;border:1.5px solid var(--border-color);border-radius:8px;font-size:.88rem}.add-row input:focus{outline:none;border-color:var(--input-focus)}
-.add-row input.qty{width:65px;flex:none;text-align:center}
-.add-btn{padding:8px 16px;border-radius:8px;border:none;background:var(--primary);color:white;font-size:.85rem;font-weight:600;cursor:pointer}.add-btn:hover{background:var(--primary-dark)}
+.pk-tag{font-size:.78rem;padding:4px 12px;border-radius:16px;background:var(--pri-bg);color:var(--pri);font-weight:600}
+.add-box{background:linear-gradient(135deg,#eff6ff,#f0fdf4);border:2px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:16px}
+.add-box h3{font-size:.9rem;font-weight:700;color:var(--pri);margin-bottom:10px}
+.add-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.add-row input{flex:1;min-width:120px;padding:10px 12px;border:2px solid var(--pri);border-radius:8px;font-size:.95rem;font-weight:500}
+.add-row input:focus{outline:none;border-color:var(--pri-dk)}
+.add-row input.qty{width:70px;flex:none;text-align:center}
 /* Cart table */
-.cart-tbl{width:100%;border-collapse:collapse;font-size:.82rem;margin-bottom:12px}
-.cart-tbl th{text-align:left;padding:6px 8px;background:#f8fafc;border:1px solid var(--border-color);font-weight:700;font-size:.7rem;text-transform:uppercase;color:var(--text-muted)}
-.cart-tbl td{padding:6px 8px;border:1px solid var(--border-color)}
-.cart-tbl .pn{font-family:monospace;font-weight:600}.cart-tbl .qc{width:45px;text-align:center;font-weight:700}
-.cart-tbl .act{width:32px;text-align:center}
-.cart-tbl .dbtn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.95rem}.cart-tbl .dbtn:hover{color:var(--error-text)}
-.submit-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;transition:all .15s;margin-bottom:8px}.submit-btn:hover{filter:brightness(1.1)}.submit-btn:disabled{opacity:.4;cursor:not-allowed}
-.clear-btn{display:block;width:100%;padding:10px;background:var(--error-bg);color:var(--error-text);border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;margin-bottom:8px}
-/* Status */
-.status{padding:10px 14px;border-radius:8px;margin-top:8px;text-align:center;font-size:.88rem;font-weight:500;display:none}
-.status.loading{display:block;background:var(--primary-bg);color:var(--primary)}.status.success{display:block;background:var(--success-bg);color:var(--success-text)}.status.error{display:block;background:var(--error-bg);color:var(--error-text)}
-/* Modals */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:20px}.modal-overlay.active{display:flex}
-.modal{background:white;border-radius:16px;padding:24px;width:100%;max-width:450px;max-height:85vh;overflow-y:auto}
-.modal h2{font-size:1.1rem;font-weight:700;margin-bottom:12px}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.modal-close-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-muted);padding:4px 8px}.modal-close-btn:hover{color:var(--text-primary)}
-.modal-btn{padding:10px 20px;border-radius:8px;border:none;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .15s}
-.modal-btn.confirm{background:var(--primary);color:white}.modal-btn.cancel{background:#f1f5f9;color:var(--text-secondary)}
+.ctbl{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:12px}
+.ctbl th{text-align:left;padding:6px 10px;background:#f8fafc;border:1px solid var(--brd);font-weight:700;font-size:.72rem;text-transform:uppercase;color:var(--t2)}
+.ctbl td{padding:6px 10px;border:1px solid var(--brd)}
+.ctbl .pn{font-family:monospace;font-weight:600}
+.ctbl .qc{width:50px;text-align:center;font-weight:700}
+.ctbl .act{width:36px;text-align:center}
+.ctbl .dbtn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:1rem;padding:2px 4px;border-radius:4px}.ctbl .dbtn:hover{color:var(--err)}
 /* Settings */
-.settings-section{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f1f5f9}
-.settings-section:last-child{border-bottom:none}
-.settings-section h3{font-size:.9rem;font-weight:700;color:var(--text-primary);margin-bottom:10px}
-/* Sheet options */
-.sheet-options{display:flex;flex-direction:column;gap:8px}
-.sheet-option{cursor:pointer;display:block}.sheet-option input{display:none}
-.sheet-option-content{display:flex;align-items:center;gap:12px;padding:12px;border:2px solid var(--border-color);border-radius:10px;transition:all .15s}
-.sheet-option input:checked+.sheet-option-content{border-color:var(--primary);background:var(--primary-bg)}
-.sheet-option-icon{font-size:1.5rem}.sheet-option-text{display:flex;flex-direction:column}.sheet-option-text strong{font-size:.88rem}.sheet-option-text small{font-size:.72rem;color:var(--text-muted)}
-/* Theme */
-.theme-options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.theme-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px;border:2px solid var(--border-color);border-radius:12px;background:white;cursor:pointer;transition:all .2s}.theme-btn:hover{border-color:#999}.theme-btn.active{border-color:var(--primary);background:var(--primary-bg)}
-.theme-preview{width:40px;height:40px;border-radius:50%}
-.theme-preview.blue{background:linear-gradient(135deg,#2563eb,#1e40af)}.theme-preview.purple{background:linear-gradient(135deg,#667eea,#764ba2)}.theme-preview.green{background:linear-gradient(135deg,#059669,#047857)}.theme-preview.orange{background:linear-gradient(135deg,#ea580c,#c2410c)}.theme-preview.dark{background:linear-gradient(135deg,#475569,#334155)}
-.theme-btn span:last-child{font-size:.8rem;color:var(--text-secondary)}
-@media(max-width:500px){body{padding:10px}.card{padding:16px;border-radius:12px}.unit-grid{grid-template-columns:1fr 1fr}.add-row{flex-direction:column}.add-row input.qty{width:100%}.theme-options{grid-template-columns:repeat(5,1fr)}.theme-btn{padding:8px}}
+.stp{margin-bottom:16px}
+.stp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.stp-label{font-size:.78rem;font-weight:600;color:var(--t2);min-width:70px;flex-shrink:0}
+.stp-lang{display:flex;border-radius:6px;overflow:hidden;border:1.5px solid var(--brd)}
+.stp-lb{padding:6px 14px;font-size:.78rem;font-weight:700;cursor:pointer;background:#fff;color:var(--t2);border:none}.stp-lb.on{background:var(--pri);color:#fff}
+.stp-sid{flex:1;padding:7px 10px;border:1.5px solid var(--brd);border-radius:6px;font-size:.78rem;font-family:monospace;min-width:0}.stp-sid:focus{outline:none;border-color:var(--pri)}
+/* Status */
+.status{padding:10px 14px;border-radius:8px;margin-top:10px;text-align:center;font-size:.88rem;font-weight:500;display:none}
+.status.ok{background:var(--ok-bg);color:var(--ok);display:block}
+.status.err{background:var(--err-bg);color:var(--err);display:block}
+.status.loading{background:var(--pri-bg);color:var(--pri);display:block}
+.empty{text-align:center;padding:40px;color:var(--t3)}.empty .ico{font-size:2rem;margin-bottom:8px}
+@media(max-width:600px){.shell{padding:10px}.bar{padding:12px 14px}.card{padding:14px}.ugrid{grid-template-columns:1fr 1fr}.add-row{flex-direction:column}.add-row input.qty{width:100%}}
 </style>
 </head>
-<body class="theme-blue">
-<div class="container">
-    <div class="card">
-        <div class="app-header">
-            <div class="app-title"><h1 id="app-title">🛒 揃い Soroi</h1><p class="subtitle" id="app-subtitle">Shop Floor Pickup</p></div>
-            <div class="header-icons" id="header-icons" style="display:none">
-                <button class="lang-toggle-btn" id="lang-toggle" onclick="toggleLang()">日本語</button>
-                <a href="admin.html" class="header-icon-btn" title="Admin" id="admin-link" style="display:none">⚙️</a>
-                <button class="header-icon-btn" id="sheet-selector-btn" onclick="openSheetSelectorModal()" title="Sheet" style="display:none">📊</button>
-                <button class="header-icon-btn" onclick="openSettingsModal()" title="Settings">⚙️</button>
-            </div>
+<body>
+<div class="shell">
+    <!-- BAR (static) -->
+    <div class="bar">
+        <div class="bar-left">
+            <h1 id="pg-title">🛒 揃い Soroi</h1>
         </div>
-        <div id="loading-section"><div class="spinner"></div><p>Loading...</p></div>
-        <div id="login-section" style="display:none">
-            <p id="login-prompt">Sign in with Google to start</p>
-            <button class="login-btn" onclick="handleGoogleLogin()">
-                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                <span id="login-btn-text">Sign in with Google</span>
-            </button>
-            <p id="login-error"></p>
-        </div>
-        <div id="app-section" style="display:none">
-            <div id="v-home"></div>
-            <div id="v-pickup" style="display:none"></div>
+        <div class="bar-right" id="bar-right" style="display:none">
+            <span class="chip" id="user-chip" style="display:none"></span>
+            <a href="admin.html" class="abtn" id="admin-link" style="display:none">⚙️ Admin</a>
+            <button class="lbtn" id="login-btn" onclick="doLogin()" style="display:none">Sign In</button>
+            <button class="lbtn" id="logout-btn" onclick="doLogout()" style="display:none">Out</button>
         </div>
     </div>
-</div>
-
-<!-- Sheet Selector Modal -->
-<div class="modal-overlay" id="sheet-selector-modal">
-    <div class="modal">
-        <div class="modal-header"><h2>📊 Sheet Mode</h2><button class="modal-close-btn" onclick="closeSheetSelectorModal()">✕</button></div>
-        <p style="color:var(--text-secondary);margin-bottom:16px;font-size:.88rem" id="sheet-modal-desc">Select the target spreadsheet</p>
-        <div class="sheet-options">
-            <label class="sheet-option"><input type="radio" name="sheet" value="production" checked onchange="onSheetChange()"><span class="sheet-option-content"><span class="sheet-option-icon">📋</span><span class="sheet-option-text"><strong>Production</strong><small>Live pickup log</small></span></span></label>
-            <label class="sheet-option"><input type="radio" name="sheet" value="test" onchange="onSheetChange()"><span class="sheet-option-content"><span class="sheet-option-icon">🧪</span><span class="sheet-option-text"><strong>Test</strong><small>For testing</small></span></span></label>
-        </div>
-        <button class="modal-btn confirm" onclick="closeSheetSelectorModal()" style="width:100%;margin-top:16px">Close</button>
+    <!-- SECTIONS -->
+    <div class="card" id="sec-loading"><div style="text-align:center;padding:40px"><div class="spinner"></div><p style="color:var(--t3)">Loading...</p></div></div>
+    <div class="card" id="sec-login" style="display:none">
+        <div class="login-ico">🛒</div>
+        <div class="login-h"><span>揃い</span> Soroi</div>
+        <div class="login-p" id="login-sub">Shop Floor Pickup</div>
+        <button class="login-btn" onclick="doLogin()">🔑 Sign in with Google</button>
+        <p id="login-error"></p>
     </div>
+    <div id="sec-home" style="display:none"></div>
+    <div id="sec-pickup" style="display:none"></div>
 </div>
-
-<!-- Settings Modal -->
-<div class="modal-overlay" id="settings-modal">
-    <div class="modal">
-        <div class="modal-header"><h2>⚙️ Settings</h2><button class="modal-close-btn" onclick="closeSettingsModal()">✕</button></div>
-        <div class="settings-section">
-            <h3 id="s-user-title">👤 User</h3>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:.88rem" id="s-lbl-user">User</span><span style="font-size:.85rem;color:var(--primary);font-weight:600" id="s-user-name"></span></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:.88rem" id="s-lbl-role">Role</span><span style="font-size:.85rem;color:var(--primary);font-weight:600" id="s-user-role"></span></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0"><span style="font-size:.88rem" id="s-lbl-logout">Logout</span><button onclick="handleLogout()" style="padding:6px 14px;border-radius:6px;border:none;font-size:.82rem;font-weight:600;cursor:pointer;background:var(--error-bg);color:var(--error-text)" id="s-logout-btn">Logout</button></div>
-        </div>
-        <div class="settings-section">
-            <h3 id="s-sheet-title">📊 Sheet</h3>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:.88rem" id="s-lbl-target">Target</span><span style="font-size:.85rem;color:var(--primary);font-weight:600" id="s-sheet-name"></span></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0" id="s-sheet-mode-row"><span style="font-size:.88rem" id="s-lbl-mode">Mode</span><select id="s-sheet-mode" onchange="onSheetModeChange()" style="padding:6px 10px;border:1.5px solid var(--border-color);border-radius:6px;font-size:.85rem"><option value="production">Production</option><option value="test">Test</option></select></div>
-        </div>
-        <div class="settings-section">
-            <h3>🌐 Language</h3>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0"><span style="font-size:.88rem">Language</span><div style="display:flex;border:1.5px solid var(--border-color);border-radius:8px;overflow:hidden"><button id="lang-btn-en" onclick="setLang('en')" style="padding:6px 14px;border:none;font-size:.82rem;font-weight:600;cursor:pointer;background:var(--primary);color:#fff">EN</button><button id="lang-btn-ja" onclick="setLang('ja')" style="padding:6px 14px;border:none;font-size:.82rem;font-weight:600;cursor:pointer;background:#fff;color:var(--text-secondary)">日本語</button></div></div>
-        </div>
-        <div class="settings-section">
-            <h3>🎨 Theme</h3>
-            <div class="theme-options">
-                <button class="theme-btn" data-theme="blue" onclick="setTheme('blue')"><span class="theme-preview blue"></span><span>Blue</span></button>
-                <button class="theme-btn" data-theme="purple" onclick="setTheme('purple')"><span class="theme-preview purple"></span><span>Purple</span></button>
-                <button class="theme-btn" data-theme="green" onclick="setTheme('green')"><span class="theme-preview green"></span><span>Green</span></button>
-                <button class="theme-btn" data-theme="orange" onclick="setTheme('orange')"><span class="theme-preview orange"></span><span>Orange</span></button>
-                <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')"><span class="theme-preview dark"></span><span>Dark</span></button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
 // =====================================================
 // CONFIG
 // =====================================================
-const SUPABASE_URL='https://wylxvmkcrexwfpjpbhyy.supabase.co';
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bHh2bWtjcmV4d2ZwanBiaHl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MzkxMDYsImV4cCI6MjA4NDIxNTEwNn0.6Bxo42hx4jwlJGWnfjiTpiDUsYfc1QLTN3YtrU1efak';
-if(!window.supabase||!window.supabase.createClient){document.getElementById('loading-section').style.display='none';document.getElementById('login-section').style.display='block';document.getElementById('login-error').textContent='SDK load failed. Reload page.';document.getElementById('login-error').style.display='block';throw new Error('SDK not loaded');}
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-
-const SHEETS_CONFIG={
-    production:{id:'1gjXQSj_J4aSpZQ8x-e_rEA3QXStEP0rU3VTShN8o1ZQ',name:'Soroi Pickup Log'},
-    test:{id:'1gjXQSj_J4aSpZQ8x-e_rEA3QXStEP0rU3VTShN8o1ZQ',name:'Soroi Test'}
-};
-const GIS_CLIENT_ID='1088099187141-ut0dn0scqt3h99htf3rg8gsrg2oo1ad8.apps.googleusercontent.com';
-const GIS_SCOPES='https://www.googleapis.com/auth/spreadsheets';
-let gisTokenClient=null;
+const SB_URL='https://wylxvmkcrexwfpjpbhyy.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind5bHh2bWtjcmV4d2ZwanBiaHl5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MzkxMDYsImV4cCI6MjA4NDIxNTEwNn0.6Bxo42hx4jwlJGWnfjiTpiDUsYfc1QLTN3YtrU1efak';
+const GIS_CID='1088099187141-ut0dn0scqt3h99htf3rg8gsrg2oo1ad8.apps.googleusercontent.com';
+const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'sb-wylxvmkcrexwfpjpbhyy-auth-token'}});
 
 // =====================================================
 // STATE
 // =====================================================
-let userProfile=null,units=[],selUnit=null,cart=[],currentSheet='production';
-let accessToken=localStorage.getItem('gis_sheets_token')||null;
-let authReady=false,currentView='home';
+let user=null,units=[],selUnit=null,cart=[],sheetId=localStorage.getItem('soroi_sid')||'',authReady=false;
+let gisTokenClient=null,sheetsToken=localStorage.getItem('soroi_stk')||null;
+let LANG=localStorage.getItem('soroi_lang')||'en';
+let currentView='loading';
 
 // =====================================================
 // i18n
 // =====================================================
-const I18N={
-    en:{title:'🛒 揃い Soroi',sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit',tapStart:'Tap to start',noUnits:'No units yet',loginPrompt:'Sign in with Google to start',loginBtn:'Sign in with Google',addPart:'Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup Cart',submit:'📋 Submit to Sheet',clear:'Clear All',empty:'Add parts above to get started',submitOk:'items submitted!',user:'User',role:'Role',logout:'Logout',sheet:'Sheet',target:'Target',mode:'Mode',sheetDesc:'Select the target spreadsheet',close:'Close',production:'Production',test:'Test',back:'← Back'},
-    ja:{title:'🛒 揃い Soroi',sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',loginPrompt:'Googleアカウントでログイン',loginBtn:'Googleでログイン',addPart:'部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップカート',submit:'📋 シートに送信',clear:'全てクリア',empty:'上から部品を追加してください',submitOk:'件送信しました！',user:'ユーザー',role:'権限',logout:'ログアウト',sheet:'シート',target:'対象',mode:'モード',sheetDesc:'対象シートを選択',close:'閉じる',production:'本番',test:'テスト',back:'← 戻る'}
+const TR={
+    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup Cart',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items in cart yet. Add parts above.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...'},
+    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップカート',submit:'📋 シートに送信',clear:'全てクリア',noItems:'カートは空です。上から部品を追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...'}
 };
-let currentLang=localStorage.getItem('soroi-lang')||'en';
-function t(k){return(I18N[currentLang]&&I18N[currentLang][k])||I18N.en[k]||k;}
+function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
+function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);if(currentView==='home')renderHome();if(currentView==='pickup')renderPickup();}
 
 // =====================================================
-// AUTH (same as Part Inventory)
+// HELPERS
+// =====================================================
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function $(id){return document.getElementById(id);}
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function nowTime(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+function showSt(id,msg,type){const e=$(id);if(!e)return;e.textContent=msg;e.className='status '+type;}
+function hideSt(id){const e=$(id);if(e)e.className='status';}
+
+// =====================================================
+// AUTH (copied from Part Inventory — proven pattern)
 // =====================================================
 window.onload=function(){
-    showLoading();
     sb.auth.onAuthStateChange(async(ev,session)=>{
-        console.log('Auth:',ev,session?.user?.email);
         if(session&&session.user&&(ev==='SIGNED_IN'||ev==='TOKEN_REFRESHED'||ev==='INITIAL_SESSION')){
-            await checkUserApproval(session.user);authReady=true;
-        }else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!session)){
-            userProfile=null;authReady=true;showLogin();
+            await checkRole(session.user);authReady=true;
         }
+        else if(ev==='SIGNED_OUT'||(ev==='INITIAL_SESSION'&&!session)){user=null;authReady=true;$('bar-right').style.display='flex';$('login-btn').style.display='inline';await loadAll();nav('home');}
     });
-    setTimeout(()=>{if(!authReady)showLogin();},4000);
+    setTimeout(async()=>{if(!authReady){$('bar-right').style.display='flex';$('login-btn').style.display='inline';await loadAll();nav('home');}},4000);
     initGIS();
 };
 
-async function handleGoogleLogin(){
-    try{const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});
-    if(error)showLoginError('Login failed: '+error.message);}catch(e){showLoginError('Login failed: '+e.message);}
+async function doLogin(){
+    const{error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});
+    if(error){$('login-error').textContent='Login failed: '+error.message;$('login-error').style.display='block';}
+}
+async function doLogout(){
+    await sb.auth.signOut();user=null;cart=[];sheetsToken=null;localStorage.removeItem('soroi_stk');
+    $('user-chip').style.display='none';$('admin-link').style.display='none';$('logout-btn').style.display='none';$('login-btn').style.display='inline';
+    nav('home');
 }
 
-async function checkUserApproval(user){
+async function checkRole(u){
+    const fb=(u.user_metadata&&u.user_metadata.full_name)||u.email.split('@')[0];
+    user={email:u.email,name:fb,isAdmin:false};
     try{
-        const{data,error}=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',user.email);
-        if(error||!data||!data.length){
-            // Fallback for known admins
-            if(user.email==='mangaonkaraniket@gmail.com'||user.email==='anikettelexistence@gmail.com'){
-                userProfile={email:user.email,name:user.user_metadata?.full_name||user.email,role:'admin',isAdmin:true};
-            }else{
-                await sb.auth.signOut();showLoginError('Access denied.\n'+user.email+' is not authorized.');showLogin();return;
-            }
-        }else{
-            userProfile={email:user.email,name:data[0].name||user.email,role:data[0].role,isAdmin:data[0].role==='admin'};
-        }
-        await loadUnits();
-        showApp();
-    }catch(e){console.error('Auth check:',e);showLoginError('Error checking access');showLogin();}
+        const{data}=await sb.from('authentication_mode_user_roles').select('name,role').eq('email',u.email);
+        if(data&&data.length>0){user.name=data[0].name||fb;user.isAdmin=(data[0].role||'').toLowerCase().trim()==='admin';}
+    }catch(e){console.warn('Role check:',e);}
+    if(u.email==='mangaonkaraniket@gmail.com'||u.email==='anikettelexistence@gmail.com')user.isAdmin=true;
+    console.log('Auth:',user.email,'admin:',user.isAdmin);
+    // Update header
+    $('user-chip').innerHTML=esc(user.name)+(user.isAdmin?'<span class="rt">admin</span>':'');
+    $('user-chip').style.display='inline';
+    $('bar-right').style.display='flex';
+    $('admin-link').style.display=user.isAdmin?'inline-flex':'none';
+    $('login-btn').style.display='none';
+    $('logout-btn').style.display='inline';
+    // Load data then navigate
+    await loadAll();
+    if(currentView==='loading'||currentView==='login')nav('home');
+    else if(currentView==='home')renderHome();
 }
-
-async function handleLogout(){
-    await sb.auth.signOut();
-    localStorage.removeItem('gis_sheets_token');
-    accessToken=null;userProfile=null;cart=[];currentSheet='production';
-    closeSettingsModal();
-}
-
-function showLoginError(msg){const el=document.getElementById('login-error');el.textContent=msg;el.style.display='block';}
 
 // =====================================================
-// GIS (same as Part Inventory — silent re-auth)
+// GIS (copied from Part Inventory — silent re-auth)
 // =====================================================
 function initGIS(){
     if(typeof google==='undefined'||!google.accounts){setTimeout(initGIS,300);return;}
-    gisTokenClient=google.accounts.oauth2.initTokenClient({client_id:GIS_CLIENT_ID,scope:GIS_SCOPES,
-        callback:r=>{if(r.access_token){accessToken=r.access_token;localStorage.setItem('gis_sheets_token',accessToken);console.log('GIS: token obtained');}}
+    gisTokenClient=google.accounts.oauth2.initTokenClient({
+        client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',
+        callback:r=>{if(r.access_token){sheetsToken=r.access_token;localStorage.setItem('soroi_stk',sheetsToken);console.log('GIS: token obtained');}}
     });
     console.log('GIS: initialized');
 }
+
 function gisReAuth(){
     return new Promise((resolve,reject)=>{
         if(!gisTokenClient){reject(new Error('GIS not ready'));return;}
-        let done=false;const origCb=gisTokenClient.callback;
-        gisTokenClient.callback=r=>{if(done)return;done=true;gisTokenClient.callback=origCb;if(r.access_token){accessToken=r.access_token;localStorage.setItem('gis_sheets_token',accessToken);resolve();}else reject(new Error('Token failed'));};
+        let done=false;
+        const origCb=gisTokenClient.callback;
+        gisTokenClient.callback=r=>{
+            if(done)return;done=true;gisTokenClient.callback=origCb;
+            if(r.access_token){sheetsToken=r.access_token;localStorage.setItem('soroi_stk',sheetsToken);resolve();}
+            else reject(new Error('Token failed'));
+        };
         gisTokenClient.requestAccessToken({prompt:''});
         setTimeout(()=>{if(!done){done=true;gisTokenClient.callback=origCb;reject(new Error('Re-auth timeout'));}},15000);
     });
 }
-function gisRequestToken(){if(!gisTokenClient){alert('Google auth loading. Try again.');return;}gisTokenClient.requestAccessToken();}
 
-// =====================================================
-// SHEETS API (same as Part Inventory)
-// =====================================================
-async function sheetsApiRequest(url,options={},isRetry=false){
-    if(!accessToken)accessToken=localStorage.getItem('gis_sheets_token');
-    if(!accessToken)throw new Error('NEEDS_GIS_AUTH');
-    const resp=await fetch(url,{...options,headers:{'Authorization':'Bearer '+accessToken,'Content-Type':'application/json',...(options.headers||{})}});
-    if(resp.status===401&&!isRetry){try{await gisReAuth();return sheetsApiRequest(url,options,true);}catch(e){accessToken=null;localStorage.removeItem('gis_sheets_token');throw new Error('NEEDS_GIS_AUTH');}}
-    if(!resp.ok){const e=await resp.json().catch(()=>({}));throw new Error(e.error?.message||'API error '+resp.status);}
-    return resp.json();
+function gisRequestToken(){
+    if(!gisTokenClient){alert('Google auth loading. Try again in a few seconds.');return;}
+    gisTokenClient.requestAccessToken();
 }
-function getCurrentSpreadsheetId(){return SHEETS_CONFIG[currentSheet].id;}
-async function checkSheetExists(name,sid){const d=await sheetsApiRequest('https://sheets.googleapis.com/v4/spreadsheets/'+sid+'?fields=sheets.properties.title');return(d.sheets||[]).some(s=>s.properties.title===name);}
-async function createNewSheet(name,sid){
-    await sheetsApiRequest('https://sheets.googleapis.com/v4/spreadsheets/'+sid+':batchUpdate',{method:'POST',body:JSON.stringify({requests:[{addSheet:{properties:{title:name}}}]})});
-    await sheetsApiRequest('https://sheets.googleapis.com/v4/spreadsheets/'+sid+'/values/'+encodeURIComponent(name)+'!A1:F1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Time','Operator','Part Number','Description','Qty']]})});
-}
-async function getNextRowNumber(name,sid){const d=await sheetsApiRequest('https://sheets.googleapis.com/v4/spreadsheets/'+sid+'/values/'+encodeURIComponent(name)+'!A:A');return(d.values||[]).length+1;}
-async function writeRows(name,startRow,rows,sid){await sheetsApiRequest('https://sheets.googleapis.com/v4/spreadsheets/'+sid+'/values/'+encodeURIComponent(name)+'!A'+startRow+':F'+(startRow+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});}
 
-// =====================================================
-// UI STATES
-// =====================================================
-function showLoading(){document.getElementById('loading-section').style.display='block';document.getElementById('login-section').style.display='none';document.getElementById('app-section').style.display='none';}
-function showLogin(){document.getElementById('loading-section').style.display='none';document.getElementById('login-section').style.display='block';document.getElementById('app-section').style.display='none';applyLang();}
-function showApp(){
-    document.getElementById('loading-section').style.display='none';document.getElementById('login-section').style.display='none';document.getElementById('app-section').style.display='block';
-    document.getElementById('header-icons').style.display='flex';
-    document.getElementById('sheet-selector-btn').style.display=userProfile.isAdmin?'flex':'none';
-    document.getElementById('admin-link').style.display=userProfile.isAdmin?'flex':'none';
-    loadSavedTheme();applyLang();renderHome();
+async function sheetsApi(url,options={},isRetry=false){
+    if(!sheetsToken)sheetsToken=localStorage.getItem('soroi_stk');
+    if(!sheetsToken)throw new Error('NEEDS_GIS_AUTH');
+    const r=await fetch(url,{...options,headers:{'Authorization':'Bearer '+sheetsToken,'Content-Type':'application/json',...(options.headers||{})}});
+    if(r.status===401&&!isRetry){
+        try{await gisReAuth();return sheetsApi(url,options,true);}catch(e){
+            sheetsToken=null;localStorage.removeItem('soroi_stk');throw new Error('NEEDS_GIS_AUTH');
+        }
+    }
+    if(!r.ok){const txt=await r.text();throw new Error('Sheets '+r.status+': '+txt);}
+    return r.json();
 }
 
 // =====================================================
 // DATA
 // =====================================================
-async function loadUnits(){
-    try{const{data,error}=await sb.from('soroi_app_units').select('*').order('sort_order');
-    if(error){console.error('loadUnits:',error);units=[];}else{units=data||[];}
-    console.log('Units:',units.length);}catch(e){console.error('loadUnits:',e);units=[];}
+async function loadAll(){
+    try{
+        const{data,error}=await sb.from('soroi_app_units').select('*').order('sort_order');
+        if(error){console.error('loadAll:',error);units=[];}
+        else{units=data||[];}
+        console.log('Units loaded:',units.length);
+    }catch(e){console.error('loadAll:',e);units=[];}
 }
 
 // =====================================================
 // NAVIGATION
 // =====================================================
-function navHome(){currentView='home';selUnit=null;cart=[];document.getElementById('v-home').style.display='block';document.getElementById('v-pickup').style.display='none';renderHome();}
-function navPickup(){currentView='pickup';document.getElementById('v-home').style.display='none';document.getElementById('v-pickup').style.display='block';renderPickup();}
+function nav(view){
+    currentView=view;
+    $('sec-loading').style.display='none';
+    $('sec-login').style.display='none';
+    $('sec-home').style.display='none';
+    $('sec-pickup').style.display='none';
+    switch(view){
+        case'loading':$('sec-loading').style.display='block';break;
+        case'login':$('sec-login').style.display='block';$('login-sub').textContent=t('sub');break;
+        case'home':renderHome();$('sec-home').style.display='block';break;
+        case'pickup':renderPickup();$('sec-pickup').style.display='block';break;
+    }
+}
 
 // =====================================================
 // HOME VIEW
 // =====================================================
 function renderHome(){
-    let h='<div class="pk-info"><span class="pk-tag">'+t('selectUnit')+'</span></div>';
-    h+='<div class="unit-grid">';
-    units.forEach(u=>{const c=u.color||'var(--primary)';h+='<div class="unit-card" onclick="openUnit(\''+u.id+'\')" style="border-top-color:'+c+'"><div class="ico">'+esc(u.icon||'📦')+'</div><h3>'+esc(u.name)+'</h3><p>'+t('tapStart')+'</p></div>';});
-    if(!units.length)h+='<div class="unit-empty"><p>'+t('noUnits')+'</p></div>';
+    const el=$('sec-home');
+    let h='<div class="card"><div class="shdr"><h2>'+t('selectUnit')+'</h2></div><p style="color:var(--t3);font-size:.85rem;margin-bottom:16px">'+t('selectP')+'</p>';
+    // Settings row
+    h+='<div class="stp">';
+    h+='<div class="stp-row"><span class="stp-label">'+t('language')+'</span><div class="stp-lang"><button class="stp-lb'+(LANG==='en'?' on':'')+'" onclick="setLang(\'en\')">EN</button><button class="stp-lb'+(LANG==='ja'?' on':'')+'" onclick="setLang(\'ja\')">日本語</button></div></div>';
+    h+='<div class="stp-row"><span class="stp-label">'+t('sheetId')+'</span><input class="stp-sid" value="'+esc(sheetId)+'" placeholder="Google Sheet ID" onchange="sheetId=this.value.trim();localStorage.setItem(\'soroi_sid\',sheetId)"></div>';
     h+='</div>';
-    document.getElementById('v-home').innerHTML=h;
+    // Unit grid
+    h+='<div class="ugrid">';
+    units.forEach(u=>{
+        const c=u.color||'#2563eb';
+        h+='<div class="ucard" onclick="openUnit(\''+u.id+'\')" style="border-top:3px solid '+c+'"><div class="ico">'+esc(u.icon||'📦')+'</div><h3>'+esc(u.name)+'</h3><p>'+t('tapStart')+'</p></div>';
+    });
+    if(!units.length)h+='<div class="empty"><div class="ico">📦</div><p>'+t('noUnits')+'</p></div>';
+    h+='</div></div>';
+    el.innerHTML=h;
 }
 
-function openUnit(id){selUnit=units.find(u=>u.id===id);if(!selUnit)return;cart=[];navPickup();}
+function openUnit(id){
+    selUnit=units.find(u=>u.id===id);
+    if(!selUnit)return;
+    cart=[];
+    nav('pickup');
+}
 
 // =====================================================
 // PICKUP VIEW
 // =====================================================
 function renderPickup(){
     if(!selUnit)return;
-    const d=new Date();const dateStr=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    const timeStr=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-    let h='<button class="pk-back" onclick="navHome()">'+t('back')+'</button>';
-    h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="font-size:1.5rem">'+(selUnit.icon||'📦')+'</span><div><h2 style="font-size:1.1rem;font-weight:700">'+esc(selUnit.name)+'</h2><p style="font-size:.75rem;color:var(--text-muted)">'+dateStr+' · '+(userProfile?esc(userProfile.name):'')+'</p></div></div>';
-    // Add part
-    h+='<div class="add-box"><h3>'+t('addPart')+'</h3><div class="add-row"><input id="inp-pn" placeholder="'+t('pnPh')+'" style="font-family:monospace"><input id="inp-name" placeholder="'+t('namePh')+'"><input id="inp-qty" class="qty" type="number" value="1" min="1" placeholder="'+t('qtyPh')+'"></div><button class="add-btn" onclick="addToCart()">'+t('add')+'</button></div>';
+    const el=$('sec-pickup');
+    let h='<div class="card">';
+    h+='<div class="shdr"><h2>'+(selUnit.icon||'📦')+' '+esc(selUnit.name)+'</h2><button class="btn btn-s btn-sm" onclick="goHome()">← Back</button></div>';
+    h+='<div class="pk-info"><span class="pk-tag">📅 '+today()+'</span><span class="pk-tag">👤 '+esc(user?user.name:'')+'</span></div>';
+    // Add part box
+    h+='<div class="add-box"><h3>'+t('addPart')+'</h3>';
+    h+='<div class="add-row"><input id="inp-pn" placeholder="'+t('pnPh')+'" style="font-family:monospace"><input id="inp-name" placeholder="'+t('namePh')+'"><input id="inp-qty" class="qty" type="number" value="1" min="1" placeholder="'+t('qtyPh')+'"></div>';
+    h+='<button class="btn btn-p" onclick="addToCart()">'+t('add')+'</button>';
+    h+='</div>';
     // Cart
+    h+='<div class="shdr" style="margin-top:8px"><h2>'+t('cart')+' ('+cart.length+')</h2>';
+    if(cart.length)h+='<button class="btn btn-d btn-sm" onclick="cart=[];renderPickup()">'+t('clear')+'</button>';
+    h+='</div>';
     if(cart.length){
-        h+='<h3 style="font-size:.9rem;font-weight:700;margin-bottom:8px">'+t('cart')+' ('+cart.length+')</h3>';
-        h+='<table class="cart-tbl"><thead><tr><th>#</th><th>'+t('pnPh')+'</th><th>'+t('namePh')+'</th><th>'+t('qtyPh')+'</th><th class="act"></th></tr></thead><tbody>';
-        cart.forEach((c,i)=>{h+='<tr><td>'+(i+1)+'</td><td class="pn">'+esc(c.pn)+'</td><td>'+esc(c.name)+'</td><td class="qc">'+c.qty+'</td><td class="act"><button class="dbtn" onclick="cart.splice('+i+',1);renderPickup()">✕</button></td></tr>';});
+        h+='<table class="ctbl"><thead><tr><th>#</th><th>'+t('pnPh')+'</th><th>'+t('namePh')+'</th><th>'+t('qtyPh')+'</th><th class="act"></th></tr></thead><tbody>';
+        cart.forEach((c,i)=>{
+            h+='<tr><td>'+(i+1)+'</td><td class="pn">'+esc(c.pn)+'</td><td>'+esc(c.name)+'</td><td class="qc">'+c.qty+'</td><td class="act"><button class="dbtn" onclick="cart.splice('+i+',1);renderPickup()">✕</button></td></tr>';
+        });
         h+='</tbody></table>';
-        h+='<button class="submit-btn" onclick="submitToSheet()">'+t('submit')+' ('+cart.length+')</button>';
-        h+='<button class="clear-btn" onclick="cart=[];renderPickup()">'+t('clear')+'</button>';
+        h+='<button class="btn btn-g" onclick="submitToSheet()" style="width:100%">'+t('submit')+'</button>';
     }else{
-        h+='<div class="unit-empty"><p>'+t('empty')+'</p></div>';
+        h+='<div class="empty"><div class="ico">📋</div><p>'+t('noItems')+'</p></div>';
     }
     h+='<div class="status" id="pk-status"></div>';
-    document.getElementById('v-pickup').innerHTML=h;
-    setTimeout(()=>{const inp=document.getElementById('inp-pn');if(inp)inp.focus();},50);
+    h+='</div>';
+    el.innerHTML=h;
+    // Focus PN input
+    setTimeout(()=>{const inp=$('inp-pn');if(inp)inp.focus();},50);
 }
 
+function goHome(){selUnit=null;cart=[];nav('home');}
+
 function addToCart(){
-    const pn=(document.getElementById('inp-pn').value||'').trim();
-    const name=(document.getElementById('inp-name').value||'').trim();
-    const qty=parseInt(document.getElementById('inp-qty').value)||1;
+    const pn=($('inp-pn').value||'').trim();
+    const name=($('inp-name').value||'').trim();
+    const qty=parseInt($('inp-qty').value)||1;
     if(!pn&&!name)return;
     cart.push({pn:pn,name:name||pn,qty:qty});
     renderPickup();
 }
 
 // =====================================================
-// SUBMIT
+// SUBMIT TO GOOGLE SHEETS (Part Inventory pattern)
 // =====================================================
 async function submitToSheet(){
     if(!cart.length)return;
-    showStatus('pk-status',t('submitting')||'Submitting...','loading');
+    if(!sheetId){showSt('pk-status','Set Sheet ID in settings first','err');return;}
+    showSt('pk-status',t('submitting'),'loading');
     try{
         const tab=selUnit?selUnit.name:'Pickup';
-        const sid=getCurrentSpreadsheetId();
-        if(!(await checkSheetExists(tab,sid)))await createNewSheet(tab,sid);
-        const row=await getNextRowNumber(tab,sid);
-        const d=new Date();const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-        const ts=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-        const rows=cart.map(c=>[ds,ts,userProfile?userProfile.name:'',c.pn,c.name,String(c.qty)]);
-        await writeRows(tab,row,rows,sid);
-        showStatus('pk-status','✅ '+cart.length+' '+t('submitOk'),'success');
-        cart=[];setTimeout(()=>{renderPickup();},2000);
+        // Check/create tab
+        const info=await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'?fields=sheets.properties.title');
+        if(!info.sheets.some(s=>s.properties.title===tab)){
+            await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+':batchUpdate',{method:'POST',body:JSON.stringify({requests:[{addSheet:{properties:{title:tab}}}]})});
+            await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A1:F1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Time','Operator','Part Number','Description','Qty']]})});
+        }
+        // Find next row
+        const col=await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A:A');
+        const nextRow=(col.values?col.values.length:0)+1;
+        // Write rows
+        const rows=cart.map(c=>[today(),nowTime(),user?user.name:'',c.pn,c.name,c.qty]);
+        await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nextRow+':F'+(nextRow+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
+        showSt('pk-status','✅ '+cart.length+' '+t('submitOk'),'ok');
+        cart=[];
+        setTimeout(()=>{renderPickup();},2000);
     }catch(e){
         console.error(e);
         if(e.message==='NEEDS_GIS_AUTH'){
-            showStatus('pk-status','📋 Sheets auth needed','error');
-            const el=document.getElementById('pk-status');
-            if(el)el.innerHTML+='<br><button onclick="gisRequestToken()" style="margin-top:8px;padding:8px 16px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer">🔑 Connect Google Sheets</button>';
-        }else{showStatus('pk-status','Error: '+e.message,'error');}
+            showSt('pk-status',t('needAuth'),'err');
+            const st=$('pk-status');
+            if(st)st.innerHTML+='<br><button onclick="gisRequestToken()" style="margin-top:8px;padding:8px 16px;background:var(--pri);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer">🔑 Connect Google Sheets</button>';
+        }else{
+            showSt('pk-status',t('submitErr')+': '+e.message,'err');
+        }
     }
 }
-
-// =====================================================
-// MODALS
-// =====================================================
-function openSheetSelectorModal(){const r=document.querySelector('input[name="sheet"][value="'+currentSheet+'"]');if(r)r.checked=true;document.getElementById('sheet-selector-modal').classList.add('active');}
-function closeSheetSelectorModal(){document.getElementById('sheet-selector-modal').classList.remove('active');}
-function onSheetChange(){const sel=document.querySelector('input[name="sheet"]:checked');if(sel)currentSheet=sel.value;}
-function onSheetModeChange(){currentSheet=document.getElementById('s-sheet-mode').value;document.getElementById('s-sheet-name').textContent=SHEETS_CONFIG[currentSheet].name;}
-function openSettingsModal(){
-    updateThemeButtons();
-    if(userProfile){document.getElementById('s-user-name').textContent=userProfile.name;document.getElementById('s-user-role').textContent=userProfile.isAdmin?'Admin':userProfile.role;}
-    document.getElementById('s-sheet-name').textContent=SHEETS_CONFIG[currentSheet].name;
-    document.getElementById('s-sheet-mode').value=currentSheet;
-    document.getElementById('s-sheet-mode-row').style.display=userProfile?.isAdmin?'flex':'none';
-    updateLangButtons();
-    document.getElementById('settings-modal').classList.add('active');
-}
-function closeSettingsModal(){document.getElementById('settings-modal').classList.remove('active');}
-
-// =====================================================
-// THEME (same as Part Inventory)
-// =====================================================
-function setTheme(theme){document.body.classList.remove('theme-blue','theme-purple','theme-green','theme-orange','theme-dark');document.body.classList.add('theme-'+theme);localStorage.setItem('soroi-theme',theme);updateThemeButtons();}
-function loadSavedTheme(){setTheme(localStorage.getItem('soroi-theme')||'blue');}
-function updateThemeButtons(){const t=localStorage.getItem('soroi-theme')||'blue';document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('active',b.dataset.theme===t));}
-
-// =====================================================
-// LANGUAGE
-// =====================================================
-function toggleLang(){currentLang=currentLang==='en'?'ja':'en';localStorage.setItem('soroi-lang',currentLang);applyLang();}
-function setLang(lang){currentLang=lang;localStorage.setItem('soroi-lang',lang);applyLang();updateLangButtons();}
-function updateLangButtons(){
-    const enB=document.getElementById('lang-btn-en'),jaB=document.getElementById('lang-btn-ja');
-    if(enB){enB.style.background=currentLang==='en'?'var(--primary)':'#fff';enB.style.color=currentLang==='en'?'#fff':'var(--text-secondary)';}
-    if(jaB){jaB.style.background=currentLang==='ja'?'var(--primary)':'#fff';jaB.style.color=currentLang==='ja'?'#fff':'var(--text-secondary)';}
-}
-function applyLang(){
-    document.getElementById('lang-toggle').textContent=currentLang==='en'?'日本語':'EN';
-    document.getElementById('app-title').textContent=t('title');
-    document.getElementById('app-subtitle').textContent=t('sub');
-    document.getElementById('login-prompt').textContent=t('loginPrompt');
-    document.getElementById('login-btn-text').textContent=t('loginBtn');
-    if(currentView==='home')renderHome();
-    if(currentView==='pickup')renderPickup();
-}
-
-// =====================================================
-// HELPERS
-// =====================================================
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function showStatus(id,msg,type){const s=document.getElementById(id);if(!s)return;s.textContent=msg;s.className='status '+type;}
 </script>
 </body>
 </html>
