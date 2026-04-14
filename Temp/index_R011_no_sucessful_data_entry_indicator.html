@@ -261,8 +261,10 @@ a{color:inherit;text-decoration:none}
             <div class="s-row"><span>Display</span><div class="stp-lang"><button class="stp-lb" id="s-lang-en" onclick="setLang('en')">EN</button><button class="stp-lb" id="s-lang-ja" onclick="setLang('ja')">日本語</button></div></div>
         </div>
         <div class="settings-section">
-            <h3>📊 Sheet ID</h3>
-            <div class="s-row"><input class="stp-sid" id="s-sheet-id" placeholder="Google Sheet ID" onchange="sheetId=this.value.trim();localStorage.setItem('soroi_sid',sheetId)" style="width:100%"></div>
+            <h3>📊 Google Sheets</h3>
+            <div class="s-row" style="margin-bottom:8px"><input class="stp-sid" id="s-sheet-id" placeholder="Google Sheet ID" onchange="sheetId=this.value.trim();localStorage.setItem('soroi_sid',sheetId)" style="width:100%"></div>
+            <div class="s-row"><span>Connection</span><span class="s-val" id="s-sheets-status"></span></div>
+            <div class="s-row"><span>Auth</span><button onclick="gisRequestToken();closeSettingsModal()" style="padding:6px 14px;border-radius:6px;border:none;font-size:.82rem;font-weight:600;cursor:pointer;background:var(--pri);color:#fff">🔑 Connect Sheets</button></div>
         </div>
         <div class="settings-section">
             <h3>🎨 Theme</h3>
@@ -287,7 +289,7 @@ const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,a
 // STATE
 // =====================================================
 let user=null,units=[],selUnit=null,bom=[],cart=[],sheetId=localStorage.getItem('soroi_sid')||'',authReady=false,addBoxOpen=false,bulkOpen=true,selSubAssy=null;
-let gisTokenClient=null,sheetsToken=localStorage.getItem('soroi_stk')||null;
+let gisTokenClient=null,sheetsToken=localStorage.getItem('gis_sheets_token')||null;
 let LANG=localStorage.getItem('soroi_lang')||'en';
 let currentView='loading';
 
@@ -295,8 +297,8 @@ let currentView='loading';
 // i18n
 // =====================================================
 const TR={
-    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup List',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items yet. Add from sub-assemblies or manually.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list',startVerify:'🔍 Start Verification',verifyTitle:'Verification',picked:'Picked',missing:'Missing',pending:'Pending',backToCart:'← Back to List',submitVerified:'📋 Submit Results',allDone:'All items verified!',notAllVerified:'Verify all items first',bulkSection:'📦 Bulk Settings',bulkHint:'Tap to add all parts from a group',manualSection:'Or add manually',partsAdded:'parts added',selectAll:'Select All',loadingBom:'Loading BOM...',noBom:'No BOM data for this unit'},
-    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップリスト',submit:'📋 シートに送信',clear:'全てクリア',noItems:'まだ部品がありません。サブアセンブリまたは手動で追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加',startVerify:'🔍 照合開始',verifyTitle:'照合',picked:'ピック済',missing:'欠品',pending:'未確認',backToCart:'← リストに戻る',submitVerified:'📋 結果を送信',allDone:'全ての部品を確認しました！',notAllVerified:'全ての部品を確認してください',bulkSection:'📦 一括設定',bulkHint:'タップしてグループの全部品を追加',manualSection:'または手動で追加',partsAdded:'部品追加済',selectAll:'全選択',loadingBom:'BOM読込中...',noBom:'このユニットにBOMデータがありません'}
+    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup List',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items yet. Add from sub-assemblies or manually.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list',startVerify:'🔍 Start Verification',verifyTitle:'Verification',picked:'Picked',missing:'Missing',pending:'Pending',backToCart:'← Back to List',submitVerified:'📋 Submit Results',allDone:'All items verified!',notAllVerified:'Verify all items first',bulkSection:'📦 Bulk Settings',bulkHint:'Tap to add all parts from a group',manualSection:'Or add manually',partsAdded:'parts added',selectAll:'Select All',markAllPicked:'Mark All Picked',markAllMissing:'Mark All Missing',loadingBom:'Loading BOM...',noBom:'No BOM data for this unit'},
+    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップリスト',submit:'📋 シートに送信',clear:'全てクリア',noItems:'まだ部品がありません。サブアセンブリまたは手動で追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加',startVerify:'🔍 照合開始',verifyTitle:'照合',picked:'ピック済',missing:'欠品',pending:'未確認',backToCart:'← リストに戻る',submitVerified:'📋 結果を送信',allDone:'全ての部品を確認しました！',notAllVerified:'全ての部品を確認してください',bulkSection:'📦 一括設定',bulkHint:'タップしてグループの全部品を追加',manualSection:'または手動で追加',partsAdded:'部品追加済',selectAll:'全選択',markAllPicked:'全てピック済',markAllMissing:'全て欠品',loadingBom:'BOM読込中...',noBom:'このユニットにBOMデータがありません'}
 };
 function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
 function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);var en=$('s-lang-en'),ja=$('s-lang-ja');if(en){en.className='stp-lb'+(l==='en'?' on':'');}if(ja){ja.className='stp-lb'+(l==='ja'?' on':'');}if(currentView==='home')renderHome();if(currentView==='verify')renderVerify();}
@@ -314,6 +316,9 @@ function openSettingsModal(){
     if(user){$('s-user-name').textContent=user.name;$('s-user-role').textContent=user.isAdmin?'Admin':'Operator';}
     else{$('s-user-name').textContent='Not signed in';$('s-user-role').textContent='—';}
     $('s-sheet-id').value=sheetId;
+    var tk=localStorage.getItem('gis_sheets_token');
+    $('s-sheets-status').textContent=tk?'✅ Connected':'❌ Not connected';
+    $('s-sheets-status').style.color=tk?'var(--ok)':'var(--err)';
     $('s-lang-en').className='stp-lb'+(LANG==='en'?' on':'');
     $('s-lang-ja').className='stp-lb'+(LANG==='ja'?' on':'');
     $('s-admin-section').style.display=(user&&user.isAdmin)?'block':'none';
@@ -352,7 +357,7 @@ async function doLogin(){
     if(error){$('login-error').textContent='Login failed: '+error.message;$('login-error').style.display='block';}
 }
 async function doLogout(){
-    await sb.auth.signOut();user=null;cart=[];sheetsToken=null;localStorage.removeItem('soroi_stk');
+    await sb.auth.signOut();user=null;cart=[];sheetsToken=null;localStorage.removeItem('gis_sheets_token');
     $('user-chip').style.display='none';$('logout-btn').style.display='none';$('login-btn').style.display='inline';
     nav('home');
 }
@@ -385,7 +390,7 @@ function initGIS(){
     if(typeof google==='undefined'||!google.accounts){setTimeout(initGIS,300);return;}
     gisTokenClient=google.accounts.oauth2.initTokenClient({
         client_id:GIS_CID,scope:'https://www.googleapis.com/auth/spreadsheets',
-        callback:r=>{if(r.access_token){sheetsToken=r.access_token;localStorage.setItem('soroi_stk',sheetsToken);console.log('GIS: token obtained');}}
+        callback:r=>{if(r.access_token){sheetsToken=r.access_token;localStorage.setItem('gis_sheets_token',sheetsToken);console.log('GIS: token obtained');}}
     });
     console.log('GIS: initialized');
 }
@@ -397,7 +402,7 @@ function gisReAuth(){
         const origCb=gisTokenClient.callback;
         gisTokenClient.callback=r=>{
             if(done)return;done=true;gisTokenClient.callback=origCb;
-            if(r.access_token){sheetsToken=r.access_token;localStorage.setItem('soroi_stk',sheetsToken);resolve();}
+            if(r.access_token){sheetsToken=r.access_token;localStorage.setItem('gis_sheets_token',sheetsToken);resolve();}
             else reject(new Error('Token failed'));
         };
         gisTokenClient.requestAccessToken({prompt:''});
@@ -411,12 +416,12 @@ function gisRequestToken(){
 }
 
 async function sheetsApi(url,options={},isRetry=false){
-    if(!sheetsToken)sheetsToken=localStorage.getItem('soroi_stk');
+    if(!sheetsToken)sheetsToken=localStorage.getItem('gis_sheets_token');
     if(!sheetsToken)throw new Error('NEEDS_GIS_AUTH');
     const r=await fetch(url,{...options,headers:{'Authorization':'Bearer '+sheetsToken,'Content-Type':'application/json',...(options.headers||{})}});
     if(r.status===401&&!isRetry){
         try{await gisReAuth();return sheetsApi(url,options,true);}catch(e){
-            sheetsToken=null;localStorage.removeItem('soroi_stk');throw new Error('NEEDS_GIS_AUTH');
+            sheetsToken=null;localStorage.removeItem('gis_sheets_token');throw new Error('NEEDS_GIS_AUTH');
         }
     }
     if(!r.ok){const txt=await r.text();throw new Error('Sheets '+r.status+': '+txt);}
@@ -523,12 +528,6 @@ function renderHome(){
             h+='<div class="sa-section">';
             if(!selSubAssy)h+='<div class="sa-title">'+t('bulkHint')+'</div>';
             h+='<div class="sa-chips">';
-            // Select All chip
-            var allAdded=groups.every(g=>addedGroups.has(g.id));
-            if(groups.length>1&&!selSubAssy){
-                if(allAdded){h+='<div class="sa-chip sa-added" style="border-left:4px solid var(--pri);font-weight:700">'+t('selectAll')+' ✓</div>';}
-                else{h+='<div class="sa-chip" onclick="addAllGroups()" style="border-left:4px solid var(--pri);font-weight:700;background:var(--pri-bg);color:var(--pri)">🛒 '+t('selectAll')+'</div>';}
-            }
             // Groups (have children — drill into)
             groups.forEach((g,i)=>{
                 var leaves=getLeaves(g.id);
@@ -729,8 +728,12 @@ function backToCart(){
 
 function markItem(idx,status){
     if(idx<0||idx>=cart.length)return;
-    // Toggle: if already same status, reset to pending
     cart[idx].status=(cart[idx].status===status)?null:status;
+    renderVerify();
+}
+
+function markAll(status){
+    cart.forEach(c=>{c.status=status;});
     renderVerify();
 }
 
@@ -752,6 +755,12 @@ function renderVerify(){
     h+='<div class="vfy-stats"><span class="vs-picked">✅ '+picked+' '+t('picked')+'</span><span class="vs-missing">❌ '+missing+' '+t('missing')+'</span><span class="vs-pending">⏳ '+pending+' '+t('pending')+'</span></div>';
     var fillColor=allDone?(missing>0?'var(--ylw)':'var(--ok)'):'var(--pri)';
     h+='<div class="vfy-bar"><div class="vfy-fill" style="width:'+pct+'%;background:'+fillColor+'"></div></div>';
+    h+='</div>';
+    // Quick actions
+    h+='<div style="display:flex;gap:6px;margin-bottom:12px">';
+    h+='<button onclick="markAll(\'picked\')" style="flex:1;padding:8px;border-radius:8px;border:2px solid var(--ok);background:var(--ok-bg);color:var(--ok);font-size:.78rem;font-weight:700;cursor:pointer">✅ '+t('markAllPicked')+'</button>';
+    h+='<button onclick="markAll(\'missing\')" style="flex:1;padding:8px;border-radius:8px;border:2px solid var(--err);background:var(--err-bg);color:var(--err);font-size:.78rem;font-weight:700;cursor:pointer">❌ '+t('markAllMissing')+'</button>';
+    h+='<button onclick="markAll(null)" style="padding:8px 12px;border-radius:8px;border:2px solid var(--brd);background:var(--card);color:var(--t3);font-size:.78rem;font-weight:700;cursor:pointer">↩</button>';
     h+='</div>';
     // Items
     cart.forEach((c,i)=>{

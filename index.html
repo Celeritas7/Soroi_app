@@ -164,6 +164,20 @@ a{color:inherit;text-decoration:none}
 .status.ok{background:var(--ok-bg);color:var(--ok);display:block}
 .status.err{background:var(--err-bg);color:var(--err);display:block}
 .status.loading{background:var(--pri-bg);color:var(--pri);display:block}
+/* Success screen */
+.success-card{text-align:center;padding:40px 20px}
+.success-ico{font-size:3.5rem;margin-bottom:14px;animation:successPop .4s ease}
+@keyframes successPop{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+.success-title{font-size:1.2rem;font-weight:700;color:var(--t1);margin-bottom:6px}
+.success-sub{font-size:.88rem;color:var(--t2);margin-bottom:20px}
+.success-stats{display:flex;justify-content:center;gap:20px;margin-bottom:24px}
+.success-stat{text-align:center}
+.success-stat .sn{font-size:1.8rem;font-weight:800}.success-stat .sl{font-size:.72rem;font-weight:600;margin-top:2px}
+.success-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:24px;background:var(--brd)}
+.success-bar .sb-ok{background:var(--ok)}.success-bar .sb-err{background:var(--err)}
+.success-info{font-size:.78rem;color:var(--t3);margin-bottom:20px}
+.success-home{padding:12px 28px;border-radius:10px;border:none;background:var(--pri);color:#fff;font-size:.9rem;font-weight:700;cursor:pointer}.success-home:hover{filter:brightness(1.1)}
+.success-countdown{font-size:.72rem;color:var(--t3);margin-top:10px}
 .empty{text-align:center;padding:40px;color:var(--t3)}.empty .ico{font-size:2rem;margin-bottom:8px}
 /* Modal overlay */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:20px}.modal-overlay.active{display:flex}
@@ -234,6 +248,7 @@ a{color:inherit;text-decoration:none}
     </div>
     <div id="sec-home" style="display:none"></div>
     <div id="sec-verify" style="display:none"></div>
+    <div id="sec-success" style="display:none"></div>
 </div>
 <!-- Paste Modal -->
 <div class="modal-overlay" id="paste-modal">
@@ -459,12 +474,13 @@ function isDesc(id,anc){var cur=bom.find(b=>b.id===id);while(cur){if(cur.parent_
 // =====================================================
 function nav(view){
     currentView=view;
-    ['sec-loading','sec-login','sec-home','sec-verify'].forEach(id=>{$(id).style.display='none';});
+    ['sec-loading','sec-login','sec-home','sec-verify','sec-success'].forEach(id=>{$(id).style.display='none';});
     switch(view){
         case'loading':$('sec-loading').style.display='block';break;
         case'login':$('sec-login').style.display='block';$('login-sub').textContent=t('sub');break;
         case'home':renderHome();$('sec-home').style.display='block';break;
         case'verify':renderVerify();$('sec-verify').style.display='block';break;
+        case'success':$('sec-success').style.display='block';break;
     }
 }
 
@@ -813,9 +829,12 @@ async function submitToSheet(){
         await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nextRow+':H'+(nextRow+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
         const pickedN=cart.filter(c=>c.status==='picked').length;
         const missingN=cart.filter(c=>c.status==='missing').length;
-        showSt('pk-status','✅ '+pickedN+' '+t('picked')+(missingN?', ❌ '+missingN+' '+t('missing'):''),'ok');
+        const totalN=cart.length;
+        var unitName=selUnit?selUnit.name:'';
+        var opName=user?(user.name||'').split(' ')[0]:'';
+        // Show success screen
+        showSuccessScreen(pickedN,missingN,totalN,unitName,opName,tab);
         cart=[];verifyMode=false;
-        setTimeout(()=>{nav('home');},2000);
     }catch(e){
         console.error(e);
         if(e.message==='NEEDS_GIS_AUTH'){
@@ -826,6 +845,43 @@ async function submitToSheet(){
             showSt('pk-status',t('submitErr')+': '+e.message,'err');
         }
     }
+}
+
+// =====================================================
+// SUCCESS SCREEN
+// =====================================================
+var successTimer=null;
+function showSuccessScreen(picked,missing,total,unitName,opName,tab){
+    var el=$('sec-success');
+    var pctOk=total?Math.round(picked/total*100):0;
+    var pctErr=total?Math.round(missing/total*100):0;
+    var allPicked=missing===0;
+    var h='<div class="card"><div class="success-card">';
+    h+='<div class="success-ico">'+(allPicked?'✅':'⚠️')+'</div>';
+    h+='<div class="success-title">'+(allPicked?'All Parts Picked!':'Submission Complete')+'</div>';
+    h+='<div class="success-sub">'+esc(unitName)+' · '+today()+' · '+esc(opName)+'</div>';
+    h+='<div class="success-stats">';
+    h+='<div class="success-stat"><div class="sn" style="color:var(--ok)">'+picked+'</div><div class="sl" style="color:var(--ok)">'+t('picked')+'</div></div>';
+    if(missing>0)h+='<div class="success-stat"><div class="sn" style="color:var(--err)">'+missing+'</div><div class="sl" style="color:var(--err)">'+t('missing')+'</div></div>';
+    h+='<div class="success-stat"><div class="sn" style="color:var(--t2)">'+total+'</div><div class="sl" style="color:var(--t2)">Total</div></div>';
+    h+='</div>';
+    h+='<div class="success-bar"><div class="sb-ok" style="width:'+pctOk+'%"></div><div class="sb-err" style="width:'+pctErr+'%"></div></div>';
+    h+='<div class="success-info">📊 Written to tab: <b>'+esc(tab)+'</b></div>';
+    h+='<button class="success-home" onclick="goHomeFromSuccess()">🏠 Back to Home</button>';
+    h+='<div class="success-countdown" id="success-cd">Returning in 5s...</div>';
+    h+='</div></div>';
+    el.innerHTML=h;
+    nav('success');
+    var sec=5;
+    if(successTimer)clearInterval(successTimer);
+    successTimer=setInterval(()=>{
+        sec--;var cd=$('success-cd');if(cd)cd.textContent='Returning in '+sec+'s...';
+        if(sec<=0){clearInterval(successTimer);successTimer=null;goHomeFromSuccess();}
+    },1000);
+}
+function goHomeFromSuccess(){
+    if(successTimer){clearInterval(successTimer);successTimer=null;}
+    selSubAssy=null;nav('home');
 }
 </script>
 </body>
