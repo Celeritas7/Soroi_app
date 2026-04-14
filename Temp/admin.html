@@ -329,6 +329,7 @@ function vBom(){
   if(S.isAdmin){
     h+='<button class="bb bb-g" onclick="trigCSV()">'+svg('up')+' CSV</button>';
     h+='<button class="bb bb-g" onclick="trigXLSX()">'+svg('up')+' XLSX</button>';
+    h+='<button class="bb" onclick="openAxonImport()" style="background:#667eea;color:#fff">⚡ Axon</button>';
     h+='<button class="bb bb-r" onclick="exportCSV()">'+svg('down')+' Export</button>';
     h+='<button class="bb" onclick="addPartManual()" style="background:rgba(255,255,255,.2)">'+svg('plus')+' Add Part</button>';
   }
@@ -521,6 +522,99 @@ function renderBomList(items,ff,idMap){
 function getDescendants(pid){var out=[];S.bom.forEach(function(b){if(isDescendantOf(b.id,pid))out.push(b);});return out;}
 function getDescendantLeaves(pid){return getDescendants(pid).filter(function(b){return !S.bom.some(function(c){return c.parent_id===b.id;});});}
 function isDescendantOf(id,ancestorId){var cur=S.bom.find(function(b){return b.id===id;});while(cur){if(cur.parent_id===ancestorId)return true;cur=S.bom.find(function(b){return b.id===cur.parent_id;});}return false;}
+
+// ============ AXON IMPORT ============
+var axonProjects=[],axonAssemblies=[];
+async function openAxonImport(){
+  if(!S.selUnit){toast('Select a unit first','err');return;}
+  // Load Axon projects
+  try{var r=await sb.from('logi_projects').select('*').order('name');axonProjects=r.data||[];}
+  catch(e){toast('Failed to load Axon projects','err');return;}
+  axonAssemblies=[];
+  var h='<div style="margin-bottom:14px"><label style="font-size:.78rem;font-weight:600;color:#6b5a4e;display:block;margin-bottom:4px">Axon Project</label>';
+  h+='<select class="md-input" id="axon-proj" onchange="onAxonProjChange(this.value)"><option value="">-- Select project --</option>';
+  axonProjects.forEach(function(p){h+='<option value="'+p.id+'">'+esc((p.emoji||'📁')+' '+p.name)+'</option>';});
+  h+='</select></div>';
+  h+='<div id="axon-assy-wrap" style="margin-bottom:14px"><label style="font-size:.78rem;font-weight:600;color:#6b5a4e;display:block;margin-bottom:4px">Assembly</label><select class="md-input" id="axon-assy" disabled><option value="">-- Select project first --</option></select></div>';
+  h+='<div id="axon-preview" style="font-size:.78rem;color:#a39485;padding:8px 0"></div>';
+  modal('⚡ Import from Axon','Import an Axon assembly tree as BOM for <b>'+esc(S.selUnit.name)+'</b>.<br><span style="color:#c62828;font-size:.78rem">⚠️ This will replace the current BOM.</span>',h,
+    [{label:'Cancel',cls:'mdc'},{label:'Import',cls:'mdo',fn:doAxonImport}]);
+}
+async function onAxonProjChange(pid){
+  var sel=$('axon-assy');
+  if(!pid){sel.innerHTML='<option value="">-- Select project first --</option>';sel.disabled=true;return;}
+  sel.innerHTML='<option value="">Loading...</option>';sel.disabled=true;
+  try{var r=await sb.from('logi_assemblies').select('*').eq('project_id',pid).order('name');axonAssemblies=r.data||[];}
+  catch(e){toast('Failed to load assemblies','err');return;}
+  var h='<option value="">-- Select assembly --</option>';
+  axonAssemblies.forEach(function(a){h+='<option value="'+a.id+'">'+esc(a.name)+'</option>';});
+  sel.innerHTML=h;sel.disabled=false;
+}
+async function doAxonImport(){
+  var aid=$('axon-assy').value;
+  if(!aid){toast('Select an assembly','err');return;}
+  toast('Importing from Axon...','');
+  try{
+    // Fetch nodes + links
+    var r1=await sb.from('logi_nodes').select('*').eq('assembly_id',aid).eq('deleted',false);
+    var r2=await sb.from('logi_links').select('*').eq('assembly_id',aid);
+    var nodes=r1.data||[];
+    var links=(r2.data||[]).filter(function(l){return !l.deleted;});
+    if(!nodes.length){toast('No nodes in this assembly','err');return;}
+    // Build parent→child map from links
+    var p2c={},linkMap={};
+    links.forEach(function(l){
+      if(!p2c[l.parent_id])p2c[l.parent_id]=[];
+      p2c[l.parent_id].push(l.child_id);
+      linkMap[l.child_id]=l;
+    });
+    // Find root nodes (not a child of any link)
+    var childIds={};links.forEach(function(l){childIds[l.child_id]=true;});
+    var roots=nodes.filter(function(n){return !childIds[n.id];});
+    // Compute levels
+    var nodeMap={};nodes.forEach(function(n){nodeMap[n.id]=n;});
+    function setLevel(id,lv){if(!nodeMap[id])return;nodeMap[id]._level=lv;(p2c[id]||[]).forEach(function(c){setLevel(c,lv+1);});}
+    roots.forEach(function(r){setLevel(r.id,1);});
+    // Delete existing BOM
+    await sb.from('soroi_app_bom').delete().eq('unit_id',S.selUnit.id);
+    // Flatten tree in DFS order and insert
+    var sortIdx=0;
+    var axonToSoroi={};// maps axon node id → soroi bom id
+    async function insertNode(nid,soroiParentId){
+      var n=nodeMap[nid];if(!n)return;
+      var lk=linkMap[nid]||{};
+      var ins={
+        unit_id:S.selUnit.id,
+        parent_id:soroiParentId,
+        level:n._level||1,
+        component:n.name||'',
+        part_number:n.part_number||null,
+        qty:lk.qty||1,
+        status:n.status||'NOT_STARTED',
+        seq:n.sequence_tag||null,
+        fastener:lk.fastener||null,
+        f_qty:lk.f_qty||null,
+        loctite:lk.loctite||null,
+        torque:lk.torque||null,
+        sort_order:sortIdx++
+      };
+      var res=await sb.from('soroi_app_bom').insert(ins).select().single();
+      if(res.error){console.error('Insert error:',res.error);return;}
+      var newId=res.data.id;
+      axonToSoroi[nid]=newId;
+      // Insert children
+      var children=p2c[nid]||[];
+      for(var i=0;i<children.length;i++){
+        await insertNode(children[i],newId);
+      }
+    }
+    for(var i=0;i<roots.length;i++){
+      await insertNode(roots[i].id,null);
+    }
+    toast('✅ Imported '+sortIdx+' items from Axon!','ok');
+    loadBom(S.selUnit.id);
+  }catch(e){console.error('Axon import error:',e);toast('Import failed: '+e.message,'err');}
+}
 
 // Export CSV
 function exportCSV(){

@@ -430,7 +430,7 @@ async function loadAll(){
     try{
         const{data,error}=await sb.from('soroi_app_units').select('*').order('sort_order');
         if(error){console.error('loadAll:',error);units=[];}
-        else{units=data||[];}
+        else{units=(data||[]).filter(u=>u.visible!==false);}
         console.log('Units loaded:',units.length);
     }catch(e){console.error('loadAll:',e);units=[];}
 }
@@ -599,7 +599,11 @@ function drillTo(id){selSubAssy=id;renderHome();}
 // Add single BOM part
 function addSingleBomPart(bid){
     var b=bom.find(p=>p.id===bid);if(!b)return;
-    cart.push({pn:b.part_number||'',name:b.component||'',qty:b.qty||1,_group:null});
+    var desc=b.component||'';
+    if(b.part_number&&desc.startsWith(b.part_number))desc=desc.substring(b.part_number.length).replace(/^[\s\-–—]+/,'');
+    // Find parent group name
+    var parent=bom.find(p=>p.id===b.parent_id);
+    cart.push({pn:b.part_number||'',name:desc||b.part_number||'',qty:b.qty||1,_group:null,_groupName:parent?parent.component:'',_unitName:selUnit?selUnit.name:''});
     renderHome();
 }
 
@@ -611,7 +615,10 @@ function addSubAssembly(gid){
     var g=bom.find(b=>b.id===gid);if(!g)return;
     var leaves=getLeaves(gid);if(!leaves.length)return;
     leaves.forEach(p=>{
-        cart.push({pn:p.part_number||'',name:p.component||p.part_number||'',qty:p.qty||1,_group:gid});
+        var desc=p.component||'';
+        // Strip part number prefix from description if present
+        if(p.part_number&&desc.startsWith(p.part_number))desc=desc.substring(p.part_number.length).replace(/^[\s\-–—]+/,'');
+        cart.push({pn:p.part_number||'',name:desc||p.part_number||'',qty:p.qty||1,_group:gid,_groupName:g.component||'',_unitName:selUnit?selUnit.name:''});
     });
     showSt('pk-status','✅ '+leaves.length+' '+t('partsAdded')+' — '+g.component,'ok');
     renderHome();
@@ -628,7 +635,7 @@ function addToCart(){
     const name=($('inp-name').value||'').trim();
     const qty=parseInt($('inp-qty').value)||1;
     if(!pn&&!name)return;
-    cart.push({pn:pn,name:name||pn,qty:qty});
+    cart.push({pn:pn,name:name||pn,qty:qty,_group:null,_groupName:'',_unitName:selUnit?selUnit.name:''});
     renderHome();
 }
 
@@ -654,7 +661,7 @@ function processPastedList(){
         else if(/\s+\d+$/.test(line)){const m=line.match(/^(.+?)\s+(\d+)$/);pn=m[1].trim();qty=parseInt(m[2])||1;}
         else{pn=line;}
         if(!pn)return;
-        cart.push({pn:pn,name:pn,qty:qty});
+        cart.push({pn:pn,name:pn,qty:qty,_group:null,_groupName:'',_unitName:selUnit?selUnit.name:''});
         added++;
     });
     closePasteModal();
@@ -743,18 +750,17 @@ async function submitToSheet(){
     showSt('pk-status',t('submitting'),'loading');
     try{
         const tab=selUnit?selUnit.name:'Pickup';
-        // Check/create tab
         const info=await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'?fields=sheets.properties.title');
         if(!info.sheets.some(s=>s.properties.title===tab)){
             await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+':batchUpdate',{method:'POST',body:JSON.stringify({requests:[{addSheet:{properties:{title:tab}}}]})});
-            await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A1:G1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Time','Operator','Part Number','Description','Qty','Status']]})});
+            await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A1:H1?valueInputOption=RAW',{method:'PUT',body:JSON.stringify({values:[['Date','Operator','Part Number','Description','Qty','Unit','Sub-Assembly','Status']]})});
         }
-        // Find next row
         const col=await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A:A');
         const nextRow=(col.values?col.values.length:0)+1;
-        // Write rows
-        const rows=cart.map(c=>[today(),nowTime(),user?user.name:'',c.pn,c.name,c.qty,c.status||'picked']);
-        await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nextRow+':G'+(nextRow+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
+        // First name only
+        var opName=user?(user.name||'').split(' ')[0]:'';
+        const rows=cart.map(c=>[today(),opName,c.pn,c.name,c.qty,c._unitName||'',c._groupName||'',c.status||'picked']);
+        await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nextRow+':H'+(nextRow+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
         const pickedN=cart.filter(c=>c.status==='picked').length;
         const missingN=cart.filter(c=>c.status==='missing').length;
         showSt('pk-status','✅ '+pickedN+' '+t('picked')+(missingN?', ❌ '+missingN+' '+t('missing'):''),'ok');
