@@ -295,8 +295,8 @@ let currentView='loading';
 // i18n
 // =====================================================
 const TR={
-    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup List',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items yet. Add from sub-assemblies or manually.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list',startVerify:'🔍 Start Verification',verifyTitle:'Verification',picked:'Picked',missing:'Missing',pending:'Pending',backToCart:'← Back to List',submitVerified:'📋 Submit Results',allDone:'All items verified!',notAllVerified:'Verify all items first',bulkSection:'📦 Bulk Settings',bulkHint:'Tap to add all parts from a group',manualSection:'Or add manually',partsAdded:'parts added',loadingBom:'Loading BOM...',noBom:'No BOM data for this unit'},
-    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップリスト',submit:'📋 シートに送信',clear:'全てクリア',noItems:'まだ部品がありません。サブアセンブリまたは手動で追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加',startVerify:'🔍 照合開始',verifyTitle:'照合',picked:'ピック済',missing:'欠品',pending:'未確認',backToCart:'← リストに戻る',submitVerified:'📋 結果を送信',allDone:'全ての部品を確認しました！',notAllVerified:'全ての部品を確認してください',bulkSection:'📦 一括設定',bulkHint:'タップしてグループの全部品を追加',manualSection:'または手動で追加',partsAdded:'部品追加済',loadingBom:'BOM読込中...',noBom:'このユニットにBOMデータがありません'}
+    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup List',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items yet. Add from sub-assemblies or manually.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list',startVerify:'🔍 Start Verification',verifyTitle:'Verification',picked:'Picked',missing:'Missing',pending:'Pending',backToCart:'← Back to List',submitVerified:'📋 Submit Results',allDone:'All items verified!',notAllVerified:'Verify all items first',bulkSection:'📦 Bulk Settings',bulkHint:'Tap to add all parts from a group',manualSection:'Or add manually',partsAdded:'parts added',selectAll:'Select All',loadingBom:'Loading BOM...',noBom:'No BOM data for this unit'},
+    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップリスト',submit:'📋 シートに送信',clear:'全てクリア',noItems:'まだ部品がありません。サブアセンブリまたは手動で追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加',startVerify:'🔍 照合開始',verifyTitle:'照合',picked:'ピック済',missing:'欠品',pending:'未確認',backToCart:'← リストに戻る',submitVerified:'📋 結果を送信',allDone:'全ての部品を確認しました！',notAllVerified:'全ての部品を確認してください',bulkSection:'📦 一括設定',bulkHint:'タップしてグループの全部品を追加',manualSection:'または手動で追加',partsAdded:'部品追加済',selectAll:'全選択',loadingBom:'BOM読込中...',noBom:'このユニットにBOMデータがありません'}
 };
 function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
 function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);var en=$('s-lang-en'),ja=$('s-lang-ja');if(en){en.className='stp-lb'+(l==='en'?' on':'');}if(ja){ja.className='stp-lb'+(l==='ja'?' on':'');}if(currentView==='home')renderHome();if(currentView==='verify')renderVerify();}
@@ -523,6 +523,12 @@ function renderHome(){
             h+='<div class="sa-section">';
             if(!selSubAssy)h+='<div class="sa-title">'+t('bulkHint')+'</div>';
             h+='<div class="sa-chips">';
+            // Select All chip
+            var allAdded=groups.every(g=>addedGroups.has(g.id));
+            if(groups.length>1&&!selSubAssy){
+                if(allAdded){h+='<div class="sa-chip sa-added" style="border-left:4px solid var(--pri);font-weight:700">'+t('selectAll')+' ✓</div>';}
+                else{h+='<div class="sa-chip" onclick="addAllGroups()" style="border-left:4px solid var(--pri);font-weight:700;background:var(--pri-bg);color:var(--pri)">🛒 '+t('selectAll')+'</div>';}
+            }
             // Groups (have children — drill into)
             groups.forEach((g,i)=>{
                 var leaves=getLeaves(g.id);
@@ -616,11 +622,46 @@ function addSubAssembly(gid){
     var leaves=getLeaves(gid);if(!leaves.length)return;
     leaves.forEach(p=>{
         var desc=p.component||'';
-        // Strip part number prefix from description if present
         if(p.part_number&&desc.startsWith(p.part_number))desc=desc.substring(p.part_number.length).replace(/^[\s\-–—]+/,'');
         cart.push({pn:p.part_number||'',name:desc||p.part_number||'',qty:p.qty||1,_group:gid,_groupName:g.component||'',_unitName:selUnit?selUnit.name:''});
     });
     showSt('pk-status','✅ '+leaves.length+' '+t('partsAdded')+' — '+g.component,'ok');
+    renderHome();
+    setTimeout(()=>{const s=$('pk-status');if(s)s.className='status';},3000);
+}
+
+function addAllGroups(){
+    var cs=getChildSet();
+    var addedGroups=new Set(cart.filter(c=>c._group).map(c=>c._group));
+    var groups=bom.filter(b=>cs.has(b.id)&&b.level>=2&&!addedGroups.has(b.id));
+    // Only add leaf groups (groups that don't contain sub-groups, or all groups recursively)
+    var total=0;
+    groups.forEach(g=>{
+        var subGroups=getDirectChildren(g.id).filter(c=>cs.has(c.id));
+        if(!subGroups.length){
+            // Leaf group — add its parts
+            var leaves=getLeaves(g.id);
+            leaves.forEach(p=>{
+                var desc=p.component||'';
+                if(p.part_number&&desc.startsWith(p.part_number))desc=desc.substring(p.part_number.length).replace(/^[\s\-–—]+/,'');
+                cart.push({pn:p.part_number||'',name:desc||p.part_number||'',qty:p.qty||1,_group:g.id,_groupName:g.component||'',_unitName:selUnit?selUnit.name:''});
+            });
+            total+=leaves.length;
+        }
+    });
+    // If no leaf groups found, add ALL leaves from all groups
+    if(!total){
+        groups.forEach(g=>{
+            var leaves=getLeaves(g.id);
+            leaves.forEach(p=>{
+                var desc=p.component||'';
+                if(p.part_number&&desc.startsWith(p.part_number))desc=desc.substring(p.part_number.length).replace(/^[\s\-–—]+/,'');
+                cart.push({pn:p.part_number||'',name:desc||p.part_number||'',qty:p.qty||1,_group:g.id,_groupName:g.component||'',_unitName:selUnit?selUnit.name:''});
+            });
+            total+=leaves.length;
+        });
+    }
+    if(total)showSt('pk-status','✅ '+total+' '+t('partsAdded'),'ok');
     renderHome();
     setTimeout(()=>{const s=$('pk-status');if(s)s.className='status';},3000);
 }
@@ -705,7 +746,7 @@ function renderVerify(){
     let h='<div class="card">';
     // Header
     h+='<div class="shdr"><h2>'+(selUnit.icon||'📦')+' '+t('verifyTitle')+'</h2><button class="btn btn-s btn-sm" onclick="backToCart()">'+t('backToCart')+'</button></div>';
-    h+='<div class="pk-info"><span class="pk-tag">📅 '+today()+'</span><span class="pk-tag">👤 '+esc(user?user.name:'')+'</span><span class="pk-tag">'+esc(selUnit.name)+'</span></div>';
+    h+='<div class="pk-info"><span class="pk-tag">📅 '+today()+'</span><span class="pk-tag">👤 '+esc(user?(user.name||'').split(' ')[0]:'')+'</span><span class="pk-tag">'+esc(selUnit.name)+'</span></div>';
     // Progress
     h+='<div class="vfy-progress">';
     h+='<div class="vfy-stats"><span class="vs-picked">✅ '+picked+' '+t('picked')+'</span><span class="vs-missing">❌ '+missing+' '+t('missing')+'</span><span class="vs-pending">⏳ '+pending+' '+t('pending')+'</span></div>';
