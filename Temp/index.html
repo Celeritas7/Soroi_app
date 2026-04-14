@@ -312,8 +312,8 @@ let currentView='loading';
 // i18n
 // =====================================================
 const TR={
-    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup List',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items yet. Add from sub-assemblies or manually.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list',startVerify:'🔍 Start Verification',verifyTitle:'Verification',picked:'Picked',missing:'Missing',pending:'Pending',skipped:'Skipped',markItemsFirst:'Mark items first',backToCart:'← Back to List',submitVerified:'📋 Submit Results',allDone:'All items verified!',notAllVerified:'Verify all items first',bulkSection:'📦 Bulk Settings',bulkHint:'Tap to add all parts from a group',manualSection:'Or add manually',partsAdded:'parts added',selectAll:'Select All',markAllPicked:'Mark All Picked',markAllMissing:'Mark All Missing',loadingBom:'Loading BOM...',noBom:'No BOM data for this unit'},
-    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップリスト',submit:'📋 シートに送信',clear:'全てクリア',noItems:'まだ部品がありません。サブアセンブリまたは手動で追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加',startVerify:'🔍 照合開始',verifyTitle:'照合',picked:'ピック済',missing:'欠品',pending:'未確認',skipped:'スキップ',markItemsFirst:'部品を選択してください',backToCart:'← リストに戻る',submitVerified:'📋 結果を送信',allDone:'全ての部品を確認しました！',notAllVerified:'全ての部品を確認してください',bulkSection:'📦 一括設定',bulkHint:'タップしてグループの全部品を追加',manualSection:'または手動で追加',partsAdded:'部品追加済',selectAll:'全選択',markAllPicked:'全てピック済',markAllMissing:'全て欠品',loadingBom:'BOM読込中...',noBom:'このユニットにBOMデータがありません'}
+    en:{sub:'Shop Floor Pickup',selectUnit:'Select Unit',selectP:'Choose an assembly unit to start picking',tapStart:'Tap to start',noUnits:'No units yet',signIn:'Sign in with Google',out:'Out',admin:'Admin',language:'Lang',sheetId:'Sheet ID',addPart:'➕ Add Part',pnPh:'Part Number',namePh:'Description',qtyPh:'Qty',add:'+ Add',cart:'Pickup List',submit:'📋 Submit to Sheet',clear:'Clear All',noItems:'No items yet. Add from sub-assemblies or manually.',submitOk:'items submitted!',submitErr:'Submit failed',needAuth:'Sheets auth needed',connecting:'Connecting to Sheets...',submitting:'Submitting...',pasteList:'📋 Paste List',pasteTitle:'📋 Paste Part List',pasteDesc:'Paste part numbers, one per line. Optional qty: PN,qty or PN<Tab>qty',pasteAdd:'Add Parts',pasteCancel:'Cancel',pasted:'parts added from list',startVerify:'🔍 Start Verification',verifyTitle:'Verification',picked:'Picked',missing:'Missing',pending:'Pending',backToCart:'← Back to List',submitVerified:'📋 Submit Results',allDone:'All items verified!',notAllVerified:'Verify all items first',bulkSection:'📦 Bulk Settings',bulkHint:'Tap to add all parts from a group',manualSection:'Or add manually',partsAdded:'parts added',selectAll:'Select All',markAllPicked:'Mark All Picked',markAllMissing:'Mark All Missing',loadingBom:'Loading BOM...',noBom:'No BOM data for this unit'},
+    ja:{sub:'工場ピックアップ',selectUnit:'ユニット選択',selectP:'ピックアップするユニットを選んでください',tapStart:'タップして開始',noUnits:'ユニットなし',signIn:'Googleでログイン',out:'ログアウト',admin:'管理',language:'言語',sheetId:'シートID',addPart:'➕ 部品追加',pnPh:'部品番号',namePh:'名称',qtyPh:'数量',add:'+ 追加',cart:'ピックアップリスト',submit:'📋 シートに送信',clear:'全てクリア',noItems:'まだ部品がありません。サブアセンブリまたは手動で追加してください。',submitOk:'件送信しました！',submitErr:'送信失敗',needAuth:'Sheets認証が必要です',connecting:'Sheets接続中...',submitting:'送信中...',pasteList:'📋 リスト貼付け',pasteTitle:'📋 部品番号リスト貼付け',pasteDesc:'部品番号を改行で区切って貼り付けてください。数量付き: PN,数量 または PN<Tab>数量',pasteAdd:'追加する',pasteCancel:'キャンセル',pasted:'件の部品をリストから追加',startVerify:'🔍 照合開始',verifyTitle:'照合',picked:'ピック済',missing:'欠品',pending:'未確認',backToCart:'← リストに戻る',submitVerified:'📋 結果を送信',allDone:'全ての部品を確認しました！',notAllVerified:'全ての部品を確認してください',bulkSection:'📦 一括設定',bulkHint:'タップしてグループの全部品を追加',manualSection:'または手動で追加',partsAdded:'部品追加済',selectAll:'全選択',markAllPicked:'全てピック済',markAllMissing:'全て欠品',loadingBom:'BOM読込中...',noBom:'このユニットにBOMデータがありません'}
 };
 function t(k){return(TR[LANG]&&TR[LANG][k])||TR.en[k]||k;}
 function setLang(l){LANG=l;localStorage.setItem('soroi_lang',l);var en=$('s-lang-en'),ja=$('s-lang-ja');if(en){en.className='stp-lb'+(l==='en'?' on':'');}if(ja){ja.className='stp-lb'+(l==='ja'?' on':'');}if(currentView==='home')renderHome();if(currentView==='verify')renderVerify();}
@@ -761,7 +761,6 @@ function renderVerify(){
     const pending=cart.length-picked-missing;
     const pct=Math.round((picked+missing)/cart.length*100);
     const allDone=pending===0;
-    const hasAction=picked+missing>0;// at least one item marked
 
     let h='<div class="card">';
     // Header
@@ -769,9 +768,7 @@ function renderVerify(){
     h+='<div class="pk-info"><span class="pk-tag">📅 '+today()+'</span><span class="pk-tag">👤 '+esc(user?(user.name||'').split(' ')[0]:'')+'</span><span class="pk-tag">'+esc(selUnit.name)+'</span></div>';
     // Progress
     h+='<div class="vfy-progress">';
-    h+='<div class="vfy-stats"><span class="vs-picked">✅ '+picked+' '+t('picked')+'</span><span class="vs-missing">❌ '+missing+' '+t('missing')+'</span>';
-    if(pending>0)h+='<span class="vs-pending">⏭ '+pending+' '+t('skipped')+'</span>';
-    h+='</div>';
+    h+='<div class="vfy-stats"><span class="vs-picked">✅ '+picked+' '+t('picked')+'</span><span class="vs-missing">❌ '+missing+' '+t('missing')+'</span><span class="vs-pending">⏳ '+pending+' '+t('pending')+'</span></div>';
     var fillColor=allDone?(missing>0?'var(--ylw)':'var(--ok)'):'var(--pri)';
     h+='<div class="vfy-bar"><div class="vfy-fill" style="width:'+pct+'%;background:'+fillColor+'"></div></div>';
     h+='</div>';
@@ -798,10 +795,10 @@ function renderVerify(){
     // Submit buttons
     h+='<div class="vfy-submit">';
     h+='<button class="vfy-sub-back" onclick="backToCart()">'+t('backToCart')+'</button>';
-    if(hasAction){
-        h+='<button class="vfy-sub-go" onclick="submitToSheet()">'+t('submitVerified')+(pending>0?' ('+pending+' '+t('skipped')+')':'')+'</button>';
+    if(allDone){
+        h+='<button class="vfy-sub-go" onclick="submitToSheet()">'+t('submitVerified')+'</button>';
     }else{
-        h+='<button class="vfy-sub-go" disabled style="opacity:.4;cursor:not-allowed">'+t('markItemsFirst')+'</button>';
+        h+='<button class="vfy-sub-go" disabled style="opacity:.4;cursor:not-allowed">'+t('notAllVerified')+'</button>';
     }
     h+='</div>';
     if(allDone)h+='<div style="text-align:center;padding:10px;color:var(--ok);font-weight:600;font-size:.85rem">'+t('allDone')+'</div>';
@@ -826,17 +823,17 @@ async function submitToSheet(){
         }
         const col=await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A:A');
         const nextRow=(col.values?col.values.length:0)+1;
+        // First name only
         var opName=user?(user.name||'').split(' ')[0]:'';
-        // Only write picked + missing, skip pending items
-        var submitted=cart.filter(c=>c.status==='picked'||c.status==='missing');
-        if(!submitted.length){showSt('pk-status','Mark at least one item first','err');return;}
-        const rows=submitted.map(c=>[today(),opName,c.pn,c.name,c.qty,c._unitName||'',c._groupName||'',c.status]);
+        const rows=cart.map(c=>[today(),opName,c.pn,c.name,c.qty,c._unitName||'',c._groupName||'',c.status||'picked']);
         await sheetsApi('https://sheets.googleapis.com/v4/spreadsheets/'+sheetId+'/values/'+encodeURIComponent(tab)+'!A'+nextRow+':H'+(nextRow+rows.length-1)+'?valueInputOption=USER_ENTERED',{method:'PUT',body:JSON.stringify({values:rows})});
-        const pickedN=submitted.filter(c=>c.status==='picked').length;
-        const missingN=submitted.filter(c=>c.status==='missing').length;
-        const skippedN=cart.length-pickedN-missingN;
+        const pickedN=cart.filter(c=>c.status==='picked').length;
+        const missingN=cart.filter(c=>c.status==='missing').length;
+        const totalN=cart.length;
         var unitName=selUnit?selUnit.name:'';
-        showSuccessScreen(pickedN,missingN,skippedN,unitName,opName,tab);
+        var opName=user?(user.name||'').split(' ')[0]:'';
+        // Show success screen
+        showSuccessScreen(pickedN,missingN,totalN,unitName,opName,tab);
         cart=[];verifyMode=false;
     }catch(e){
         console.error(e);
@@ -854,12 +851,11 @@ async function submitToSheet(){
 // SUCCESS SCREEN
 // =====================================================
 var successTimer=null;
-function showSuccessScreen(picked,missing,skipped,unitName,opName,tab){
+function showSuccessScreen(picked,missing,total,unitName,opName,tab){
     var el=$('sec-success');
-    var total=picked+missing;
     var pctOk=total?Math.round(picked/total*100):0;
     var pctErr=total?Math.round(missing/total*100):0;
-    var allPicked=missing===0&&skipped===0;
+    var allPicked=missing===0;
     var h='<div class="card"><div class="success-card">';
     h+='<div class="success-ico">'+(allPicked?'✅':'⚠️')+'</div>';
     h+='<div class="success-title">'+(allPicked?'All Parts Picked!':'Submission Complete')+'</div>';
@@ -867,7 +863,7 @@ function showSuccessScreen(picked,missing,skipped,unitName,opName,tab){
     h+='<div class="success-stats">';
     h+='<div class="success-stat"><div class="sn" style="color:var(--ok)">'+picked+'</div><div class="sl" style="color:var(--ok)">'+t('picked')+'</div></div>';
     if(missing>0)h+='<div class="success-stat"><div class="sn" style="color:var(--err)">'+missing+'</div><div class="sl" style="color:var(--err)">'+t('missing')+'</div></div>';
-    if(skipped>0)h+='<div class="success-stat"><div class="sn" style="color:var(--t3)">'+skipped+'</div><div class="sl" style="color:var(--t3)">'+t('skipped')+'</div></div>';
+    h+='<div class="success-stat"><div class="sn" style="color:var(--t2)">'+total+'</div><div class="sl" style="color:var(--t2)">Total</div></div>';
     h+='</div>';
     h+='<div class="success-bar"><div class="sb-ok" style="width:'+pctOk+'%"></div><div class="sb-err" style="width:'+pctErr+'%"></div></div>';
     h+='<div class="success-info">📊 Written to tab: <b>'+esc(tab)+'</b></div>';
